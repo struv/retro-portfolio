@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>William Struve - Retro 3D Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        :root {
+            --primary: #ff00ff;
+            --secondary: #00ffff;
+            --bg: #000033;
+            --text: #ffffff;
+            --accent: #ffff00;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'VT323', monospace;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff00ff' stroke-width='2'><path d='M5 12h14'></path><path d='M12 5v14'></path></svg>") 12 12, auto;
+        }
+        
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 1rem;
+            margin-bottom: 2rem;
+            border: 4px solid var(--primary);
+            background: rgba(0, 0, 51, 0.7);
+            box-shadow: 0 0 20px var(--primary), inset 0 0 10px var(--secondary);
+            animation: border-pulse 4s infinite;
+        }
+        
+        @keyframes border-pulse {
+            0% { border-color: var(--primary); box-shadow: 0 0 20px var(--primary), inset 0 0 10px var(--secondary); }
+            50% { border-color: var(--secondary); box-shadow: 0 0 20px var(--secondary), inset 0 0 10px var(--primary); }
+            100% { border-color: var(--primary); box-shadow: 0 0 20px var(--primary), inset 0 0 10px var(--secondary); }
+        }
+        
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            text-shadow: 4px 4px 0 var(--secondary);
+        }
+        
+        h2 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            color: var(--secondary);
+            text-shadow: 2px 2px 0 var(--primary);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+        
+        p {
+            font-size: 1.5rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border: 4px solid var(--secondary);
+            background: rgba(0, 0, 51, 0.7);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            animation: scan-line 4s linear infinite;
+        }
+        
+        @keyframes scan-line {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        ul {
+            list-style-type: none;
+            padding-left: 1rem;
+        }
+        
+        li {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .skill-group {
+            flex: 1 1 200px;
+        }
+        
+        .experience-item {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .experience-title {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .glitch-effect {
+            animation: glitch 3s infinite;
+            position: relative;
+        }
+        
+        @keyframes glitch {
+            0%, 90%, 100% { 
+                transform: translate(0); 
+                text-shadow: none;
+            }
+            92% { 
+                transform: translate(-5px, 3px); 
+                text-shadow: -2px 0 var(--primary);
+            }
+            94% { 
+                transform: translate(5px, -3px); 
+                text-shadow: 2px 0 var(--secondary);
+            }
+            96% { 
+                transform: translate(-3px, -5px); 
+                text-shadow: 2px 2px var(--accent);
+            }
+            98% { 
+                transform: translate(3px, 2px); 
+                text-shadow: -2px -2px var(--primary);
+            }
+        }
+        
+        #controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(0, 0, 51, 0.8);
+            border: 2px solid var(--accent);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+        
+        button {
+            font-family: 'Press Start 2P', cursive;
+            background: var(--primary);
+            border: none;
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: var(--secondary);
+        }
+        
+        .pixelated {
+            image-rendering: pixelated;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bg"></canvas>
+    
+    <div class="container">
+        <header>
+            <h1 class="glitch-effect">William Struve</h1>
+            <p>Fresh UCR CS Grad👋</p>
+        </header>
+        
+        <section class="section">
+            <h2>Background</h2>
+            <p>I have been programming for a couple years, and have experience with various languages such as C, HTML, and Java. More recently I've been learning CSS, JavaScript, Node, and React. I like fishing and music production as hobbies.</p>
+        </section>
+        
+        <section class="section">
+            <h2>Fun facts about me</h2>
+            <ul>
+                <li>I have a pet cat named Stark</li>
+                <li>I can cook pasta because I'm Italian</li>
+                <li>I have great reflexes but terrible memory</li>
+            </ul>
+        </section>
+        
+        <section class="section">
+            <h2>Skills</h2>
+            <div class="skills">
+                <div class="skill-group">
+                    <h3>Programming languages:</h3>
+                    <ul>
+                        <li>JavaScript</li>
+                        <li>CSS</li>
+                        <li>HTML</li>
+                        <li>C</li>
+                        <li>C++</li>
+                        <li>Java</li>
+                    </ul>
+                </div>
+                
+                <div class="skill-group">
+                    <h3>IDEs:</h3>
+                    <ul>
+                        <li>VSCode</li>
+                        <li>NetBeans</li>
+                        <li>IntelliJ</li>
+                        <li>Eclipse</li>
+                        <li>Jupyter</li>
+                    </ul>
+                </div>
+                
+                <div class="skill-group">
+                    <h3>Frameworks:</h3>
+                    <ul>
+                        <li>React.js</li>
+                        <li>Node.js</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Experience🧑‍💼</h2>
+            
+            <div class="experience-item">
+                <div class="experience-title">
+                    <span>Mochinut Kitchen Staff</span>
+                    <span>6/21 - 1/22</span>
+                </div>
+                <ul>
+                    <li>Made and mixed dough, made corn dogs</li>
+                    <li>Fried, frosted, and decorated donuts controlling supply</li>
+                </ul>
+            </div>
+            
+            <div class="experience-item">
+                <div class="experience-title">
+                    <span>Aloha Senior Living Anaheim Caregiver</span>
+                    <span>5/20 - 5/21</span>
+                </div>
+                <ul>
+                    <li>Prepared breakfast, lunch, and dinner for residents, fed residents</li>
+                    <li>Moved residents, changed diapers, cleaned facility</li>
+                </ul>
+            </div>
+            
+            <div class="experience-item">
+                <div class="experience-title">
+                    <span>Lepow International Web Development Intern</span>
+                    <span>6/19 - 4/19</span>
+                </div>
+                <ul>
+                    <li>Created, updated, and edited web pages for various company sites</li>
+                    <li>Worked with Wordpress, Elementor, and PHP</li>
+                    <li>Note: took a tech hiatus due to TBI</li>
+                </ul>
+            </div>
+            
+            <div class="experience-item">
+                <div class="experience-title">
+                    <span>Mt. San Antonio College Technical Education Resource Center Tutor</span>
+                    <span>12/18 - 4/19</span>
+                </div>
+                <ul>
+                    <li>Taught students Math / English / Physics / Computer Science</li>
+                    <li>Simplified ideas taught in class for students to easily retain</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+    
+    <div id="controls">
+        <button id="toggleEffect1">Toggle Grid Effect</button>
+        <button id="toggleEffect2">Toggle Particles</button>
+        <button id="toggleEffect3">Toggle Colors</button>
+    </div>
+
+    <script>
+        // Three.js setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({
+            canvas: document.querySelector('#bg'),
+            alpha: true
+        });
+        
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.position.z = 30;
+        
+        // Variables for mouse interaction
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+        
+        // Variables for scroll interaction
+        let scrollY = 0;
+        let targetScrollY = 0;
+        
+        // Grid effect
+        const gridSize = 50;
+        const gridDivisions = 20;
+        const gridHelper = new THREE.GridHelper(gridSize, gridDivisions, 0xff00ff, 0x00ffff);
+        gridHelper.position.y = -15;
+        scene.add(gridHelper);
+        
+        // Abstract objects
+        const abstractGroup = new THREE.Group();
+        scene.add(abstractGroup);
+        
+        // Create torus
+        const torusGeometry = new THREE.TorusGeometry(10, 3, 16, 100);
+        const torusMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0xff00ff, 
+            wireframe: true 
+        });
+        const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+        abstractGroup.add(torus);
+        
+        // Create icosahedron
+        const icosaGeometry = new THREE.IcosahedronGeometry(8, 0);
+        const icosaMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0x00ffff, 
+            wireframe: true 
+        });
+        const icosahedron = new THREE.Mesh(icosaGeometry, icosaMaterial);
+        abstractGroup.add(icosahedron);
+        
+        // Create octahedron
+        const octaGeometry = new THREE.OctahedronGeometry(6, 0);
+        const octaMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0xffff00, 
+            wireframe: true 
+        });
+        const octahedron = new THREE.Mesh(octaGeometry, octaMaterial);
+        abstractGroup.add(octahedron);
+        
+        // Particles effect
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCnt = 5000;
+        const posArray = new Float32Array(particlesCnt * 3);
+        
+        for(let i = 0; i < particlesCnt * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 100;
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.2,
+            color: 0xffffff
+        });
+        
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        
+        // Event listeners
+        document.addEventListener('mousemove', onDocumentMouseMove);
+        window.addEventListener('scroll', onScroll);
+        window.addEventListener('resize', onWindowResize);
+        
+        // Control buttons
+        document.getElementById('toggleEffect1').addEventListener('click', () => {
+            gridHelper.visible = !gridHelper.visible;
+        });
+        
+        document.getElementById('toggleEffect2').addEventListener('click', () => {
+            particlesMesh.visible = !particlesMesh.visible;
+        });
+        
+        let colorMode = 0;
+        document.getElementById('toggleEffect3').addEventListener('click', () => {
+            colorMode = (colorMode + 1) % 3;
+            
+            if (colorMode === 0) {
+                torusMaterial.color.set(0xff00ff);
+                icosaMaterial.color.set(0x00ffff);
+                octaMaterial.color.set(0xffff00);
+            } else if (colorMode === 1) {
+                torusMaterial.color.set(0x00ff00);
+                icosaMaterial.color.set(0xff0000);
+                octaMaterial.color.set(0x0000ff);
+            } else {
+                torusMaterial.color.set(0xffffff);
+                icosaMaterial.color.set(0xffffff);
+                octaMaterial.color.set(0xffffff);
+            }
+        });
+        
+        function onDocumentMouseMove(event) {
+            mouseX = (event.clientX - windowHalfX);
+            mouseY = (event.clientY - windowHalfY);
+        }
+        
+        function onScroll() {
+            scrollY = window.scrollY;
+        }
+        
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Smooth mouse movement
+            targetX = mouseX * 0.001;
+            targetY = mouseY * 0.001;
+            
+            // Smooth scroll movement
+            targetScrollY = scrollY * 0.005;
+            
+            // Rotate abstract group based on mouse position
+            abstractGroup.rotation.y += 0.005 * (targetX - abstractGroup.rotation.y);
+            abstractGroup.rotation.x += 0.005 * (targetY - abstractGroup.rotation.x);
+            
+            // Individual rotations for objects
+            torus.rotation.x += 0.01;
+            torus.rotation.y += 0.005;
+            
+            icosahedron.rotation.x -= 0.007;
+            icosahedron.rotation.z += 0.01;
+            
+            octahedron.rotation.y += 0.02;
+            octahedron.rotation.z -= 0.01;
+            
+            // Scale objects based on scroll
+            const scaleFactor = 1 + (targetScrollY * 0.01);
+            abstractGroup.scale.set(
+                Math.max(0.5, Math.min(1.5, scaleFactor)),
+                Math.max(0.5, Math.min(1.5, scaleFactor)),
+                Math.max(0.5, Math.min(1.5, scaleFactor))
+            );
+            
+            // Move grid based on scroll
+            gridHelper.position.y = -15 + (targetScrollY * 0.1);
+            
+            // Rotate particles
+            particlesMesh.rotation.y += 0.001;
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+    </script>
+</body>
+</html>
