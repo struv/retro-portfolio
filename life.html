@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychedelic Game of Life - William Struve</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Psychedelic styles */
+        @keyframes rainbow-bg {
+            0% { background-color: #ff0000; }
+            17% { background-color: #ff00ff; }
+            33% { background-color: #0000ff; }
+            50% { background-color: #00ffff; }
+            67% { background-color: #00ff00; }
+            83% { background-color: #ffff00; }
+            100% { background-color: #ff0000; }
+        }
+        
+        @keyframes rainbow-glow {
+            0% { box-shadow: 0 0 8px 2px #ff0000; }
+            17% { box-shadow: 0 0 8px 2px #ff00ff; }
+            33% { box-shadow: 0 0 8px 2px #0000ff; }
+            50% { box-shadow: 0 0 8px 2px #00ffff; }
+            67% { box-shadow: 0 0 8px 2px #00ff00; }
+            83% { box-shadow: 0 0 8px 2px #ffff00; }
+            100% { box-shadow: 0 0 8px 2px #ff0000; }
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse-size {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes zoom-in-out {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(0.95); }
+            75% { transform: scale(1.05); }
+        }
+        
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5rem 1rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff);
+            opacity: 0.1;
+            z-index: -1;
+            animation: rainbow-bg 10s linear infinite;
+        }
+        
+        .game-container {
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            animation: pulse-size 8s ease-in-out infinite;
+        }
+        
+        .game-title {
+            font-family: 'Press Start 2P', cursive;
+            position: relative;
+            color: transparent !important;
+            background: linear-gradient(90deg, #ff0000, #ff00ff, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000);
+            background-size: 400% 100%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            animation: rainbow-bg 5s linear infinite;
+            text-shadow: 0px 0px 10px rgba(255, 0, 255, 0.7);
+        }
+        
+        /* Override Tailwind text colors */
+        .text-2xl, .text-xl, .text-lg {
+            color: var(--accent);
+        }
+        
+        /* Psychedelic buttons */
+        .psych-button {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            border: none;
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            font-family: 'VT323', monospace;
+            font-size: 1.25rem;
+            text-shadow: 1px 1px 0 #000;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            animation: rainbow-glow 8s linear infinite;
+            z-index: 1;
+        }
+        
+        .psych-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+            z-index: -1;
+        }
+        
+        .psych-button:hover::before {
+            left: 100%;
+        }
+        
+        .psych-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.8);
+        }
+        
+        /* Psychedelic grid */
+        .grid-container {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            background: transparent;
+            padding: 2px;
+            border: 2px solid #ff00ff;
+            box-shadow: 0 0 20px #00ffff, inset 0 0 10px #ff00ff;
+            animation: rainbow-glow 8s linear infinite;
+            transition: all 0.5s ease;
+        }
+        
+        .zoom-effect {
+            animation: zoom-in-out 5s infinite ease-in-out;
+        }
+        
+        .psych-grid {
+            display: grid;
+            gap: 1px;
+            background: rgba(0, 0, 0, 0.3);
+            transform-style: preserve-3d;
+            transform: rotateX(5deg);
+            transition: transform 0.3s ease;
+        }
+        
+        .psych-grid:hover {
+            transform: rotateX(0deg);
+        }
+        
+        /* Cell styles */
+        .cell {
+            width: 16px;
+            height: 16px;
+            border: 1px solid rgba(255, 0, 255, 0.3);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+        
+        .cell.alive {
+            background-color: transparent;
+            animation: rainbow-bg 3s linear infinite;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+            transform: scale(1.15);
+            z-index: 2;
+        }
+        
+        .cell.dead {
+            background-color: transparent;
+            border: 1px solid rgba(255, 0, 255, 0.3);
+            transition: background-color 0.5s ease;
+        }
+        
+        .cell:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.2);
+            z-index: 3;
+        }
+        
+        /* Slider styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 8px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #ffffff;
+            box-shadow: 0 0 5px rgba(255, 0, 255, 0.8);
+            cursor: pointer;
+            animation: rainbow-bg 5s linear infinite;
+        }
+        
+        /* Generation counter */
+        .generation-counter {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            animation: pulse-size 2s ease-in-out infinite;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: 2px solid #00ffff;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+        }
+        
+        /* Select styling */
+        select {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            color: white;
+            text-shadow: 1px 1px 0 black;
+            border: none;
+            animation: rainbow-glow 8s linear infinite;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="site-name">W.STRUVE</a>
+            <button class="mobile-toggle" id="mobileToggle">☰</button>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="life.html" class="nav-link">Game of Life</a>
+                <!-- Add more links here as needed -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="app-container">
+        <div class="game-container retro-container">
+            <div id="root"></div>
+        </div>
+    </div>
+
+    <script type="text/babel">
+        const { useState, useCallback, useRef, useEffect } = React;
+
+        const GameOfLife = () => {
+          const [gridSize, setGridSize] = useState({ rows: 25, cols: 25 });
+          const [cellSize, setCellSize] = useState(16);
+          const [grid, setGrid] = useState([]);
+          const [running, setRunning] = useState(false);
+          const [generation, setGeneration] = useState(0);
+          const [speed, setSpeed] = useState(100);
+          const [hue, setHue] = useState(0);
+          const [zoomActive, setZoomActive] = useState(false);
+          
+          const runningRef = useRef(running);
+          runningRef.current = running;
+          
+          // Initialize empty grid
+          useEffect(() => {
+            resetGrid();
+          }, [gridSize]);
+          
+          // Psychedelic hue rotation
+          useEffect(() => {
+            const interval = setInterval(() => {
+              setHue(h => (h + 1) % 360);
+            }, 50);
+            
+            return () => clearInterval(interval);
+          }, []);
+          
+          // Create empty grid
+          const resetGrid = () => {
+            const newGrid = Array(gridSize.rows).fill().map(() => 
+              Array(gridSize.cols).fill(false)
+            );
+            setGrid(newGrid);
+            setGeneration(0);
+            setRunning(false);
+            runningRef.current = false;
+          };
+
+          // Create random grid
+          const randomizeGrid = () => {
+            const newGrid = Array(gridSize.rows).fill().map(() => 
+              Array(gridSize.cols).fill().map(() => Math.random() > 0.7)
+            );
+            setGrid(newGrid);
+            setGeneration(0);
+          };
+          
+          // Toggle cell state with psychedelic delay
+          const toggleCell = (i, j) => {
+            if (running) return;
+            
+            // Create a deep copy of the grid to update the specific cell
+            const newGrid = grid.map(row => [...row]);
+            newGrid[i][j] = !newGrid[i][j];
+            setGrid(newGrid);
+            
+            // Psychedelic effect - ripple effect
+            setTimeout(() => {
+              const rippleGrid = grid.map(row => [...row]);
+              // Get neighbors
+              const directions = [
+                [-1, -1], [-1, 0], [-1, 1],
+                [0, -1],           [0, 1],
+                [1, -1],  [1, 0],  [1, 1]
+              ];
+              
+              for (let [dx, dy] of directions) {
+                const newI = (i + dx + gridSize.rows) % gridSize.rows;
+                const newJ = (j + dy + gridSize.cols) % gridSize.cols;
+                // Small chance to toggle neighbor cells for visual effect
+                if (Math.random() > 0.8) {
+                  rippleGrid[newI][newJ] = !rippleGrid[newI][newJ];
+                }
+              }
+              // Only apply if still not running
+              if (!runningRef.current) {
+                setGrid(rippleGrid);
+              }
+            }, 150);
+          };
+          
+          // Calculate next generation with psychedelic effects
+          const runSimulation = useCallback(() => {
+            if (!runningRef.current) return;
+            
+            setGrid(g => {
+              const newGrid = g.map((row, i) => 
+                row.map((cell, j) => {
+                  const neighbors = countNeighbors(g, i, j);
+                  
+                  // Conway's Game of Life rules with rare psychedelic mutations
+                  if (cell && (neighbors < 2 || neighbors > 3)) {
+                    // Death by underpopulation or overpopulation
+                    return Math.random() > 0.99 ? true : false; 
+                  }
+                  if (!cell && neighbors === 3) {
+                    // Birth
+                    return true;
+                  }
+                  // Rare spontaneous generation for visual interest
+                  if (!cell && Math.random() > 0.997) {
+                    return true;
+                  }
+                  return cell; // Survival
+                })
+              );
+              
+              return newGrid;
+            });
+            
+            setGeneration(gen => gen + 1);
+            setTimeout(runSimulation, speed);
+          }, [speed, gridSize]);
+          
+          // Count neighbors for a cell
+          const countNeighbors = (grid, i, j) => {
+            let count = 0;
+            const directions = [
+              [-1, -1], [-1, 0], [-1, 1],
+              [0, -1],           [0, 1],
+              [1, -1],  [1, 0],  [1, 1]
+            ];
+            
+            for (let [dx, dy] of directions) {
+              const newI = (i + dx + gridSize.rows) % gridSize.rows;
+              const newJ = (j + dy + gridSize.cols) % gridSize.cols;
+              if (grid[newI][newJ]) count++;
+            }
+            
+            return count;
+          };
+          
+          // Start/stop simulation
+          const toggleRunning = () => {
+            const newRunning = !running;
+            setRunning(newRunning);
+            runningRef.current = newRunning;
+            
+            // Toggle zoom effect when starting/stopping
+            setZoomActive(newRunning);
+            
+            if (newRunning) {
+              runningRef.current = true;
+              runSimulation();
+            }
+          };
+          
+          // Preset patterns
+          const presets = {
+            glider: [
+              [0, 2], [1, 0], [1, 2], [2, 1], [2, 2]
+            ],
+            blinker: [
+              [1, 0], [1, 1], [1, 2]
+            ],
+            pulsar: [
+              [2, 4], [2, 5], [2, 6], [2, 10], [2, 11], [2, 12],
+              [4, 2], [4, 7], [4, 9], [4, 14],
+              [5, 2], [5, 7], [5, 9], [5, 14],
+              [6, 2], [6, 7], [6, 9], [6, 14],
+              [7, 4], [7, 5], [7, 6], [7, 10], [7, 11], [7, 12],
+              [9, 4], [9, 5], [9, 6], [9, 10], [9, 11], [9, 12],
+              [10, 2], [10, 7], [10, 9], [10, 14],
+              [11, 2], [11, 7], [11, 9], [11, 14],
+              [12, 2], [12, 7], [12, 9], [12, 14],
+              [14, 4], [14, 5], [14, 6], [14, 10], [14, 11], [14, 12]
+            ],
+            gosperGliderGun: [
+              [5, 1], [5, 2], [6, 1], [6, 2],
+              [5, 11], [6, 11], [7, 11], [4, 12], [8, 12], [3, 13], [9, 13],
+              [3, 14], [9, 14], [6, 15], [4, 16], [8, 16], [5, 17], [6, 17], [7, 17],
+              [6, 18], [3, 21], [4, 21], [5, 21], [3, 22], [4, 22], [5, 22],
+              [2, 23], [6, 23], [1, 25], [2, 25], [6, 25], [7, 25],
+              [3, 35], [4, 35], [3, 36], [4, 36]
+            ],
+            beacon: [
+              [1, 1], [1, 2], [2, 1], [2, 2],
+              [3, 3], [3, 4], [4, 3], [4, 4]
+            ],
+            toad: [
+              [2, 2], [2, 3], [2, 4],
+              [3, 1], [3, 2], [3, 3]
+            ],
+            lwss: [ // Lightweight spaceship
+              [1, 1], [1, 4],
+              [2, 5],
+              [3, 1], [3, 5],
+              [4, 2], [4, 3], [4, 4], [4, 5]
+            ],
+            pentadecathlon: [
+              [5, 8], [6, 8], [7, 7], [7, 9], [8, 8], [9, 8],
+              [10, 8], [11, 8], [12, 7], [12, 9], [13, 8], [14, 8]
+            ],
+            diehard: [
+              [4, 14], [5, 8], [5, 9], [6, 9], [6, 13], [6, 14], [6, 15]
+            ],
+            psychedelic: [
+              // A custom psychedelic pattern - flower of life
+              [12, 12], 
+              [11, 11], [11, 12], [11, 13],
+              [12, 11], [12, 13],
+              [13, 11], [13, 12], [13, 13],
+              [10, 10], [10, 14], [14, 10], [14, 14],
+              [9, 12], [12, 9], [15, 12], [12, 15],
+              [8, 8], [8, 16], [16, 8], [16, 16]
+            ]
+          };
+          
+          const loadPreset = (name) => {
+            if (!presets[name]) return;
+            
+            // Create a blank grid
+            const newGrid = Array(gridSize.rows).fill().map(() => 
+              Array(gridSize.cols).fill(false)
+            );
+            
+            // Middle of the grid for centering
+            const centerI = Math.floor(gridSize.rows / 2) - 3;
+            const centerJ = Math.floor(gridSize.cols / 2) - 3;
+            
+            // Set cells according to the pattern
+            presets[name].forEach(([i, j]) => {
+              const newI = centerI + i;
+              const newJ = centerJ + j;
+              if (newI >= 0 && newI < gridSize.rows && newJ >= 0 && newJ < gridSize.cols) {
+                newGrid[newI][newJ] = true;
+              }
+            });
+            
+            setGrid(newGrid);
+            setGeneration(0);
+          };
+          
+          return (
+            <div className="flex flex-col items-center w-full mt-4">
+              <h1 className="game-title text-2xl font-bold mb-4">Psychedelic Game of Life</h1>
+              
+              <div className="mb-4 flex flex-wrap gap-2">
+                <button 
+                  className="psych-button" 
+                  onClick={toggleRunning}
+                  style={{
+                    filter: `hue-rotate(${running ? 180 : 0}deg)`,
+                    transition: 'filter 0.5s ease'
+                  }}
+                >
+                  {running ? 'Stop Tripping' : 'Start Trip'}
+                </button>
+                <button 
+                  className="psych-button"
+                  onClick={resetGrid}
+                >
+                  Reset
+                </button>
+                <button 
+                  className="psych-button"
+                  onClick={randomizeGrid}
+                >
+                  Randomize
+                </button>
+                
+                <select 
+                  className="psych-button"
+                  onChange={(e) => loadPreset(e.target.value)}
+                  value=""
+                >
+                  <option value="" disabled>Choose Pattern</option>
+                  <option value="psychedelic">✨ Trippy Flower ✨</option>
+                  <option value="glider">Glider</option>
+                  <option value="blinker">Blinker</option>
+                  <option value="beacon">Beacon</option>
+                  <option value="toad">Toad</option>
+                  <option value="lwss">Spaceship</option>
+                  <option value="pulsar">Pulsar</option>
+                  <option value="gosperGliderGun">Glider Gun</option>
+                </select>
+                
+                <div className="flex items-center">
+                  <span className="mr-2 text-white">Speed:</span>
+                  <input 
+                    type="range" 
+                    min="50" 
+                    max="500" 
+                    step="50" 
+                    value={500 - speed} 
+                    onChange={(e) => setSpeed(500 - parseInt(e.target.value))}
+                    className="w-32"
+                  />
+                </div>
+              </div>
+              
+              <div className="generation-counter">Generation: {generation}</div>
+              
+              <div className={`grid-container ${zoomActive ? 'zoom-effect' : ''}`}>
+                <div 
+                  className="psych-grid"
+                  style={{ 
+                    gridTemplateColumns: `repeat(${gridSize.cols}, ${cellSize}px)`,
+                    transform: `rotateX(5deg) rotateY(${Math.sin(generation/10) * 3}deg)`
+                  }}
+                >
+                  {grid.map((rows, i) => 
+                    rows.map((cell, j) => {
+                      // Calculate distance from center for radial effects
+                      const centerI = Math.floor(gridSize.rows / 2);
+                      const centerJ = Math.floor(gridSize.cols / 2);
+                      const distFromCenter = Math.sqrt(Math.pow(i - centerI, 2) + Math.pow(j - centerJ, 2));
+                      const maxDist = Math.sqrt(Math.pow(gridSize.rows/2, 2) + Math.pow(gridSize.cols/2, 2));
+                      const distRatio = distFromCenter / maxDist;
+                      
+                      // Calculate individual cell hue based on position and generation
+                      const cellHue = (hue + (i * 10) + (j * 10) + (generation * 5)) % 360;
+                      
+                      return (
+                        <div
+                          key={`${i}-${j}`}
+                          onClick={() => toggleCell(i, j)}
+                          className={`cell ${cell ? 'alive' : 'dead'}`}
+                          style={{
+                            cursor: running ? 'default' : 'pointer',
+                            background: cell ? `hsl(${cellHue}, 100%, 50%)` : 'transparent',
+                            boxShadow: cell ? `0 0 ${5 + Math.sin(generation/5) * 3}px hsl(${cellHue}, 100%, 70%)` : 'none',
+                            transform: cell ? `scale(${1 + Math.sin(generation/10 + distRatio * 5) * 0.1})` : 'scale(1)',
+                            transition: `all ${0.2 + distRatio * 0.3}s ease`,
+                            zIndex: cell ? 2 : 1,
+                            opacity: cell ? 1 : (zoomActive ? 0.4 : 0.2)
+                          }}
+                        />
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+              
+              <div className="mt-4 text-sm text-gray-400" style={{textShadow: '0 0 5px #ff00ff'}}>
+                Click cells to toggle them when stopped. Let your mind drift into the patterns...
+              </div>
+            </div>
+          );
+        };
+
+        ReactDOM.render(<GameOfLife />, document.getElementById('root'));
+    </script>
+
+    <script src="nav.js"></script>
+</body>
+</html>
