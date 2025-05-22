@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Melody Generator - William Struve</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Retro styles */
+        @keyframes scan-line {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        
+        @keyframes border-pulse {
+            0%, 100% { border-color: var(--primary); }
+            50% { border-color: var(--secondary); }
+        }
+        
+        .retro-container {
+            background: rgba(0, 0, 51, 0.7);
+            border: 4px solid var(--primary);
+            box-shadow: 0 0 20px var(--primary), inset 0 0 10px var(--secondary);
+            animation: border-pulse 4s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .retro-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            animation: scan-line 4s linear infinite;
+        }
+        
+        #controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(0, 0, 51, 0.8);
+            border: 2px solid var(--accent);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 1000;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        #toggleMusic {
+            background: rgba(0, 0, 51, 0.9);
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #toggleMusic:hover {
+            background: var(--accent);
+            color: rgba(0, 0, 51, 0.9);
+        }
+
+        #volumeControl {
+            position: relative;
+            z-index: 1001;
+            cursor: pointer;
+            width: 100%;
+            accent-color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="site-name">W.STRUVE</a>
+            <button class="mobile-toggle" id="mobileToggle">☰</button>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="life.html" class="nav-link">Game of Life</a>
+                <a href="melody.html" class="nav-link">Melody Generator</a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="controls">
+        <button id="toggleMusic" class="retro-button">Pause Music</button>
+        <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="0.5">
+    </div>
+
+    <div class="container">
+        <div class="retro-container">
+            <div id="root"></div>
+        </div>
+    </div>
+
+    <script src="nav.js"></script>
+    <script src="public/music.js"></script>
+    <script type="text/babel" src="melody.js"></script>
+    <script type="text/babel">
+        // Render the RetroMelodyGenerator component
+        ReactDOM.render(<RetroMelodyGenerator />, document.getElementById('root'));
+    </script>
+    <script>
+        // Music controls
+        const toggleMusicBtn = document.getElementById('toggleMusic');
+        const volumeControl = document.getElementById('volumeControl');
+
+        // Volume control
+        volumeControl.addEventListener('input', (e) => {
+            setVolume(e.target.value);
+        });
+
+        toggleMusicBtn.addEventListener('click', () => {
+            toggleMusic();
+            toggleMusicBtn.textContent = isMusicPlaying ? 'Pause Music' : 'Play Music';
+        });
+    </script>
+</body>
+</html> 
