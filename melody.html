@@ -3,127 +3,764 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retro Melody Generator - William Struve</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* Retro styles */
-        @keyframes scan-line {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
-        }
-        
-        @keyframes border-pulse {
-            0%, 100% { border-color: var(--primary); }
-            50% { border-color: var(--secondary); }
-        }
-        
-        .retro-container {
-            background: rgba(0, 0, 51, 0.7);
-            border: 4px solid var(--primary);
-            box-shadow: 0 0 20px var(--primary), inset 0 0 10px var(--secondary);
-            animation: border-pulse 4s infinite;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .retro-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            animation: scan-line 4s linear infinite;
-        }
-        
-        #controls {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: rgba(0, 0, 51, 0.8);
-            border: 2px solid var(--accent);
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            z-index: 1000;
-            box-shadow: 0 0 10px var(--primary);
-        }
-
-        #toggleMusic {
-            background: rgba(0, 0, 51, 0.9);
-            border: 2px solid var(--accent);
-            color: var(--accent);
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        #toggleMusic:hover {
-            background: var(--accent);
-            color: rgba(0, 0, 51, 0.9);
-        }
-
-        #volumeControl {
-            position: relative;
-            z-index: 1001;
-            cursor: pointer;
-            width: 100%;
-            accent-color: var(--accent);
-        }
-    </style>
+    <title>Retro Melody Generator</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="site-name">W.STRUVE</a>
-            <button class="mobile-toggle" id="mobileToggle">☰</button>
-            <div class="nav-links" id="navLinks">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="life.html" class="nav-link">Game of Life</a>
-                <a href="melody.html" class="nav-link">Melody Generator</a>
-            </div>
-        </div>
-    </nav>
-
-    <div id="controls">
-        <button id="toggleMusic" class="retro-button">Pause Music</button>
-        <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="0.5">
-    </div>
-
-    <div class="container">
-        <div class="retro-container">
-            <div id="root"></div>
-        </div>
-    </div>
-
-    <script src="nav.js"></script>
-    <script src="public/music.js"></script>
-    <script type="text/babel" src="melody.js"></script>
+    <div id="melody-generator"></div>
+    
     <script type="text/babel">
-        // Render the RetroMelodyGenerator component
-        ReactDOM.render(<RetroMelodyGenerator />, document.getElementById('root'));
-    </script>
-    <script>
-        // Music controls
-        const toggleMusicBtn = document.getElementById('toggleMusic');
-        const volumeControl = document.getElementById('volumeControl');
+        // Remove ES6 imports since we're using CDN versions
+        const { useState, useEffect, useRef } = React;
+        const Tone = window.Tone;
 
-        // Volume control
-        volumeControl.addEventListener('input', (e) => {
-            setVolume(e.target.value);
-        });
+        // Existing data from the Python code
+        const progression_1 = ["Ebmin13", "Abmin13", "Dbmin11", "Gbmin13", "GbminAdd9_11", "Ebmin"];
 
-        toggleMusicBtn.addEventListener('click', () => {
-            toggleMusic();
-            toggleMusicBtn.textContent = isMusicPlaying ? 'Pause Music' : 'Play Music';
-        });
+        const chord_scales = {
+          "Ebmin13": ["Eb", "F", "Gb", "Ab", "Bb", "C", "Db"],
+          "Abmin13": ["Ab", "Bb", "Cb", "Db", "Eb", "F", "Gb"],
+          "Dbmin11": ["Db", "E", "Gb", "Ab", "Cb", "Eb"],
+          "Gbmin13": ["Gb", "Ab", "A", "B", "Db", "Eb", "E"],
+          "GbminAdd9_11": ["Gb", "A", "Db", "Ab", "Cb"],
+          "Ebmin": ["Eb", "F", "Gb", "Ab", "Bb", "Cb", "Db"],
+        };
+
+        const midi_notes = {
+          'C': 60, 'C#': 61, 'Db': 61, 'D': 62, 'D#': 63, 'Eb': 63, 'E': 64, 'F': 65,
+          'F#': 66, 'Gb': 66, 'G': 67, 'G#': 68, 'Ab': 68, 'A': 69, 'A#': 70, 'Bb': 70, 'B': 71, 'Cb': 71
+        };
+
+        const RetroMelodyGenerator = () => {
+          const [melody, setMelody] = useState([]);
+          const [isPlaying, setIsPlaying] = useState(false);
+          const [synth, setSynth] = useState(null);
+          const [generationOptions, setGenerationOptions] = useState({
+            notesPerChord: 4,
+            chromaticProbability: 0.2,
+            chordProbability: 0.25,
+            numberOfChords: 6,
+            baseOctave: 3,
+            waveform: 'sine',
+            maxFrequency: 16
+          });
+          const [currentNote, setCurrentNote] = useState(-1);
+          const [visualNotes, setVisualNotes] = useState([]);
+          const [isExporting, setIsExporting] = useState(false);
+          const [exportFormat, setExportFormat] = useState('wav');
+          const [exportProgress, setExportProgress] = useState(0);
+          
+          const canvasRef = useRef(null);
+          const animationRef = useRef(null);
+          const analyzerRef = useRef(null);
+
+          // Initialize Tone.js synth
+          useEffect(() => {
+            const newSynth = new Tone.PolySynth(Tone.Synth, {
+              oscillator: {
+                type: generationOptions.waveform
+              }
+            }).toDestination();
+            
+            newSynth.volume.value = -6; // Lower the volume a bit
+            setSynth(newSynth);
+
+            return () => {
+              if (newSynth) {
+                newSynth.dispose();
+              }
+            };
+          }, [generationOptions.waveform]);
+
+          // Set up canvas visualizer
+          useEffect(() => {
+            const canvas = canvasRef.current;
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            const analyser = Tone.getContext().createAnalyser();
+            analyser.fftSize = 256;
+            Tone.getDestination().connect(analyser);
+            analyzerRef.current = analyser;
+
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+
+            const renderFrame = () => {
+              if (!canvas) return;
+              
+              animationRef.current = requestAnimationFrame(renderFrame);
+              analyser.getByteFrequencyData(dataArray);
+              
+              ctx.fillStyle = 'rgb(0, 0, 0)';
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              
+              // Focus on lower frequencies based on user setting
+              const maxFreq = generationOptions.maxFrequency;
+              const barWidth = (canvas.width / maxFreq) * 0.8;
+              let x = 0;
+              
+              for (let i = 0; i < maxFreq; i++) {
+                // Apply emphasis to lower frequencies
+                const emphasizedValue = i < 8 
+                  ? dataArray[i] * (1.2 - (i * 0.05)) // Boost lowest frequencies
+                  : dataArray[i] * (0.8 - ((i - 8) * 0.05)); // Gradually reduce higher frequencies
+                
+                const barHeight = emphasizedValue / 256 * canvas.height / 2;
+                
+                // Generate a color based on frequency and time - warmer colors for low frequencies
+                const hue = Math.max(0, 50 - (i * 3)) + (Date.now() * 0.02) % 30;
+                ctx.fillStyle = `hsl(${hue}, 90%, 50%)`;
+                
+                // Draw bars mirrored on top and bottom
+                ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+                ctx.fillRect(x, 0, barWidth, barHeight * 0.7);
+                
+                x += barWidth + 2; // Bigger spacing between bars
+              }
+              
+              // Draw grid lines for retro effect
+              ctx.strokeStyle = 'rgba(0, 255, 0, 0.1)';
+              ctx.lineWidth = 1;
+              
+              // Horizontal grid lines
+              for (let y = 0; y < canvas.height; y += 10) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+              }
+              
+              // Draw a center line
+              ctx.strokeStyle = 'rgba(0, 255, 0, 0.3)';
+              ctx.beginPath();
+              ctx.moveTo(0, canvas.height / 2);
+              ctx.lineTo(canvas.width, canvas.height / 2);
+              ctx.stroke();
+            };
+            
+            renderFrame();
+            
+            return () => {
+              if (animationRef.current) {
+                cancelAnimationFrame(animationRef.current);
+              }
+              if (analyzerRef.current) {
+                analyzerRef.current.disconnect();
+              }
+            };
+          }, []);
+
+          // Handle window resize for canvas
+          useEffect(() => {
+            const handleResize = () => {
+              if (canvasRef.current) {
+                canvasRef.current.width = canvasRef.current.offsetWidth;
+                canvasRef.current.height = canvasRef.current.offsetHeight;
+              }
+            };
+            
+            window.addEventListener('resize', handleResize);
+            handleResize(); // Initialize size
+            
+            return () => window.removeEventListener('resize', handleResize);
+          }, []);
+
+          // Helper function to transpose a note up a half step
+          const transposeHalfStep = (note) => {
+            const noteOrder = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+            const flatToSharp = { 'Db': 'C#', 'Eb': 'D#', 'Gb': 'F#', 'Ab': 'G#', 'Bb': 'A#', 'Cb': 'B' };
+            
+            // Convert flat notation to sharp notation for processing
+            const normalizedNote = flatToSharp[note] || note;
+            
+            // Find the index of the note in the noteOrder array
+            const index = noteOrder.indexOf(normalizedNote);
+            
+            // If not found, return the original note
+            if (index === -1) return note;
+            
+            // Calculate the next index, wrapping around at 'G' to 'C'
+            let nextIndex;
+            if (normalizedNote === 'G') {
+              nextIndex = noteOrder.indexOf('C');
+            } else {
+              nextIndex = (index + 1) % noteOrder.length;
+            }
+            
+            return noteOrder[nextIndex];
+          };
+          
+          // Function to update a specific note in the melody
+          const updateNote = (melodyIndex, noteIndex) => {
+            const newMelody = [...melody];
+            const newVisualNotes = [...visualNotes];
+            
+            // Get the current note
+            const currentNote = newMelody[melodyIndex][noteIndex];
+            
+            // Transpose it up a half step
+            const newNote = transposeHalfStep(currentNote);
+            
+            // Update the melody
+            newMelody[melodyIndex][noteIndex] = newNote;
+            
+            // Update the visual representation
+            newVisualNotes[melodyIndex].notes[noteIndex] = newNote;
+            
+            setMelody(newMelody);
+            setVisualNotes(newVisualNotes);
+            
+            // Play the updated note for immediate feedback
+            if (synth) {
+              const midiNum = midi_notes[newNote];
+              const octave = generationOptions.baseOctave;
+              const freq = Tone.Frequency(midiNum + (octave - 3) * 12, "midi").toFrequency();
+              
+              synth.triggerAttackRelease(freq, "8n");
+            }
+          };
+
+          // Generate a melody based on the progression
+          const generateMelody = () => {
+            const newMelody = [];
+            setCurrentNote(-1);
+            
+            // Use a subset of the progression based on numberOfChords
+            const chordsToUse = progression_1.slice(0, Math.min(generationOptions.numberOfChords, progression_1.length));
+            
+            for (const chord of chordsToUse) {
+              const scaleNotes = chord_scales[chord] || [];
+              
+              for (let i = 0; i < generationOptions.notesPerChord; i++) {
+                if (Math.random() < generationOptions.chordProbability) {
+                  // Generate a chord
+                  const chordSize = Math.floor(Math.random() * 2) + 2; // 2-3 notes
+                  const chordNotes = [];
+                  
+                  for (let j = 0; j < chordSize; j++) {
+                    if (scaleNotes.length > 0) {
+                      const noteIndex = Math.floor(Math.random() * scaleNotes.length);
+                      chordNotes.push(scaleNotes[noteIndex]);
+                    }
+                  }
+                  
+                  newMelody.push(chordNotes);
+                } else {
+                  // Generate a single note
+                  if (scaleNotes.length > 0) {
+                    const noteIndex = Math.floor(Math.random() * scaleNotes.length);
+                    newMelody.push([scaleNotes[noteIndex]]);
+                  }
+                }
+              }
+            }
+            
+            // Create colorful visual representation
+            const newVisualNotes = newMelody.map(noteGroup => {
+              const hue = Math.floor(Math.random() * 360);
+              return {
+                notes: noteGroup,
+                color: `hsl(${hue}, 80%, 65%)`
+              };
+            });
+            
+            setVisualNotes(newVisualNotes);
+            setMelody(newMelody);
+          };
+
+          // Play the generated melody
+          const playMelody = async () => {
+            if (!synth || melody.length === 0) return;
+            
+            // Stop any playing melody
+            Tone.Transport.stop();
+            Tone.Transport.cancel();
+            
+            // Start audio context if needed
+            await Tone.start();
+            
+            setIsPlaying(true);
+            setCurrentNote(-1);
+            
+            // Create a sequence of notes with varied durations
+            const seq = new Tone.Sequence(
+              (time, noteIndex) => {
+                if (noteIndex < melody.length) {
+                  const noteGroup = melody[noteIndex];
+                  setCurrentNote(noteIndex);
+                  
+                  // Convert to frequencies and play
+                  const midiNumbers = noteGroup.map(note => {
+                    // Get MIDI number for the note
+                    const midiNum = midi_notes[note];
+                    // Convert MIDI number to frequency using the selected base octave
+                    const octaveVariation = Math.floor(Math.random() * 2); // Add 0 or 1 to the base octave for variety
+                    const octave = generationOptions.baseOctave + octaveVariation;
+                    return Tone.Frequency(midiNum + (octave - 3) * 12, "midi").toFrequency();
+                  });
+                  
+                  // Play the notes
+                  synth.triggerAttackRelease(midiNumbers, "8n", time);
+                } else {
+                  // End of sequence
+                  setIsPlaying(false);
+                  setCurrentNote(-1);
+                  Tone.Transport.stop();
+                }
+              },
+              Array.from({ length: melody.length }, (_, i) => i),
+              "8n"
+            );
+            
+            seq.start(0);
+            Tone.Transport.start();
+          };
+
+          // Stop playing
+          const stopPlaying = () => {
+            Tone.Transport.stop();
+            Tone.Transport.cancel();
+            setIsPlaying(false);
+            setCurrentNote(-1);
+          };
+
+          // Export functions
+          const exportMelody = async () => {
+            if (!melody.length) return;
+            
+            setIsExporting(true);
+            setExportProgress(0);
+            
+            try {
+              if (exportFormat === 'wav') {
+                await exportToWav();
+              } else if (exportFormat === 'midi') {
+                exportToMidi();
+              }
+            } catch (error) {
+              console.error('Error exporting melody:', error);
+            } finally {
+              setIsExporting(false);
+              setExportProgress(100);
+              
+              // Reset progress after 2 seconds
+              setTimeout(() => {
+                setExportProgress(0);
+              }, 2000);
+            }
+          };
+          
+          // Export to WAV using Tone.js recorder
+          const exportToWav = async () => {
+            try {
+              // Create a recorder
+              const recorder = new Tone.Recorder();
+              
+              // Connect our synth to the recorder
+              synth.connect(recorder);
+              
+              // Start recording
+              await recorder.start();
+              
+              // Play all notes in sequence
+              const now = Tone.now();
+              const duration = 0.5; // 0.5 seconds per note/chord
+              
+              for (let i = 0; i < melody.length; i++) {
+                const noteGroup = melody[i];
+                setExportProgress(Math.floor((i / melody.length) * 90));
+                
+                // Convert to frequencies
+                const midiNumbers = noteGroup.map(note => {
+                  const midiNum = midi_notes[note];
+                  const octave = generationOptions.baseOctave;
+                  return Tone.Frequency(midiNum + (octave - 3) * 12, "midi").toFrequency();
+                });
+                
+                // Schedule note playback
+                synth.triggerAttackRelease(midiNumbers, "8n", now + (i * duration));
+              }
+              
+              // Wait for all notes to play plus a little buffer
+              await new Promise(resolve => setTimeout(resolve, (melody.length * duration * 1000) + 500));
+              
+              // Stop recording
+              const recording = await recorder.stop();
+              
+              // Create a download link
+              const url = URL.createObjectURL(recording);
+              const link = document.createElement("a");
+              link.download = "retro-melody.wav";
+              link.href = url;
+              document.body.appendChild(link); // Append to body first (safer)
+              link.click();
+              document.body.removeChild(link); // Clean up the DOM
+              
+              // Clean up
+              setTimeout(() => URL.revokeObjectURL(url), 30000);
+              synth.disconnect(recorder);
+              recorder.dispose();
+              
+              setExportProgress(100);
+            } catch (error) {
+              console.error("Error exporting WAV:", error);
+              setExportProgress(0);
+              setIsExporting(false);
+            }
+          };
+          
+          // Export to MIDI file
+          const exportToMidi = () => {
+            try {
+              // Simple implementation of MIDI file creation
+              const midiHeader = [
+                0x4D, 0x54, 0x68, 0x64, // MThd
+                0x00, 0x00, 0x00, 0x06, // Header size
+                0x00, 0x00, // Format type 0
+                0x00, 0x01, // Number of tracks (1)
+                0x00, 0x60  // Time division (96 ticks per quarter note)
+              ];
+              
+              // Start track data
+              let trackData = [
+                0x4D, 0x54, 0x72, 0x6B // MTrk
+              ];
+              
+              // Add tempo meta event (120 BPM)
+              trackData = trackData.concat([
+                0x00, // Delta time
+                0xFF, 0x51, 0x03, // Tempo meta event
+                0x07, 0xA1, 0x20  // 120 BPM (500,000 microseconds per quarter note)
+              ]);
+              
+              // Add program change (set instrument to 80 - lead synth)
+              trackData = trackData.concat([
+                0x00, // Delta time
+                0xC0, 0x50 // Program change to instrument 80
+              ]);
+              
+              let currentTime = 0;
+              const ticksPerBeat = 96; // Standard MIDI ticks per quarter note
+              const noteDuration = ticksPerBeat / 2; // Eighth note duration
+              
+              // Add note events
+              for (const noteGroup of melody) {
+                // Note on events (all at the same time)
+                for (const note of noteGroup) {
+                  // Calculate MIDI note number
+                  const midiNum = midi_notes[note];
+                  const octave = generationOptions.baseOctave;
+                  const noteNumber = midiNum + (octave - 3) * 12;
+                  
+                  // Delta time (0 for simultaneous notes after the first)
+                  trackData.push(noteGroup.indexOf(note) === 0 ? currentTime === 0 ? 0x00 : 0x60 : 0x00);
+                  
+                  // Note on event (0x90 = note on, channel 1)
+                  trackData = trackData.concat([
+                    0x90, noteNumber, 0x64 // Note on, note number, velocity 100
+                  ]);
+                }
+                
+                // Note off events (all at the same time, after duration)
+                for (const note of noteGroup) {
+                  const midiNum = midi_notes[note];
+                  const octave = generationOptions.baseOctave;
+                  const noteNumber = midiNum + (octave - 3) * 12;
+                  
+                  // Delta time (note duration for first note, 0 for others)
+                  trackData.push(noteGroup.indexOf(note) === 0 ? noteDuration : 0x00);
+                  
+                  // Note off event (0x80 = note off, channel 1)
+                  trackData = trackData.concat([
+                    0x80, noteNumber, 0x00 // Note off, note number, velocity 0
+                  ]);
+                }
+                
+                currentTime += noteDuration;
+              }
+              
+              // End of track event
+              trackData = trackData.concat([
+                0x00, 0xFF, 0x2F, 0x00 // End of track
+              ]);
+              
+              // Track length (4 bytes, big-endian)
+              const trackLength = trackData.length - 4; // Subtract MTrk header
+              const trackLengthBytes = [
+                (trackLength >> 24) & 0xFF,
+                (trackLength >> 16) & 0xFF,
+                (trackLength >> 8) & 0xFF,
+                trackLength & 0xFF
+              ];
+              
+              // Insert track length after MTrk
+              trackData.splice(4, 0, ...trackLengthBytes);
+              
+              // Combine header and track data
+              const midiData = new Uint8Array([...midiHeader, ...trackData]);
+              
+              // Create a download link
+              const blob = new Blob([midiData], { type: "audio/midi" });
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement("a");
+              link.download = "retro-melody.mid";
+              link.href = url;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              
+              // Clean up
+              setTimeout(() => URL.revokeObjectURL(url), 30000);
+              
+              setExportProgress(100);
+            } catch (error) {
+              console.error("Error exporting MIDI:", error);
+              setExportProgress(0);
+              setIsExporting(false);
+            }
+          };
+
+          return (
+            <div className="flex flex-col items-center w-full max-w-4xl p-6 bg-black text-green-400 font-mono">
+              <h1 className="text-3xl mb-6 text-center font-bold">RETRO MELODY GENERATOR</h1>
+              
+              <div className="w-full mb-6 p-4 bg-gray-900 border-2 border-green-500 rounded">
+                <h2 className="text-xl mb-4 text-center">GENERATION OPTIONS</h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="flex flex-col">
+                    <label className="mb-2">Notes Per Chord: {generationOptions.notesPerChord}</label>
+                    <input 
+                      type="range" 
+                      min="2" 
+                      max="8" 
+                      value={generationOptions.notesPerChord} 
+                      onChange={(e) => setGenerationOptions({
+                        ...generationOptions, 
+                        notesPerChord: parseInt(e.target.value)
+                      })}
+                      className="w-full"
+                    />
+                  </div>
+                  
+                  <div className="flex flex-col">
+                    <label className="mb-2">Chord Probability: {(generationOptions.chordProbability * 100).toFixed(0)}%</label>
+                    <input 
+                      type="range" 
+                      min="0" 
+                      max="100" 
+                      value={generationOptions.chordProbability * 100} 
+                      onChange={(e) => setGenerationOptions({
+                        ...generationOptions, 
+                        chordProbability: parseInt(e.target.value) / 100
+                      })}
+                      className="w-full"
+                    />
+                  </div>
+                  
+                  <div className="flex flex-col">
+                    <label className="mb-2">Chromatic Probability: {(generationOptions.chromaticProbability * 100).toFixed(0)}%</label>
+                    <input 
+                      type="range" 
+                      min="0" 
+                      max="100" 
+                      value={generationOptions.chromaticProbability * 100} 
+                      onChange={(e) => setGenerationOptions({
+                        ...generationOptions, 
+                        chromaticProbability: parseInt(e.target.value) / 100
+                      })}
+                      className="w-full"
+                    />
+                  </div>
+                  
+                  <div className="flex flex-col">
+                    <label className="mb-2">Number of Chords: {generationOptions.numberOfChords}</label>
+                    <input 
+                      type="range" 
+                      min="1" 
+                      max="6" 
+                      value={generationOptions.numberOfChords} 
+                      onChange={(e) => setGenerationOptions({
+                        ...generationOptions, 
+                        numberOfChords: parseInt(e.target.value)
+                      })}
+                      className="w-full"
+                    />
+                  </div>
+                  
+                  <div className="flex flex-col">
+                    <label className="mb-2">Base Octave: {generationOptions.baseOctave}</label>
+                    <input 
+                      type="range" 
+                      min="1" 
+                      max="4" 
+                      value={generationOptions.baseOctave} 
+                      onChange={(e) => setGenerationOptions({
+                        ...generationOptions, 
+                        baseOctave: parseInt(e.target.value)
+                      })}
+                      className="w-full"
+                    />
+                  </div>
+                  
+                  <div className="flex flex-col">
+                    <label className="mb-2">Waveform</label>
+                    <select
+                      value={generationOptions.waveform}
+                      onChange={(e) => setGenerationOptions({
+                        ...generationOptions,
+                        waveform: e.target.value
+                      })}
+                      className="p-2 bg-gray-800 border border-green-500 text-green-400 rounded"
+                    >
+                      <option value="sine">Sine (Smooth)</option>
+                      <option value="triangle">Triangle (Warm)</option>
+                      <option value="square">Square (Retro)</option>
+                      <option value="sawtooth">Sawtooth (Buzzy)</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div className="mt-4 border-t border-green-500 pt-4">
+                  <h3 className="text-lg mb-2 text-center">Visualizer Settings</h3>
+                  <div className="flex flex-col">
+                    <label className="mb-2">Frequency Range: {generationOptions.maxFrequency} bands</label>
+                    <input 
+                      type="range" 
+                      min="6" 
+                      max="32" 
+                      value={generationOptions.maxFrequency} 
+                      onChange={(e) => setGenerationOptions({
+                        ...generationOptions, 
+                        maxFrequency: parseInt(e.target.value)
+                      })}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs mt-1">
+                      <span>Low End Only</span>
+                      <span>Full Range</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex flex-wrap gap-4 mb-6">
+                <button 
+                  onClick={generateMelody}
+                  className="px-4 py-2 bg-green-800 text-green-200 border-2 border-green-500 hover:bg-green-700 rounded font-bold"
+                >
+                  GENERATE MELODY
+                </button>
+                
+                <button 
+                  onClick={isPlaying ? stopPlaying : playMelody}
+                  disabled={melody.length === 0}
+                  className={`px-4 py-2 border-2 border-green-500 rounded font-bold ${melody.length === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'} ${isPlaying ? 'bg-red-800 text-red-200' : 'bg-green-800 text-green-200'}`}
+                >
+                  {isPlaying ? "STOP" : "PLAY MELODY"}
+                </button>
+                
+                <div className="flex gap-2 items-center">
+                  <select
+                    value={exportFormat}
+                    onChange={(e) => setExportFormat(e.target.value)}
+                    className="p-2 bg-gray-800 border border-green-500 text-green-400 rounded"
+                    disabled={isExporting || melody.length === 0}
+                  >
+                    <option value="wav">WAV Audio</option>
+                    <option value="midi">MIDI File</option>
+                  </select>
+                  
+                  <button
+                    onClick={exportMelody}
+                    disabled={isExporting || melody.length === 0}
+                    className={`px-4 py-2 bg-blue-800 text-blue-200 border-2 border-blue-500 hover:bg-blue-700 rounded font-bold ${(isExporting || melody.length === 0) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    {isExporting ? `EXPORTING ${exportProgress}%` : "EXPORT"}
+                  </button>
+                </div>
+              </div>
+              
+              {/* Canvas Visualizer */}
+              <div className="w-full mb-6 p-4 bg-gray-900 border-2 border-green-500 rounded">
+                <h2 className="text-xl mb-4 text-center">FREQUENCY VISUALIZER</h2>
+                <div className="w-full h-64 bg-black rounded border border-green-500" style={{ overflow: 'hidden' }}>
+                  <canvas 
+                    ref={canvasRef} 
+                    className="w-full h-full"
+                    style={{ width: '100%', height: '100%' }}
+                  />
+                </div>
+                <div className="mt-2 text-center text-xs text-green-400">
+                  <p className="mb-1">Visualizer responds to audio when playing</p>
+                  {isPlaying && <p className="text-yellow-300">ACTIVE - AUDIO VISUALIZING</p>}
+                  <p className="text-xs mt-2">Adjust frequency range in Settings above</p>
+                </div>
+              </div>
+              
+              {/* Melody Visualization */}
+              {visualNotes.length > 0 && (
+                <div className="w-full mb-6 p-4 bg-gray-900 border-2 border-green-500 rounded overflow-x-auto">
+                  <h2 className="text-xl mb-4 text-center">MELODY VISUALIZATION</h2>
+                  
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {visualNotes.map((noteGroup, melodyIndex) => (
+                      <div 
+                        key={melodyIndex}
+                        className={`p-2 rounded-md transition-all duration-300 ${currentNote === melodyIndex ? 'scale-110 border-4' : 'border'}`}
+                        style={{ 
+                          backgroundColor: currentNote === melodyIndex ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
+                          borderColor: noteGroup.color
+                        }}
+                      >
+                        <div 
+                          className="w-8 h-16 rounded-md flex flex-col items-center justify-end"
+                          style={{ backgroundColor: noteGroup.color }}
+                        >
+                          {noteGroup.notes.map((note, noteIndex) => (
+                            <button
+                              key={noteIndex}
+                              onClick={() => updateNote(melodyIndex, noteIndex)}
+                              className="text-xs font-bold text-black hover:bg-black hover:text-white transition-all duration-150 w-full py-1 rounded"
+                            >
+                              {note}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-4 text-sm">
+                    <p className="text-center">PROGRESSION: {progression_1.slice(0, generationOptions.numberOfChords).join(' → ')}</p>
+                  </div>
+                  <div className="mt-4 text-center text-xs">
+                    <p className="mb-2 text-yellow-300">Click note boxes to transpose up a half step (loops from G to C)</p>
+                  </div>
+                </div>
+              )}
+              
+              {/* CRT Scanlines Effect */}
+              <div className="fixed top-0 left-0 w-full h-full pointer-events-none">
+                <div className="w-full h-full bg-gradient-to-b from-transparent to-transparent bg-repeat bg-size-100-2px opacity-10" 
+                  style={{ 
+                    backgroundImage: 'linear-gradient(0deg, rgba(0,255,0,0.1) 1px, transparent 1px)',
+                    backgroundSize: '100% 2px' 
+                  }}
+                />
+              </div>
+            </div>
+          );
+        };
+
+        // Update to use createRoot for React 18
+        const root = ReactDOM.createRoot(document.getElementById('melody-generator'));
+        root.render(<RetroMelodyGenerator />);
     </script>
 </body>
-</html> 
+</html>
