@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retro Melody Generator</title>
+    <title>Retro Melody Generator - William Struve</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -11,8 +12,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <div id="melody-generator"></div>
+    <!-- Navbar will be inserted here by shared components -->
     
+    <div class="container mx-auto px-4 py-8">
+        <div id="melody-generator"></div>
+    </div>
+
+    <!-- CRT Scanlines Effect -->
+    <div class="fixed top-0 left-0 w-full h-full pointer-events-none">
+        <div class="w-full h-full bg-gradient-to-b from-transparent to-transparent bg-repeat bg-size-100-2px opacity-10" 
+            style="background-image: linear-gradient(0deg, rgba(0,255,0,0.1) 1px, transparent 1px); background-size: 100% 2px;">
+        </div>
+    </div>
+
     <script type="text/babel">
         // Remove ES6 imports since we're using CDN versions
         const { useState, useEffect, useRef } = React;
@@ -526,7 +538,7 @@
           };
 
           return (
-            <div className="flex flex-col items-center w-full max-w-4xl p-6 bg-black text-green-400 font-mono">
+            <div className="retro-container">
               <h1 className="text-3xl mb-6 text-center font-bold">RETRO MELODY GENERATOR</h1>
               
               <div className="w-full mb-6 p-4 bg-gray-900 border-2 border-green-500 rounded">
@@ -744,16 +756,6 @@
                   </div>
                 </div>
               )}
-              
-              {/* CRT Scanlines Effect */}
-              <div className="fixed top-0 left-0 w-full h-full pointer-events-none">
-                <div className="w-full h-full bg-gradient-to-b from-transparent to-transparent bg-repeat bg-size-100-2px opacity-10" 
-                  style={{ 
-                    backgroundImage: 'linear-gradient(0deg, rgba(0,255,0,0.1) 1px, transparent 1px)',
-                    backgroundSize: '100% 2px' 
-                  }}
-                />
-              </div>
             </div>
           );
         };
@@ -761,6 +763,13 @@
         // Update to use createRoot for React 18
         const root = ReactDOM.createRoot(document.getElementById('melody-generator'));
         root.render(<RetroMelodyGenerator />);
+    </script>
+    <script src="shared/init.js"></script>
+    <script>
+      document.addEventListener('sharedComponentsReady', function() {
+          initializeNavbar();
+          initializeBackground();
+      });
     </script>
 </body>
 </html>

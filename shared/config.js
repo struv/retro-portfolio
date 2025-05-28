@@ -1,7 +1,8 @@
 // Navigation configuration
 const navConfig = [
     { path: 'index.html', label: 'Home' },
-    { path: 'life.html', label: 'Game of Life' },
+    { path: 'life.html', label: 'Life' },
+    { path: 'melody.html', label: 'Melody' },
     // Add new pages here
 ];
 

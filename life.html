@@ -74,6 +74,7 @@
             position: relative;
             overflow: hidden;
             animation: pulse-size 8s ease-in-out infinite;
+            opacity: 1;
         }
         
         .game-title {
@@ -238,20 +239,13 @@
             animation: rainbow-glow 8s linear infinite;
             cursor: pointer;
         }
+        /* Game container opacity */
+        .game-container {
+            background: rgba(0, 0, 51, 0.9) !important;
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="site-name">W.STRUVE</a>
-            <button class="mobile-toggle" id="mobileToggle">☰</button>
-            <div class="nav-links" id="navLinks">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="life.html" class="nav-link">Game of Life</a>
-                <!-- Add more links here as needed -->
-            </div>
-        </div>
-    </nav>
 
     <div class="app-container">
         <div class="game-container retro-container">
@@ -606,6 +600,12 @@
         ReactDOM.render(<GameOfLife />, document.getElementById('root'));
     </script>
 
-    <script src="nav.js"></script>
+    <script src="shared/init.js"></script>
+    <script>
+        document.addEventListener('sharedComponentsReady', function() {
+            initializeNavbar();
+            initializeBackground();
+        });
+    </script>
 </body>
 </html>
