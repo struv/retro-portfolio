@@ -108,38 +108,45 @@ function initializeBackground() {
     window.addEventListener('scroll', onScroll);
     window.addEventListener('resize', onWindowResize);
     
-    // Control functions
     function createControls() {
         const controlsHTML = `
-            <div id="controls" style="
-                position: fixed;
-                bottom: ${config.controls.position.bottom};
-                right: ${config.controls.position.right};
-                background: rgba(0, 0, 51, 0.8);
-                border: 2px solid var(--accent);
-                padding: 1rem;
-                display: flex;
-                flex-direction: column;
-                gap: 0.5rem;
-                z-index: 10;
-            ">
-                ${config.controls.buttons.map(button => `
-                    <button id="${button.id}" style="
-                        font-family: 'Press Start 2P', cursive;
-                        background: var(--primary);
-                        border: none;
-                        color: var(--text);
-                        padding: 0.5rem 1rem;
-                        cursor: pointer;
-                        transition: all 0.3s;
-                    ">${button.label}</button>
-                `).join('')}
+            <div id="bg-controls" class="retro-panel bg-controls">
+                <div class="retro-panel-header">
+                    <span class="retro-panel-title">EFFECTS</span>
+                    <button id="toggleControlsVisibility" class="retro-minimize-btn" title="Minimize/Expand Controls">−</button>
+                </div>
+                <div id="controlButtons" class="bg-controls-content">
+                    ${config.controls.buttons.map(button => `
+                        <button id="${button.id}" class="bg-control-btn">${button.label}</button>
+                    `).join('')}
+                </div>
             </div>
         `;
         
         document.body.insertAdjacentHTML('beforeend', controlsHTML);
         
         // Setup control functionality
+        let controlsMinimized = false;
+        const controlsContainer = document.getElementById('bg-controls');
+        const controlButtons = document.getElementById('controlButtons');
+        const toggleButton = document.getElementById('toggleControlsVisibility');
+        
+        // Toggle minimize functionality
+        toggleButton.addEventListener('click', () => {
+            controlsMinimized = !controlsMinimized;
+            
+            if (controlsMinimized) {
+                controlsContainer.classList.add('minimized');
+                toggleButton.textContent = '+';
+                toggleButton.title = 'Expand Controls';
+            } else {
+                controlsContainer.classList.remove('minimized');
+                toggleButton.textContent = '−';
+                toggleButton.title = 'Minimize Controls';
+            }
+        });
+        
+        // Control button functionality
         document.getElementById('toggleGrid').addEventListener('click', () => {
             gridHelper.visible = !gridHelper.visible;
         });

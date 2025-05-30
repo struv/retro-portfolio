@@ -1,4 +1,4 @@
-// Global MP3 Player component
+// Global MP3 Player component - Updated to use CSS classes
 function initializeMP3Player() {
     // Check if MP3 player should be disabled on this page
     const currentPage = getCurrentPagePath();
@@ -14,158 +14,35 @@ function initializeMP3Player() {
     let audio = null;
     let playlist = [...config.defaultPlaylist];
     
-    // Create MP3 player HTML
+    // Create MP3 player HTML using CSS classes
     const playerHTML = `
-        <div id="mp3-player" style="
-            position: fixed;
-            bottom: ${config.position.bottom};
-            left: ${config.position.left};
-            background: rgba(0, 0, 51, 0.9);
-            border: 2px solid var(--primary);
-            padding: 1rem;
-            z-index: 15;
-            min-width: 250px;
-            font-family: 'VT323', monospace;
-            box-shadow: 0 0 20px var(--primary);
-            border-radius: 4px;
-            backdrop-filter: blur(10px);
-        ">
-            <div id="mp3-header" style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 1rem;
-                border-bottom: 1px solid var(--secondary);
-                padding-bottom: 0.5rem;
-            ">
-                <span style="color: var(--accent); font-weight: bold; font-size: 1.2rem;">♪ PLAYER</span>
-                <button id="mp3-minimize" style="
-                    background: none;
-                    border: none;
-                    color: var(--secondary);
-                    cursor: pointer;
-                    font-size: 1.2rem;
-                    padding: 0;
-                    width: 20px;
-                    height: 20px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                ">−</button>
+        <div id="mp3-player" class="retro-panel mp3-player">
+            <div class="retro-panel-header">
+                <span class="retro-panel-title">♪ PLAYER</span>
+                <button id="mp3-minimize" class="retro-minimize-btn">−</button>
             </div>
             
-            <div id="mp3-content">
-                <div id="track-info" style="
-                    color: var(--text);
-                    font-size: 1rem;
-                    margin-bottom: 1rem;
-                    text-align: center;
-                    min-height: 1.5rem;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                ">
+            <div id="mp3-content" class="mp3-content">
+                <div id="track-info" class="mp3-track-info">
                     Select a track
                 </div>
                 
-                <div id="progress-container" style="
-                    width: 100%;
-                    height: 4px;
-                    background: rgba(255, 255, 255, 0.2);
-                    margin-bottom: 1.5rem;
-                    border-radius: 2px;
-                    overflow: hidden;
-                ">
-                    <div id="progress-bar" style="
-                        width: 0%;
-                        height: 100%;
-                        background: linear-gradient(90deg, var(--primary), var(--secondary));
-                        transition: width 0.1s ease;
-                    "></div>
+                <div class="mp3-progress-container">
+                    <div id="progress-bar" class="mp3-progress-bar"></div>
                 </div>
                 
-                <div id="controls" style="
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 0.75rem;
-                    margin-bottom: 1.5rem;
-                ">
-                    <button id="prev-btn" class="mp3-btn" style="
-                        background: var(--primary);
-                        border: 1px solid var(--secondary);
-                        color: var(--text);
-                        padding: 0.5rem;
-                        cursor: pointer;
-                        font-size: 1rem;
-                        min-width: 2.5rem;
-                        border-radius: 2px;
-                        font-family: 'VT323', monospace;
-                        transition: all 0.2s;
-                        display: inline-flex;
-                        align-items: center;
-                        justify-content: center;
-                    ">⏮</button>
-                    <button id="play-btn" class="mp3-btn" style="
-                        background: var(--primary);
-                        border: 1px solid var(--secondary);
-                        color: var(--text);
-                        padding: 0.5rem;
-                        cursor: pointer;
-                        font-size: 1rem;
-                        min-width: 2.5rem;
-                        border-radius: 2px;
-                        font-family: 'VT323', monospace;
-                        transition: all 0.2s;
-                        display: inline-flex;
-                        align-items: center;
-                        justify-content: center;
-                    ">▶</button>
-                    <button id="next-btn" class="mp3-btn" style="
-                        background: var(--primary);
-                        border: 1px solid var(--secondary);
-                        color: var(--text);
-                        padding: 0.5rem;
-                        cursor: pointer;
-                        font-size: 1rem;
-                        min-width: 2.5rem;
-                        border-radius: 2px;
-                        font-family: 'VT323', monospace;
-                        transition: all 0.2s;
-                        display: inline-flex;
-                        align-items: center;
-                        justify-content: center;
-                    ">⏭</button>
+                <div id="controls" class="mp3-controls">
+                    <button id="prev-btn" class="mp3-btn">⏮</button>
+                    <button id="play-btn" class="mp3-btn">▶</button>
+                    <button id="next-btn" class="mp3-btn">⏭</button>
                 </div>
                 
-                <div id="volume-container" style="
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    margin-top: 1rem;
-                    margin-bottom: 1rem;
-                ">
-                    <span style="color: var(--text); font-size: 0.9rem;">🔊</span>
-                    <input type="range" id="volume-slider" min="0" max="100" value="50" style="
-                        flex: 1;
-                        height: 4px;
-                        background: rgba(255, 255, 255, 0.2);
-                        outline: none;
-                        border-radius: 2px;
-                    ">
+                <div class="mp3-volume-container">
+                    <span class="mp3-volume-icon">🔊</span>
+                    <input type="range" id="volume-slider" class="mp3-volume-slider" min="0" max="100" value="50">
                 </div>
                 
-                <select id="playlist-select" style="
-                    width: 100%;
-                    background: rgba(0, 0, 0, 0.7);
-                    border: 1px solid var(--secondary);
-                    color: var(--text);
-                    padding: 0.25rem;
-                    border-radius: 2px;
-                    font-family: 'VT323', monospace;
-                    font-size: 1rem;
-                ">
+                <select id="playlist-select" class="mp3-playlist-select">
                     <option value="">Select Track...</option>
                     ${playlist.map((track, index) => 
                         `<option value="${index}">${track.title}</option>`
@@ -173,45 +50,6 @@ function initializeMP3Player() {
                 </select>
             </div>
         </div>
-        
-        <style>
-        .mp3-btn:hover {
-            background: var(--secondary);
-            box-shadow: 0 0 10px var(--secondary);
-        }
-        
-        .mp3-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        #volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--accent);
-            cursor: pointer;
-            box-shadow: 0 0 5px var(--primary);
-        }
-        
-        #mp3-player.minimized #mp3-content {
-            display: none;
-        }
-        
-        #mp3-player.minimized {
-            min-width: auto;
-        }
-        
-        @media (max-width: 600px) {
-            #mp3-player {
-                bottom: 1rem !important;
-                right: 1rem !important;
-                left: 1rem !important;
-                min-width: auto;
-            }
-        }
-        </style>
     `;
     
     // Insert player into page
