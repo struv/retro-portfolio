@@ -50,6 +50,17 @@
             document.head.appendChild(script);
         });
     }
+
+    // Load MP3 player component
+    function loadMP3Player() {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'shared/mp3player.js';
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+    }
     
     // Initialize shared components after DOM is ready
     function initializeSharedComponents() {
@@ -59,12 +70,28 @@
             return;
         }
         
+        console.log('Starting component initialization...');
+        
         // Load dependencies and components sequentially
         loadConfig()
-            .then(() => loadNavbar())
-            .then(() => loadThreeJS())
-            .then(() => loadBackground())
             .then(() => {
+                console.log('Config loaded');
+                return loadNavbar();
+            })
+            .then(() => {
+                console.log('Navbar loaded');
+                return loadThreeJS();
+            })
+            .then(() => {
+                console.log('Three.js loaded');
+                return loadBackground();
+            })
+            .then(() => {
+                console.log('Background loaded');
+                return loadMP3Player();
+            })
+            .then(() => {
+                console.log('MP3 Player loaded');
                 // All dependencies loaded, components are ready to use
                 console.log('Shared components loaded successfully');
                 
@@ -85,6 +112,7 @@
         loadConfig,
         loadNavbar,
         loadBackground,
-        loadThreeJS
+        loadThreeJS,
+        loadMP3Player
     };
 })();

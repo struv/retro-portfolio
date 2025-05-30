@@ -83,12 +83,16 @@
         .pixelated {
             image-rendering: pixelated;
         }
+
+        .main-content {
+            padding-bottom: 200px; /* Adjust based on actual player height */
+        }
     </style>
 </head>
 <body>
     <canvas id="bg"></canvas>
     
-    <div class="container">
+    <div class="container main-content">
         <header>
             <h1 class="glitch-effect">William Struve</h1>
             <p>Fresh UCR CS Grad👋</p>
@@ -197,16 +201,21 @@
     <script src="shared/init.js"></script>
     <script>
         document.addEventListener('sharedComponentsReady', function() {
+            console.log('Initializing components...');
             initializeNavbar();
             initializeBackground();
+            console.log('Initializing MP3 player...');
+            initializeMP3Player();
+            console.log('All components initialized');
         });
-        </script>
+    </script>
     
     <div id="controls">
         <button id="toggleEffect1">Toggle Grid Effect</button>
         <button id="toggleEffect2">Toggle Particles</button>
         <button id="toggleEffect3">Toggle Colors</button>
     </div>
+    
 
 </body>
 </html>

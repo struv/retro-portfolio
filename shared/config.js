@@ -6,6 +6,19 @@ const navConfig = [
     // Add new pages here
 ];
 
+// Page-specific configuration
+const pageConfig = {
+    'index.html': {
+        disableMP3Player: false
+    },
+    'life.html': {
+        disableMP3Player: false
+    },
+    'melody.html': {
+        disableMP3Player: true  // Disable on melody page since it has its own audio
+    }
+};
+
 // Three.js background configuration
 const backgroundConfig = {
     camera: {
@@ -50,8 +63,22 @@ const backgroundConfig = {
     }
 };
 
+// MP3 player configuration
+const mp3PlayerConfig = {
+    position: { bottom: '8rem', left: '2rem' },
+    defaultPlaylist: [
+        { title: 'analogBass', src: 'audio/analogBass.mp3' },
+        { title: 'artificialGlass', src: 'audio/artificialGlass.mp3' },
+        { title: 'minecraftDeathcore', src: 'audio/minecraftDeathcore.mp3' },
+        { title: 'slofi', src: 'audio/slofi.mp3' },
+        { title: 'waveMobbin', src: 'audio/waveMobbin.mp3' }
+    ]
+};
+
 // Export for use in other modules
 window.SiteConfig = {
     nav: navConfig,
-    background: backgroundConfig
+    page: pageConfig,
+    background: backgroundConfig,
+    mp3Player: mp3PlayerConfig
 };
