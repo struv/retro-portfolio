@@ -131,6 +131,15 @@ function initializeBackground() {
         const controlButtons = document.getElementById('controlButtons');
         const toggleButton = document.getElementById('toggleControlsVisibility');
         
+        // Restore minimized state from localStorage
+        const savedBGState = localStorage.getItem('bgControlsMinimized');
+        if (savedBGState === 'true') {
+            controlsMinimized = true;
+            controlsContainer.classList.add('minimized');
+            toggleButton.textContent = '+';
+            toggleButton.title = 'Expand Controls';
+        }
+        
         // Toggle minimize functionality
         toggleButton.addEventListener('click', () => {
             controlsMinimized = !controlsMinimized;
@@ -144,6 +153,9 @@ function initializeBackground() {
                 toggleButton.textContent = '−';
                 toggleButton.title = 'Minimize Controls';
             }
+            
+            // Save state to localStorage
+            localStorage.setItem('bgControlsMinimized', controlsMinimized.toString());
         });
         
         // Control button functionality
