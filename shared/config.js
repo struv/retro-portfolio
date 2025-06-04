@@ -69,9 +69,11 @@ const mp3PlayerConfig = {
     defaultPlaylist: [
         { title: 'analogBass', src: 'audio/analogBass.mp3' },
         { title: 'artificialGlass', src: 'audio/artificialGlass.mp3' },
+        { title: 'frostbittenFeet', src: 'audio/frostbittenFeet.mp3' },
         { title: 'minecraftDeathcore', src: 'audio/minecraftDeathcore.mp3' },
         { title: 'slofi', src: 'audio/slofi.mp3' },
         { title: 'waveMobbin', src: 'audio/waveMobbin.mp3' }
+        
     ]
 };
 
