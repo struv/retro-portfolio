@@ -13,6 +13,7 @@ function initializeMP3Player() {
     let isPlaying = false;
     let audio = null;
     let playlist = [...config.defaultPlaylist];
+    let isShuffleEnabled = false;
     
     // Create MP3 player HTML using CSS classes
     const playerHTML = `
@@ -35,6 +36,7 @@ function initializeMP3Player() {
                     <button id="prev-btn" class="mp3-btn">⏮</button>
                     <button id="play-btn" class="mp3-btn">▶</button>
                     <button id="next-btn" class="mp3-btn">⏭</button>
+                    <button id="shuffle-btn" class="mp3-btn" title="Toggle Shuffle">🔀</button>
                 </div>
                 
                 <div class="mp3-volume-container">
@@ -60,6 +62,7 @@ function initializeMP3Player() {
     const playBtn = document.getElementById('play-btn');
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
+    const shuffleBtn = document.getElementById('shuffle-btn');
     const volumeSlider = document.getElementById('volume-slider');
     const progressBar = document.getElementById('progress-bar');
     const trackInfo = document.getElementById('track-info');
@@ -136,7 +139,17 @@ function initializeMP3Player() {
     function nextTrack() {
         if (playlist.length === 0) return;
         
-        currentTrack = (currentTrack + 1) % playlist.length;
+        if (isShuffleEnabled) {
+            // Get a random track different from the current one
+            let newTrack;
+            do {
+                newTrack = Math.floor(Math.random() * playlist.length);
+            } while (newTrack === currentTrack && playlist.length > 1);
+            currentTrack = newTrack;
+        } else {
+            currentTrack = (currentTrack + 1) % playlist.length;
+        }
+        
         playlistSelect.value = currentTrack;
         createAudio();
         
@@ -150,7 +163,17 @@ function initializeMP3Player() {
     function prevTrack() {
         if (playlist.length === 0) return;
         
-        currentTrack = currentTrack === 0 ? playlist.length - 1 : currentTrack - 1;
+        if (isShuffleEnabled) {
+            // Get a random track different from the current one
+            let newTrack;
+            do {
+                newTrack = Math.floor(Math.random() * playlist.length);
+            } while (newTrack === currentTrack && playlist.length > 1);
+            currentTrack = newTrack;
+        } else {
+            currentTrack = currentTrack === 0 ? playlist.length - 1 : currentTrack - 1;
+        }
+        
         playlistSelect.value = currentTrack;
         createAudio();
         
@@ -164,6 +187,11 @@ function initializeMP3Player() {
     playBtn.addEventListener('click', togglePlay);
     nextBtn.addEventListener('click', nextTrack);
     prevBtn.addEventListener('click', prevTrack);
+    
+    shuffleBtn.addEventListener('click', () => {
+        isShuffleEnabled = !isShuffleEnabled;
+        shuffleBtn.style.opacity = isShuffleEnabled ? '1' : '0.5';
+    });
     
     volumeSlider.addEventListener('input', (e) => {
         if (audio) {
