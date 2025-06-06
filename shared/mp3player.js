@@ -44,12 +44,19 @@ function initializeMP3Player() {
                     <input type="range" id="volume-slider" class="mp3-volume-slider" min="0" max="100" value="50">
                 </div>
                 
-                <select id="playlist-select" class="mp3-playlist-select">
-                    <option value="">Select Track...</option>
-                    ${playlist.map((track, index) => 
-                        `<option value="${index}">${track.title}</option>`
-                    ).join('')}
-                </select>
+                <div class="custom-dropdown" id="playlist-dropdown">
+                    <div class="dropdown-selected">
+                        <span id="selected-track">Select Track...</span>
+                        <span class="dropdown-arrow">▼</span>
+                    </div>
+                    <div class="dropdown-options">
+                        ${playlist.map((track, index) => 
+                            `<div class="dropdown-option" data-index="${index}" data-track="${track.title}">
+                                ${track.title}
+                            </div>`
+                        ).join('')}
+                    </div>
+                </div>
             </div>
         </div>
     `;
@@ -66,7 +73,8 @@ function initializeMP3Player() {
     const volumeSlider = document.getElementById('volume-slider');
     const progressBar = document.getElementById('progress-bar');
     const trackInfo = document.getElementById('track-info');
-    const playlistSelect = document.getElementById('playlist-select');
+    const dropdown = document.getElementById('playlist-dropdown');
+    const selectedTrack = document.getElementById('selected-track');
     const minimizeBtn = document.getElementById('mp3-minimize');
     const content = document.getElementById('mp3-content');
     
@@ -104,6 +112,7 @@ function initializeMP3Player() {
             
             audio.addEventListener('timeupdate', updateProgress);
         }
+        updateSelectedTrack();
     }
     
     // Update progress bar
@@ -153,7 +162,7 @@ function initializeMP3Player() {
             currentTrack = (currentTrack + 1) % playlist.length;
         }
         
-        playlistSelect.value = currentTrack;
+        dropdown.value = currentTrack;
         createAudio();
         
         if (isPlaying) {
@@ -177,7 +186,7 @@ function initializeMP3Player() {
             currentTrack = currentTrack === 0 ? playlist.length - 1 : currentTrack - 1;
         }
         
-        playlistSelect.value = currentTrack;
+        dropdown.value = currentTrack;
         createAudio();
         
         if (isPlaying) {
@@ -202,17 +211,43 @@ function initializeMP3Player() {
         }
     });
     
-    playlistSelect.addEventListener('change', (e) => {
-        if (e.target.value !== '') {
+    dropdown.addEventListener('click', (e) => {
+        dropdown.classList.toggle('active');
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!dropdown.contains(e.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+    
+    // Handle option selection
+    dropdown.querySelectorAll('.dropdown-option').forEach(option => {
+        option.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const index = parseInt(option.dataset.index);
             const wasPlaying = isPlaying;
-            currentTrack = parseInt(e.target.value);
+            currentTrack = index;
+            selectedTrack.textContent = playlist[currentTrack].title;
+            selectedTrack.setAttribute('data-track', playlist[currentTrack].title);
             createAudio();
             
             if (wasPlaying) {
                 togglePlay();
             }
-        }
+            
+            dropdown.classList.remove('active');
+        });
     });
+    
+    // Update selected track display
+    function updateSelectedTrack() {
+        if (playlist[currentTrack]) {
+            selectedTrack.textContent = playlist[currentTrack].title;
+            selectedTrack.setAttribute('data-track', playlist[currentTrack].title);
+        }
+    }
     
     minimizeBtn.addEventListener('click', () => {
         player.classList.toggle('minimized');
@@ -249,7 +284,7 @@ function initializeMP3Player() {
     // Auto-select first track if available
     if (playlist.length > 0) {
         currentTrack = 0;
-        playlistSelect.value = 0;
+        dropdown.value = 0;
         createAudio();
     }
     

@@ -433,6 +433,42 @@ button:hover {
     font-size: 1rem;
 }
 
+/* MP3 Player dropdown styling */
+.mp3-playlist-select option {
+    background: rgba(0, 0, 51, 0.9);
+    padding: 0.5rem;
+}
+
+.mp3-playlist-select option[value="0"] {
+    color: #ff6b6b; /* analogBass */
+    text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+}
+
+.mp3-playlist-select option[value="1"] {
+    color: #00ffff; /* artificialGlass */
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+.mp3-playlist-select option[value="2"] {
+    color: #87ceeb; /* frostbittenFeet */
+    text-shadow: 0 0 5px rgba(135, 206, 235, 0.5);
+}
+
+.mp3-playlist-select option[value="3"] {
+    color: #32cd32; /* minecraftDeathcore */
+    text-shadow: 0 0 5px rgba(50, 205, 50, 0.5);
+}
+
+.mp3-playlist-select option[value="4"] {
+    color: #ff69b4; /* slofi */
+    text-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
+}
+
+.mp3-playlist-select option[value="5"] {
+    color: #9370db; /* waveMobbin */
+    text-shadow: 0 0 5px rgba(147, 112, 219, 0.5);
+}
+
 /* Background Controls specific */
 .bg-controls {
     position: fixed;
@@ -534,5 +570,130 @@ button:hover {
 
 .mp3-track-info[data-track="waveMobbin"] {
     color: #9370db; /* Purple for wave/synth vibes */
+    text-shadow: 0 0 5px rgba(147, 112, 219, 0.5);
+}
+
+/* Custom Dropdown Styles */
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+    font-family: 'VT323', monospace;
+    margin-top: 1rem;
+}
+
+.dropdown-selected {
+    background: rgba(0, 0, 51, 0.9);
+    border: 1px solid var(--secondary);
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text);
+}
+
+.dropdown-selected:hover {
+    border-color: var(--primary);
+}
+
+.dropdown-arrow {
+    font-size: 0.8rem;
+    transition: transform 0.3s;
+}
+
+.custom-dropdown.active .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-options {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 51, 0.95);
+    border: 1px solid var(--secondary);
+    border-bottom: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    z-index: 1000;
+    transform-origin: bottom;
+}
+
+.custom-dropdown.active .dropdown-options {
+    max-height: 300px;
+    overflow-y: auto;
+    border-bottom: 1px solid var(--secondary);
+}
+
+.dropdown-option {
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.dropdown-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Track-specific colors */
+.dropdown-option[data-track="analogBass"] {
+    color: #ff6b6b;
+    text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+}
+
+.dropdown-option[data-track="artificialGlass"] {
+    color: #00ffff;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+.dropdown-option[data-track="frostbittenFeet"] {
+    color: #87ceeb;
+    text-shadow: 0 0 5px rgba(135, 206, 235, 0.5);
+}
+
+.dropdown-option[data-track="minecraftDeathcore"] {
+    color: #32cd32;
+    text-shadow: 0 0 5px rgba(50, 205, 50, 0.5);
+}
+
+.dropdown-option[data-track="slofi"] {
+    color: #ff69b4;
+    text-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
+}
+
+.dropdown-option[data-track="waveMobbin"] {
+    color: #9370db;
+    text-shadow: 0 0 5px rgba(147, 112, 219, 0.5);
+}
+
+/* Selected track colors */
+#selected-track[data-track="analogBass"] {
+    color: #ff6b6b;
+    text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+}
+
+#selected-track[data-track="artificialGlass"] {
+    color: #00ffff;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+#selected-track[data-track="frostbittenFeet"] {
+    color: #87ceeb;
+    text-shadow: 0 0 5px rgba(135, 206, 235, 0.5);
+}
+
+#selected-track[data-track="minecraftDeathcore"] {
+    color: #32cd32;
+    text-shadow: 0 0 5px rgba(50, 205, 50, 0.5);
+}
+
+#selected-track[data-track="slofi"] {
+    color: #ff69b4;
+    text-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
+}
+
+#selected-track[data-track="waveMobbin"] {
+    color: #9370db;
     text-shadow: 0 0 5px rgba(147, 112, 219, 0.5);
 }
