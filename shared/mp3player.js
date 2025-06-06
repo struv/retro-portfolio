@@ -84,14 +84,17 @@ function initializeMP3Player() {
             // Audio event listeners
             audio.addEventListener('loadstart', () => {
                 trackInfo.textContent = `Loading: ${playlist[currentTrack].title}`;
+                trackInfo.setAttribute('data-track', playlist[currentTrack].title);
             });
             
             audio.addEventListener('canplay', () => {
                 trackInfo.textContent = playlist[currentTrack].title;
+                trackInfo.setAttribute('data-track', playlist[currentTrack].title);
             });
             
             audio.addEventListener('error', () => {
                 trackInfo.textContent = `Error: ${playlist[currentTrack].title}`;
+                trackInfo.setAttribute('data-track', playlist[currentTrack].title);
                 nextTrack();
             });
             
