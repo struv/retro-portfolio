@@ -5,4 +5,3 @@ Features to add:<br>
 whiteboard<br>
 blog<br>
 video showcase<br>
-colorful songnames
