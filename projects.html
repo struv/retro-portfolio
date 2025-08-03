@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - William Struve</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Page-specific styles */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        
+        .projects-header {
+            text-align: center;
+            padding: 3rem 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .project-item {
+            display: block;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--secondary);
+            background: rgba(0, 0, 51, 0.7);
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary);
+            transform: translateX(10px);
+        }
+        
+        .project-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 255, 0.1), transparent);
+            transition: 0.5s;
+        }
+        
+        .project-item:hover::before {
+            left: 100%;
+        }
+        
+        .project-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .project-description {
+            font-size: 1.3rem;
+            line-height: 1.4;
+            color: var(--text);
+            opacity: 0.8;
+        }
+        
+        .project-tech {
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            color: var(--secondary);
+            font-style: italic;
+        }
+        
+        #controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(0, 0, 51, 0.8);
+            border: 2px solid var(--accent);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bg"></canvas>
+    
+
+    
+    <div class="container">
+        <header class="projects-header retro-container">
+            <h1 class="glitch-effect">Projects</h1>
+            <p>Interactive demos and experiments</p>
+        </header>
+        
+        <section class="retro-container">
+            <h2>Interactive Demos</h2>
+            
+            <a href="life.html" class="project-item">
+                <span class="project-title">Psychedelic Game of Life</span>
+                <div class="project-description">
+                    Conway's Game of Life with trippy visual effects, animated cells, and classic patterns
+                </div>
+                <div class="project-tech">React • JavaScript • CSS Animations</div>
+            </a>
+            
+            <a href="melody.html" class="project-item">
+                <span class="project-title">Melody Maker</span>
+                <div class="project-description">
+                    Interactive music creation tool with retro synth sounds and visual effects
+                </div>
+                <div class="project-tech">Web Audio API • JavaScript • Three.js</div>
+            </a>
+            
+            <a href="#" class="project-item">
+                <span class="project-title">Music Synthesizer</span>
+                <div class="project-description">
+                    Browser-based synthesizer with multiple waveforms and effects
+                </div>
+                <div class="project-tech">Web Audio API • JavaScript</div>
+            </a>
+            
+            <a href="#" class="project-item">
+                <span class="project-title">3D Particle System</span>
+                <div class="project-description">
+                    Interactive particle physics simulation with Three.js
+                </div>
+                <div class="project-tech">Three.js • WebGL</div>
+            </a>
+            
+            <a href="#" class="project-item">
+                <span class="project-title">Retro Snake Game</span>
+                <div class="project-description">
+                    Classic snake game with CRT-style visual effects
+                </div>
+                <div class="project-tech">Canvas API • JavaScript</div>
+            </a>
+        </section>
+        
+        <section class="retro-container">
+            <h2>Web Applications</h2>
+            
+            <a href="#" class="project-item">
+                <span class="project-title">Task Manager</span>
+                <div class="project-description">
+                    Full-stack todo app with real-time updates
+                </div>
+                <div class="project-tech">React • Node.js • MongoDB</div>
+            </a>
+            
+            <a href="#" class="project-item">
+                <span class="project-title">Weather Dashboard</span>
+                <div class="project-description">
+                    Real-time weather data with interactive maps
+                </div>
+                <div class="project-tech">React • API Integration • Charts</div>
+            </a>
+        </section>
+        
+        <section class="retro-container">
+            <h2>Algorithms & Data Structures</h2>
+            
+            <a href="#" class="project-item">
+                <span class="project-title">Sorting Visualizer</span>
+                <div class="project-description">
+                    Visual representation of sorting algorithms in action
+                </div>
+                <div class="project-tech">JavaScript • Canvas</div>
+            </a>
+            
+            <a href="#" class="project-item">
+                <span class="project-title">Pathfinding Visualizer</span>
+                <div class="project-description">
+                    A* and Dijkstra algorithms with maze generation
+                </div>
+                <div class="project-tech">JavaScript • Graph Theory</div>
+            </a>
+        </section>
+    </div>
+    
+    <div id="controls">
+        <button id="toggleEffect1">Toggle Grid Effect</button>
+        <button id="toggleEffect2">Toggle Particles</button>
+        <button id="toggleEffect3">Toggle Colors</button>
+    </div>
+
+    <script src="shared/init.js"></script>
+    <script>
+        document.addEventListener('sharedComponentsReady', function() {
+            console.log('Initializing components...');
+            initializeNavbar();
+            initializeBackground();
+            console.log('All components initialized');
+        });
+        
+        // Three.js setup - same as index.html
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({
+            canvas: document.querySelector('#bg'),
+            alpha: true
+        });
+        
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.position.z = 30;
+        
+        // Variables for mouse interaction
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+        
+        // Variables for scroll interaction
+        let scrollY = 0;
+        let targetScrollY = 0;
+        
+        // Grid effect
+        const gridSize = 50;
+        const gridDivisions = 20;
+        const gridHelper = new THREE.GridHelper(gridSize, gridDivisions, 0xff00ff, 0x00ffff);
+        gridHelper.position.y = -15;
+        scene.add(gridHelper);
+        
+        // Abstract objects
+        const abstractGroup = new THREE.Group();
+        scene.add(abstractGroup);
+        
+        // Create torus
+        const torusGeometry = new THREE.TorusGeometry(10, 3, 16, 100);
+        const torusMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0xff00ff, 
+            wireframe: true 
+        });
+        const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+        abstractGroup.add(torus);
+        
+        // Create icosahedron
+        const icosaGeometry = new THREE.IcosahedronGeometry(8, 0);
+        const icosaMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0x00ffff, 
+            wireframe: true 
+        });
+        const icosahedron = new THREE.Mesh(icosaGeometry, icosaMaterial);
+        abstractGroup.add(icosahedron);
+        
+        // Create octahedron
+        const octaGeometry = new THREE.OctahedronGeometry(6, 0);
+        const octaMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0xffff00, 
+            wireframe: true 
+        });
+        const octahedron = new THREE.Mesh(octaGeometry, octaMaterial);
+        abstractGroup.add(octahedron);
+        
+        // Particles effect
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCnt = 5000;
+        const posArray = new Float32Array(particlesCnt * 3);
+        
+        for(let i = 0; i < particlesCnt * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 100;
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.2,
+            color: 0xffffff
+        });
+        
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        
+        // Event listeners
+        document.addEventListener('mousemove', onDocumentMouseMove);
+        window.addEventListener('scroll', onScroll);
+        window.addEventListener('resize', onWindowResize);
+        
+        // Control buttons
+        document.getElementById('toggleEffect1').addEventListener('click', () => {
+            gridHelper.visible = !gridHelper.visible;
+        });
+        
+        document.getElementById('toggleEffect2').addEventListener('click', () => {
+            particlesMesh.visible = !particlesMesh.visible;
+        });
+        
+        let colorMode = 0;
+        document.getElementById('toggleEffect3').addEventListener('click', () => {
+            colorMode = (colorMode + 1) % 3;
+            
+            if (colorMode === 0) {
+                torusMaterial.color.set(0xff00ff);
+                icosaMaterial.color.set(0x00ffff);
+                octaMaterial.color.set(0xffff00);
+            } else if (colorMode === 1) {
+                torusMaterial.color.set(0x00ff00);
+                icosaMaterial.color.set(0xff0000);
+                octaMaterial.color.set(0x0000ff);
+            } else {
+                torusMaterial.color.set(0xffffff);
+                icosaMaterial.color.set(0xffffff);
+                octaMaterial.color.set(0xffffff);
+            }
+        });
+        
+        function onDocumentMouseMove(event) {
+            mouseX = (event.clientX - windowHalfX);
+            mouseY = (event.clientY - windowHalfY);
+        }
+        
+        function onScroll() {
+            scrollY = window.scrollY;
+        }
+        
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Smooth mouse movement
+            targetX = mouseX * 0.001;
+            targetY = mouseY * 0.001;
+            
+            // Smooth scroll movement
+            targetScrollY = scrollY * 0.005;
+            
+            // Rotate abstract group based on mouse position
+            abstractGroup.rotation.y += 0.005 * (targetX - abstractGroup.rotation.y);
+            abstractGroup.rotation.x += 0.005 * (targetY - abstractGroup.rotation.x);
+            
+            // Individual rotations for objects
+            torus.rotation.x += 0.01;
+            torus.rotation.y += 0.005;
+            
+            icosahedron.rotation.x -= 0.007;
+            icosahedron.rotation.z += 0.01;
+            
+            octahedron.rotation.y += 0.02;
+            octahedron.rotation.z -= 0.01;
+            
+            // Scale objects based on scroll
+            const scaleFactor = 1 + (targetScrollY * 0.01);
+            abstractGroup.scale.set(
+                Math.max(0.5, Math.min(1.5, scaleFactor)),
+                Math.max(0.5, Math.min(1.5, scaleFactor)),
+                Math.max(0.5, Math.min(1.5, scaleFactor))
+            );
+            
+            // Move grid based on scroll
+            gridHelper.position.y = -15 + (targetScrollY * 0.1);
+            
+            // Rotate particles
+            particlesMesh.rotation.y += 0.001;
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+    </script>
+</body>
+</html>

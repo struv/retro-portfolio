@@ -1,6 +1,7 @@
 // Navigation configuration
 const navConfig = [
     { path: 'index.html', label: 'Home' },
+    { path: 'projects.html', label: 'Projects' },
     { path: 'life.html', label: 'Life' },
     { path: 'melody.html', label: 'Melody' },
     // Add new pages here
@@ -9,6 +10,9 @@ const navConfig = [
 // Page-specific configuration
 const pageConfig = {
     'index.html': {
+        disableMP3Player: false
+    },
+    'projects.html': {
         disableMP3Player: false
     },
     'life.html': {
