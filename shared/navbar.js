@@ -1,17 +1,17 @@
 // Navbar generation and management
 function initializeNavbar() {
-    const config = window.SiteConfig.nav;
+    const config = getNavbarPaths();
     const currentPage = getCurrentPagePath();
     
     // Create navbar HTML
     const navbarHTML = `
         <nav class="navbar">
             <div class="nav-container">
-                <a href="index.html" class="site-name">W.STRUVE</a>
+                <a href="${config.find(item => item.label === 'Home').path}" class="site-name">W.STRUVE</a>
                 <button class="mobile-toggle" id="mobileToggle">☰</button>
                 <div class="nav-links" id="navLinks">
                     ${config.map(item => `
-                        <a href="${item.path}" class="nav-link ${item.path === currentPage ? 'active' : ''}">${item.label}</a>
+                        <a href="${item.path}" class="nav-link ${item.path.endsWith(currentPage) ? 'active' : ''}">${item.label}</a>
                     `).join('')}
                 </div>
             </div>
@@ -32,6 +32,16 @@ function getCurrentPagePath() {
     const path = window.location.pathname;
     const filename = path.split('/').pop() || 'index.html';
     return filename;
+}
+
+function getNavbarPaths() {
+    const isInSubdirectory = window.location.pathname.split('/').length > 2;
+    const prefix = isInSubdirectory ? '../' : '';
+    
+    return window.SiteConfig.nav.map(item => ({
+        ...item,
+        path: prefix + item.path
+    }));
 }
 
 function setupMobileToggle() {

@@ -18,11 +18,17 @@
         });
     }
     
+    // Get the correct path for shared components
+    function getSharedPath() {
+        const isInSubdirectory = window.location.pathname.split('/').length > 2;
+        return isInSubdirectory ? '../shared/' : 'shared/';
+    }
+    
     // Load configuration
     function loadConfig() {
         return new Promise((resolve, reject) => {
             const script = document.createElement('script');
-            script.src = 'shared/config.js';
+            script.src = getSharedPath() + 'config.js';
             script.onload = resolve;
             script.onerror = reject;
             document.head.appendChild(script);
@@ -33,7 +39,7 @@
     function loadNavbar() {
         return new Promise((resolve, reject) => {
             const script = document.createElement('script');
-            script.src = 'shared/navbar.js';
+            script.src = getSharedPath() + 'navbar.js';
             script.onload = resolve;
             script.onerror = reject;
             document.head.appendChild(script);
@@ -44,7 +50,7 @@
     function loadBackground() {
         return new Promise((resolve, reject) => {
             const script = document.createElement('script');
-            script.src = 'shared/background.js';
+            script.src = getSharedPath() + 'background.js';
             script.onload = resolve;
             script.onerror = reject;
             document.head.appendChild(script);
@@ -55,7 +61,7 @@
     function loadMP3Player() {
         return new Promise((resolve, reject) => {
             const script = document.createElement('script');
-            script.src = 'shared/mp3player.js';
+            script.src = getSharedPath() + 'mp3player.js';
             script.onload = resolve;
             script.onerror = reject;
             document.head.appendChild(script);
