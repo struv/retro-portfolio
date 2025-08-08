@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathfinding Visualizer - William Struve</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .pathfinder-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 5rem 1rem 2rem;
+        }
+
+        .pathfinder-grid {
+            display: inline-grid;
+            gap: 1px;
+            background: #000;
+            border: 2px solid var(--primary);
+            margin: 1rem 0;
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        .grid-cell {
+            width: 20px;
+            height: 20px;
+            border: 1px solid rgba(255, 0, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.1s ease;
+            position: relative;
+        }
+
+        .cell-empty {
+            background: #001122;
+        }
+
+        .cell-wall {
+            background: var(--primary);
+            box-shadow: inset 0 0 5px rgba(255, 0, 255, 0.8);
+        }
+
+        .cell-start {
+            background: #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+            animation: pulse-start 2s infinite;
+        }
+
+        .cell-end {
+            background: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+            animation: pulse-end 2s infinite;
+        }
+
+        .cell-visited {
+            background: rgba(0, 255, 255, 0.6);
+            animation: visit-animation 0.3s ease-in;
+        }
+
+        .cell-path {
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent);
+            animation: path-animation 0.5s ease-in;
+        }
+
+        .cell-current {
+            background: #ffffff;
+            box-shadow: 0 0 15px #ffffff;
+            animation: current-pulse 1s infinite;
+        }
+
+        @keyframes pulse-start {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes pulse-end {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes visit-animation {
+            0% { transform: scale(0.3); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes path-animation {
+            0% { transform: scale(0.6); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes current-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .controls-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-group {
+            padding: 1rem;
+            border: 2px solid var(--secondary);
+            background: rgba(0, 0, 51, 0.7);
+        }
+
+        .control-group h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .pathfinder-btn {
+            font-family: 'VT323', monospace;
+            background: var(--primary);
+            border: 2px solid var(--secondary);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0.25rem;
+            font-size: 1rem;
+        }
+
+        .pathfinder-btn:hover {
+            background: var(--secondary);
+            box-shadow: 0 0 10px var(--secondary);
+        }
+
+        .pathfinder-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .algorithm-select {
+            background: rgba(0, 0, 51, 0.9);
+            border: 2px solid var(--secondary);
+            color: var(--text);
+            padding: 0.5rem;
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .speed-slider {
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+            border: 1px solid var(--secondary);
+            background: rgba(0, 0, 51, 0.5);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            color: var(--accent);
+            display: block;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1rem 0;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #fff;
+        }
+
+        .instructions {
+            text-align: center;
+            margin: 1rem 0;
+            color: var(--text);
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="pathfinder-container">
+        <div class="retro-container">
+            <div id="pathfinder-root"></div>
+        </div>
+    </div>
+
+    <script type="text/babel">
+        const { useState, useCallback, useRef, useEffect } = React;
+
+        const PathfindingVisualizer = () => {
+            const [gridSize, setGridSize] = useState({ rows: 25, cols: 50 });
+            const [grid, setGrid] = useState([]);
+            const [startPos, setStartPos] = useState({ row: 5, col: 5 });
+            const [endPos, setEndPos] = useState({ row: 19, col: 44 });
+            const [isRunning, setIsRunning] = useState(false);
+            const [algorithm, setAlgorithm] = useState('astar');
+            const [speed, setSpeed] = useState(10);
+            const [mode, setMode] = useState('wall'); // wall, start, end
+            const [stats, setStats] = useState({ visited: 0, pathLength: 0, time: 0 });
+            const [isMouseDown, setIsMouseDown] = useState(false);
+
+            const runningRef = useRef(false);
+            const timeoutRef = useRef(null);
+            const speedRef = useRef(speed);
+
+            // Initialize grid
+            useEffect(() => {
+                initializeGrid();
+            }, [gridSize]);
+
+            // Update speed ref when speed changes
+            useEffect(() => {
+                speedRef.current = speed;
+            }, [speed]);
+
+            const initializeGrid = () => {
+                const newGrid = Array(gridSize.rows).fill().map(() =>
+                    Array(gridSize.cols).fill().map(() => ({
+                        isWall: false,
+                        isVisited: false,
+                        isPath: false,
+                        isCurrent: false,
+                        distance: Infinity,
+                        heuristic: 0,
+                        fScore: Infinity,
+                        parent: null
+                    }))
+                );
+                setGrid(newGrid);
+                setStats({ visited: 0, pathLength: 0, time: 0 });
+            };
+
+            const clearPath = () => {
+                if (isRunning) return;
+                setGrid(prev => prev.map(row =>
+                    row.map(cell => ({
+                        ...cell,
+                        isVisited: false,
+                        isPath: false,
+                        isCurrent: false,
+                        distance: Infinity,
+                        heuristic: 0,
+                        fScore: Infinity,
+                        parent: null
+                    }))
+                ));
+                setStats({ visited: 0, pathLength: 0, time: 0 });
+            };
+
+            const clearWalls = () => {
+                if (isRunning) return;
+                setGrid(prev => prev.map(row =>
+                    row.map(cell => ({
+                        ...cell,
+                        isWall: false,
+                        isVisited: false,
+                        isPath: false,
+                        isCurrent: false,
+                        distance: Infinity,
+                        heuristic: 0,
+                        fScore: Infinity,
+                        parent: null
+                    }))
+                ));
+                setStats({ visited: 0, pathLength: 0, time: 0 });
+            };
+
+            const generateMaze = () => {
+                if (isRunning) return;
+                
+                // Random maze generation
+                const newGrid = Array(gridSize.rows).fill().map(() =>
+                    Array(gridSize.cols).fill().map(() => ({
+                        isWall: Math.random() < 0.3,
+                        isVisited: false,
+                        isPath: false,
+                        isCurrent: false,
+                        distance: Infinity,
+                        heuristic: 0,
+                        fScore: Infinity,
+                        parent: null
+                    }))
+                );
+
+                // Ensure start and end are not walls
+                newGrid[startPos.row][startPos.col].isWall = false;
+                newGrid[endPos.row][endPos.col].isWall = false;
+
+                setGrid(newGrid);
+                setStats({ visited: 0, pathLength: 0, time: 0 });
+            };
+
+            const handleCellClick = (row, col) => {
+                if (isRunning) return;
+
+                if (mode === 'start') {
+                    setStartPos({ row, col });
+                } else if (mode === 'end') {
+                    setEndPos({ row, col });
+                } else if (mode === 'wall') {
+                    toggleWall(row, col);
+                }
+            };
+
+            const handleMouseDown = (row, col) => {
+                setIsMouseDown(true);
+                handleCellClick(row, col);
+            };
+
+            const handleMouseEnter = (row, col) => {
+                if (isMouseDown && mode === 'wall') {
+                    toggleWall(row, col);
+                }
+            };
+
+            const handleMouseUp = () => {
+                setIsMouseDown(false);
+            };
+
+            const toggleWall = (row, col) => {
+                if ((row === startPos.row && col === startPos.col) ||
+                    (row === endPos.row && col === endPos.col)) return;
+
+                setGrid(prev => {
+                    const newGrid = [...prev];
+                    newGrid[row][col] = {
+                        ...newGrid[row][col],
+                        isWall: !newGrid[row][col].isWall
+                    };
+                    return newGrid;
+                });
+            };
+
+            const getNeighbors = (row, col) => {
+                const neighbors = [];
+                const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+                
+                for (const [dRow, dCol] of directions) {
+                    const newRow = row + dRow;
+                    const newCol = col + dCol;
+                    
+                    if (newRow >= 0 && newRow < gridSize.rows &&
+                        newCol >= 0 && newCol < gridSize.cols &&
+                        !grid[newRow][newCol].isWall) {
+                        neighbors.push({ row: newRow, col: newCol });
+                    }
+                }
+                
+                return neighbors;
+            };
+
+            const heuristic = (a, b) => {
+                return Math.abs(a.row - b.row) + Math.abs(a.col - b.col);
+            };
+
+            const reconstructPath = (endNode) => {
+                const path = [];
+                let current = endNode;
+                
+                while (current.parent) {
+                    path.unshift(current);
+                    current = current.parent;
+                }
+                
+                return path;
+            };
+
+            const animatePath = (path) => {
+                console.log('Animating path with', path.length, 'nodes');
+                // Simple approach: just mark the path cells
+                setGrid(prev => {
+                    const newGrid = prev.map(row => row.map(cell => ({ ...cell })));
+                    path.forEach(node => {
+                        if (newGrid[node.row] && newGrid[node.row][node.col]) {
+                            newGrid[node.row][node.col].isPath = true;
+                        }
+                    });
+                    return newGrid;
+                });
+            };
+
+            const visualizeDijkstra = async () => {
+                console.log('Starting Dijkstra visualization');
+                const startTime = Date.now();
+                setIsRunning(true);
+                runningRef.current = true;
+                clearPath();
+
+                const openSet = [];
+                const visitedCount = { value: 0 };
+
+                // Initialize
+                const newGrid = grid.map(row => row.map(cell => ({ ...cell })));
+                newGrid[startPos.row][startPos.col].distance = 0;
+                openSet.push({ row: startPos.row, col: startPos.col, distance: 0 });
+
+                while (openSet.length > 0 && runningRef.current) {
+                    // Sort by distance
+                    openSet.sort((a, b) => a.distance - b.distance);
+                    const current = openSet.shift();
+
+                    if (current.row === endPos.row && current.col === endPos.col) {
+                        const path = reconstructPath(newGrid[current.row][current.col]);
+                        animatePath(path);
+                        setStats({ 
+                            visited: visitedCount.value, 
+                            pathLength: path.length,
+                            time: Date.now() - startTime
+                        });
+                        setIsRunning(false);
+                        runningRef.current = false;
+                        return;
+                    }
+
+                    if (newGrid[current.row][current.col].isVisited) continue;
+
+                    newGrid[current.row][current.col].isVisited = true;
+                    visitedCount.value++;
+
+                    // Animate current cell
+                    setGrid([...newGrid]);
+
+                    const neighbors = getNeighbors(current.row, current.col);
+                    
+                    for (const neighbor of neighbors) {
+                        const newDistance = current.distance + 1;
+                        
+                        if (newDistance < newGrid[neighbor.row][neighbor.col].distance) {
+                            newGrid[neighbor.row][neighbor.col].distance = newDistance;
+                            newGrid[neighbor.row][neighbor.col].parent = newGrid[current.row][current.col];
+                            openSet.push({ ...neighbor, distance: newDistance });
+                        }
+                    }
+
+                    await new Promise(resolve => {
+                        timeoutRef.current = setTimeout(resolve, 101 - speedRef.current);
+                    });
+                }
+
+                setIsRunning(false);
+                runningRef.current = false;
+            };
+
+            const visualizeAStar = async () => {
+                const startTime = Date.now();
+                setIsRunning(true);
+                runningRef.current = true;
+                clearPath();
+
+                const openSet = [];
+                const visitedCount = { value: 0 };
+
+                // Initialize
+                const newGrid = grid.map(row => row.map(cell => ({ ...cell })));
+                const startNode = newGrid[startPos.row][startPos.col];
+                startNode.distance = 0;
+                startNode.heuristic = heuristic(startPos, endPos);
+                startNode.fScore = startNode.heuristic;
+                
+                openSet.push({ row: startPos.row, col: startPos.col, fScore: startNode.fScore });
+
+                while (openSet.length > 0 && runningRef.current) {
+                    // Sort by fScore
+                    openSet.sort((a, b) => a.fScore - b.fScore);
+                    const current = openSet.shift();
+
+                    if (current.row === endPos.row && current.col === endPos.col) {
+                        const path = reconstructPath(newGrid[current.row][current.col]);
+                        animatePath(path);
+                        setStats({ 
+                            visited: visitedCount.value, 
+                            pathLength: path.length,
+                            time: Date.now() - startTime
+                        });
+                        setIsRunning(false);
+                        runningRef.current = false;
+                        return;
+                    }
+
+                    if (newGrid[current.row][current.col].isVisited) continue;
+
+                    newGrid[current.row][current.col].isVisited = true;
+                    visitedCount.value++;
+
+                    // Animate current cell
+                    setGrid([...newGrid]);
+
+                    const neighbors = getNeighbors(current.row, current.col);
+                    
+                    for (const neighbor of neighbors) {
+                        const tentativeDistance = newGrid[current.row][current.col].distance + 1;
+                        
+                        if (tentativeDistance < newGrid[neighbor.row][neighbor.col].distance) {
+                            newGrid[neighbor.row][neighbor.col].distance = tentativeDistance;
+                            newGrid[neighbor.row][neighbor.col].heuristic = heuristic(neighbor, endPos);
+                            newGrid[neighbor.row][neighbor.col].fScore = tentativeDistance + newGrid[neighbor.row][neighbor.col].heuristic;
+                            newGrid[neighbor.row][neighbor.col].parent = newGrid[current.row][current.col];
+                            
+                            openSet.push({ ...neighbor, fScore: newGrid[neighbor.row][neighbor.col].fScore });
+                        }
+                    }
+
+                    await new Promise(resolve => {
+                        timeoutRef.current = setTimeout(resolve, 101 - speedRef.current);
+                    });
+                }
+
+                setIsRunning(false);
+                runningRef.current = false;
+            };
+
+            const startVisualization = () => {
+                if (algorithm === 'dijkstra') {
+                    visualizeDijkstra();
+                } else {
+                    visualizeAStar();
+                }
+            };
+
+            const stopVisualization = () => {
+                setIsRunning(false);
+                runningRef.current = false;
+                if (timeoutRef.current) {
+                    clearTimeout(timeoutRef.current);
+                }
+            };
+
+            const getCellClass = (row, col) => {
+                const cell = grid[row][col];
+                let className = 'grid-cell ';
+
+                if (row === startPos.row && col === startPos.col) {
+                    className += 'cell-start';
+                } else if (row === endPos.row && col === endPos.col) {
+                    className += 'cell-end';
+                } else if (cell.isWall) {
+                    className += 'cell-wall';
+                } else if (cell.isPath) {
+                    className += 'cell-path';
+                } else if (cell.isCurrent) {
+                    className += 'cell-current';
+                } else if (cell.isVisited) {
+                    className += 'cell-visited';
+                } else {
+                    className += 'cell-empty';
+                }
+
+                return className;
+            };
+
+            console.log('Rendering PathfindingVisualizer, grid length:', grid.length);
+            return (
+                <div>
+                    <h1 className="text-3xl mb-6 text-center font-bold glitch-effect">PATHFINDING VISUALIZER</h1>
+                    
+                    <div className="controls-panel">
+                        <div className="control-group">
+                            <h3>Algorithm</h3>
+                            <select 
+                                className="algorithm-select" 
+                                value={algorithm} 
+                                onChange={(e) => setAlgorithm(e.target.value)}
+                                disabled={isRunning}
+                            >
+                                <option value="astar">A* Algorithm</option>
+                                <option value="dijkstra">Dijkstra's Algorithm</option>
+                            </select>
+                        </div>
+
+                        <div className="control-group">
+                            <h3>Speed: {speed}%</h3>
+                            <input 
+                                type="range" 
+                                min="1" 
+                                max="100" 
+                                value={speed} 
+                                onChange={(e) => setSpeed(Number(e.target.value))}
+                                className="speed-slider"
+                            />
+                        </div>
+
+                        <div className="control-group">
+                            <h3>Mode</h3>
+                            <button 
+                                className={`pathfinder-btn ${mode === 'wall' ? 'active' : ''}`}
+                                onClick={() => setMode('wall')}
+                                disabled={isRunning}
+                            >
+                                Draw Walls
+                            </button>
+                            <button 
+                                className={`pathfinder-btn ${mode === 'start' ? 'active' : ''}`}
+                                onClick={() => setMode('start')}
+                                disabled={isRunning}
+                            >
+                                Set Start
+                            </button>
+                            <button 
+                                className={`pathfinder-btn ${mode === 'end' ? 'active' : ''}`}
+                                onClick={() => setMode('end')}
+                                disabled={isRunning}
+                            >
+                                Set End
+                            </button>
+                        </div>
+
+                        <div className="control-group">
+                            <h3>Actions</h3>
+                            <button 
+                                className="pathfinder-btn" 
+                                onClick={startVisualization}
+                                disabled={isRunning}
+                            >
+                                Start Pathfinding
+                            </button>
+                            <button 
+                                className="pathfinder-btn" 
+                                onClick={stopVisualization}
+                                disabled={!isRunning}
+                            >
+                                Stop
+                            </button>
+                            <button 
+                                className="pathfinder-btn" 
+                                onClick={clearPath}
+                                disabled={isRunning}
+                            >
+                                Clear Path
+                            </button>
+                            <button 
+                                className="pathfinder-btn" 
+                                onClick={clearWalls}
+                                disabled={isRunning}
+                            >
+                                Clear Walls
+                            </button>
+                            <button 
+                                className="pathfinder-btn" 
+                                onClick={generateMaze}
+                                disabled={isRunning}
+                            >
+                                Generate Maze
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="legend">
+                        <div className="legend-item">
+                            <div className="legend-color" style={{background: '#00ff00'}}></div>
+                            <span>Start</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color" style={{background: '#ff0000'}}></div>
+                            <span>End</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color" style={{background: 'var(--primary)'}}></div>
+                            <span>Wall</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color" style={{background: 'rgba(0, 255, 255, 0.6)'}}></div>
+                            <span>Visited</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color" style={{background: 'var(--accent)'}}></div>
+                            <span>Path</span>
+                        </div>
+                    </div>
+
+                    <div className="instructions">
+                        Click and drag to draw walls • Select mode to place start/end points • Choose algorithm and start visualization
+                    </div>
+
+                    <div style={{textAlign: 'center', marginBottom: '1rem'}}>
+                        <div 
+                            className="pathfinder-grid"
+                            style={{
+                                gridTemplateColumns: `repeat(${gridSize.cols}, 20px)`,
+                                gridTemplateRows: `repeat(${gridSize.rows}, 20px)`
+                            }}
+                            onMouseUp={handleMouseUp}
+                            onMouseLeave={handleMouseUp}
+                        >
+                            {grid.map((row, rowIndex) =>
+                                row.map((cell, colIndex) => (
+                                    <div
+                                        key={`${rowIndex}-${colIndex}`}
+                                        className={getCellClass(rowIndex, colIndex)}
+                                        onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
+                                        onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
+                                        style={{userSelect: 'none'}}
+                                    />
+                                ))
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="stats-panel">
+                        <div className="stat-item">
+                            <span className="stat-value">{stats.visited}</span>
+                            <div>Nodes Visited</div>
+                        </div>
+                        <div className="stat-item">
+                            <span className="stat-value">{stats.pathLength}</span>
+                            <div>Path Length</div>
+                        </div>
+                        <div className="stat-item">
+                            <span className="stat-value">{stats.time}ms</span>
+                            <div>Time Taken</div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<PathfindingVisualizer />, document.getElementById('pathfinder-root'));
+    </script>
+
+    <script src="../shared/init.js"></script>
+    <script>
+        document.addEventListener('sharedComponentsReady', function() {
+            initializeNavbar();
+            initializeBackground();
+        });
+    </script>
+</body>
+</html>
