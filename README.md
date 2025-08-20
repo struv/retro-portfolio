@@ -1,7 +1,6 @@
 Hosted at:
-https://retro-portfolio-theta.vercel.app/index.html
-
+[wstruve.com
+](https://www.wstruve.com)<br>
 Features to add:<br>
-whiteboard<br>
 blog<br>
 video showcase<br>
