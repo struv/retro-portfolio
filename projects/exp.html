@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Tracker - William Struve</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        /* Study Tracker specific styles */
+        .study-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 5rem 1rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .study-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff);
+            opacity: 0.05;
+            z-index: -1;
+            animation: rainbow-bg 15s linear infinite;
+        }
+        
+        @keyframes rainbow-bg {
+            0% { background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff); }
+            33% { background: linear-gradient(45deg, #00ffff, #ffff00, #00ffff); }
+            66% { background: linear-gradient(45deg, #ffff00, #ff00ff, #ffff00); }
+            100% { background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff); }
+        }
+        
+        .xp-bar {
+            height: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .xp-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .xp-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shine 2s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .level-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: 4px solid var(--accent);
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.5rem;
+            color: white;
+            text-shadow: 2px 2px 0 black;
+            box-shadow: 0 0 20px var(--primary);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px var(--primary); }
+            50% { box-shadow: 0 0 30px var(--secondary), 0 0 40px var(--primary); }
+        }
+        
+        .task-item {
+            background: rgba(0, 0, 51, 0.8);
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .task-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 255, 0.1), transparent);
+            transition: 0.5s;
+        }
+        
+        .task-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .task-item:hover::before {
+            left: 100%;
+        }
+        
+        .task-completed {
+            opacity: 0.6;
+            background: rgba(0, 100, 0, 0.2);
+            border-color: #00ff00;
+        }
+        
+        .category-coding { border-left: 4px solid #ff6b6b; }
+        .category-job-search { border-left: 4px solid #4ecdc4; }
+        .category-learning { border-left: 4px solid #45b7d1; }
+        .category-projects { border-left: 4px solid #96ceb4; }
+        .category-personal { border-left: 4px solid #ffeaa7; }
+        
+        .achievement-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--accent), var(--primary));
+            color: black;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            box-shadow: 0 0 10px var(--accent);
+            animation: achievement-glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes achievement-glow {
+            0%, 100% { box-shadow: 0 0 10px var(--accent); }
+            50% { box-shadow: 0 0 20px var(--accent), 0 0 30px var(--primary); }
+        }
+        
+        .quick-task-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: 2px solid var(--accent);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 0 black;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quick-task-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .quick-task-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--primary);
+        }
+        
+        .quick-task-btn:hover::before {
+            left: 100%;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: rgba(0, 0, 51, 0.8);
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary);
+        }
+        
+        .stat-number {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2rem;
+            color: var(--accent);
+            text-shadow: 2px 2px 0 var(--primary);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 2rem;
+            background: linear-gradient(45deg, var(--accent), var(--primary));
+            color: black;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 0 20px var(--accent);
+            animation: slide-in 0.5s ease, fade-out 0.5s ease 2.5s forwards;
+            z-index: 1000;
+        }
+        
+        @keyframes slide-in {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fade-out {
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
+        .streak-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 165, 0, 0.2);
+            border: 2px solid orange;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            color: orange;
+            text-shadow: 1px 1px 0 black;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+        }
+        
+        .form-input, .form-select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--secondary);
+            color: var(--text);
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+        }
+        
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: 2px solid var(--accent);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 0 black;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .study-container {
+                padding: 4rem 0.5rem 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .level-badge {
+                width: 60px;
+                height: 60px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="study-container">
+        <div id="root"></div>
+    </div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+
+        // Game configuration
+        const LEVEL_XP_REQUIREMENTS = {
+            1: 0, 2: 100, 3: 200, 4: 300, 5: 400, 6: 500,
+            7: 650, 8: 800, 9: 950, 10: 1100, 11: 1250,
+            12: 1450, 13: 1650, 14: 1850, 15: 2050, 16: 2250,
+            17: 2500, 18: 2750, 19: 3000, 20: 3250
+        };
+
+        const TASK_TEMPLATES = {
+            coding: [
+                { title: "Complete LeetCode Easy", xp: 10 },
+                { title: "Complete LeetCode Medium", xp: 20 },
+                { title: "Complete LeetCode Hard", xp: 35 },
+                { title: "Git commit with meaningful message", xp: 5 },
+                { title: "Deploy a project", xp: 30 },
+                { title: "Code review", xp: 15 },
+                { title: "Complete coding tutorial", xp: 12 },
+                { title: "Debug and fix a bug", xp: 8 },
+                { title: "Write unit tests", xp: 10 }
+            ],
+            "job-search": [
+                { title: "Apply for a job", xp: 20 },
+                { title: "Customize resume for role", xp: 15 },
+                { title: "Complete interview", xp: 40 },
+                { title: "Networking conversation", xp: 25 },
+                { title: "Update LinkedIn profile", xp: 10 },
+                { title: "Research company", xp: 8 },
+                { title: "Practice coding interview", xp: 15 },
+                { title: "Attend networking event", xp: 30 }
+            ],
+            learning: [
+                { title: "Complete course module", xp: 15 },
+                { title: "Read technical article", xp: 5 },
+                { title: "Watch tutorial video", xp: 8 },
+                { title: "Take comprehensive notes", xp: 5 },
+                { title: "Write blog post", xp: 25 },
+                { title: "Practice algorithm", xp: 10 },
+                { title: "Complete online quiz", xp: 8 },
+                { title: "Study for certification", xp: 20 }
+            ],
+            projects: [
+                { title: "Start new project", xp: 15 },
+                { title: "Complete project feature", xp: 25 },
+                { title: "Refactor existing code", xp: 12 },
+                { title: "Write project documentation", xp: 10 },
+                { title: "Set up CI/CD pipeline", xp: 30 },
+                { title: "Add responsive design", xp: 18 }
+            ],
+            personal: [
+                { title: "Organize workspace", xp: 5 },
+                { title: "Plan weekly goals", xp: 8 },
+                { title: "Exercise/walk", xp: 10 },
+                { title: "Meditate/mindfulness", xp: 8 },
+                { title: "Read tech book chapter", xp: 12 },
+                { title: "Update personal website", xp: 15 }
+            ]
+        };
+
+        const ACHIEVEMENTS = [
+            { id: "first_steps", name: "First Steps", description: "Complete your first task", icon: "🎯", criteria: { type: "tasks_completed", value: 1 } },
+            { id: "consistent", name: "Consistent", description: "7-day streak", icon: "🔥", criteria: { type: "streak", value: 7 } },
+            { id: "dedicated", name: "Dedicated", description: "30-day streak", icon: "💪", criteria: { type: "streak", value: 30 } },
+            { id: "century_club", name: "Century Club", description: "Earn 100 total XP", icon: "💯", criteria: { type: "total_xp", value: 100 } },
+            { id: "code_warrior", name: "Code Warrior", description: "Complete 25 coding tasks", icon: "⚔️", criteria: { type: "category_count", value: 25, category: "coding" } },
+            { id: "job_hunter", name: "Job Hunter", description: "Apply to 10 positions", icon: "🎯", criteria: { type: "category_count", value: 10, category: "job-search" } },
+            { id: "scholar", name: "Scholar", description: "Complete 30 learning tasks", icon: "📚", criteria: { type: "category_count", value: 30, category: "learning" } },
+            { id: "level_5", name: "Rising Star", description: "Reach level 5", icon: "⭐", criteria: { type: "level", value: 5 } },
+            { id: "level_10", name: "Expert", description: "Reach level 10", icon: "🏆", criteria: { type: "level", value: 10 } },
+            { id: "perfectionist", name: "Perfectionist", description: "Complete 10 tasks in one day", icon: "💎", criteria: { type: "daily_tasks", value: 10 } }
+        ];
+
+        const StudyTracker = () => {
+            const [tasks, setTasks] = useState([]);
+            const [stats, setStats] = useState({
+                totalXP: 0,
+                currentLevel: 1,
+                tasksCompleted: 0,
+                currentStreak: 0,
+                longestStreak: 0,
+                lastActiveDate: null,
+                achievements: [],
+                categoryStats: {
+                    coding: 0,
+                    "job-search": 0,
+                    learning: 0,
+                    projects: 0,
+                    personal: 0
+                }
+            });
+            const [newTask, setNewTask] = useState({ title: "", category: "coding", xp: 10 });
+            const [notifications, setNotifications] = useState([]);
+            const [showAchievements, setShowAchievements] = useState(false);
+
+            // Load data from localStorage on mount
+            useEffect(() => {
+                const savedTasks = localStorage.getItem('study-tracker-tasks');
+                const savedStats = localStorage.getItem('study-tracker-stats');
+                
+                if (savedTasks) {
+                    setTasks(JSON.parse(savedTasks));
+                }
+                
+                if (savedStats) {
+                    setStats(JSON.parse(savedStats));
+                }
+            }, []);
+
+            // Save to localStorage whenever tasks or stats change
+            useEffect(() => {
+                localStorage.setItem('study-tracker-tasks', JSON.stringify(tasks));
+            }, [tasks]);
+
+            useEffect(() => {
+                localStorage.setItem('study-tracker-stats', JSON.stringify(stats));
+            }, [stats]);
+
+            const calculateLevel = (xp) => {
+                let level = 1;
+                for (let l = 2; l <= 20; l++) {
+                    if (xp >= LEVEL_XP_REQUIREMENTS[l]) {
+                        level = l;
+                    } else {
+                        break;
+                    }
+                }
+                return level;
+            };
+
+            const getXPForNextLevel = (currentLevel) => {
+                return LEVEL_XP_REQUIREMENTS[currentLevel + 1] || LEVEL_XP_REQUIREMENTS[20];
+            };
+
+            const showNotification = (message, type = "success") => {
+                const id = Date.now();
+                setNotifications(prev => [...prev, { id, message, type }]);
+                setTimeout(() => {
+                    setNotifications(prev => prev.filter(n => n.id !== id));
+                }, 3000);
+            };
+
+            const checkAchievements = (newStats, newTasks) => {
+                const unlockedAchievements = [];
+                
+                ACHIEVEMENTS.forEach(achievement => {
+                    if (newStats.achievements.includes(achievement.id)) return;
+                    
+                    let unlocked = false;
+                    const { criteria } = achievement;
+                    
+                    switch (criteria.type) {
+                        case "total_xp":
+                            unlocked = newStats.totalXP >= criteria.value;
+                            break;
+                        case "tasks_completed":
+                            unlocked = newStats.tasksCompleted >= criteria.value;
+                            break;
+                        case "streak":
+                            unlocked = newStats.currentStreak >= criteria.value;
+                            break;
+                        case "level":
+                            unlocked = newStats.currentLevel >= criteria.value;
+                            break;
+                        case "category_count":
+                            unlocked = newStats.categoryStats[criteria.category] >= criteria.value;
+                            break;
+                        case "daily_tasks":
+                            const today = new Date().toDateString();
+                            const todayTasks = newTasks.filter(task => 
+                                task.completed && new Date(task.completedAt).toDateString() === today
+                            ).length;
+                            unlocked = todayTasks >= criteria.value;
+                            break;
+                    }
+                    
+                    if (unlocked) {
+                        unlockedAchievements.push(achievement.id);
+                        showNotification(`🏆 Achievement Unlocked: ${achievement.name}!`);
+                    }
+                });
+                
+                return [...newStats.achievements, ...unlockedAchievements];
+            };
+
+            const addTask = () => {
+                if (!newTask.title.trim()) return;
+                
+                const task = {
+                    id: Date.now().toString(),
+                    title: newTask.title,
+                    category: newTask.category,
+                    xpValue: newTask.xp,
+                    completed: false,
+                    completedAt: null,
+                    createdAt: new Date().toISOString()
+                };
+                
+                setTasks(prev => [task, ...prev]);
+                setNewTask({ title: "", category: "coding", xp: 10 });
+                showNotification("Task added successfully!");
+            };
+
+            const completeTask = (taskId) => {
+                const task = tasks.find(t => t.id === taskId);
+                if (!task || task.completed) return;
+                
+                const updatedTasks = tasks.map(t => 
+                    t.id === taskId 
+                        ? { ...t, completed: true, completedAt: new Date().toISOString() }
+                        : t
+                );
+                
+                const newXP = stats.totalXP + task.xpValue;
+                const newLevel = calculateLevel(newXP);
+                const leveledUp = newLevel > stats.currentLevel;
+                
+                // Update streak
+                const today = new Date().toDateString();
+                const lastActive = stats.lastActiveDate ? new Date(stats.lastActiveDate).toDateString() : null;
+                const yesterday = new Date(Date.now() - 86400000).toDateString();
+                
+                let newStreak = stats.currentStreak;
+                if (!lastActive || lastActive === today) {
+                    // First task today or continuing same day
+                    newStreak = lastActive === today ? stats.currentStreak : stats.currentStreak + 1;
+                } else if (lastActive === yesterday) {
+                    // Continuing streak from yesterday
+                    newStreak = stats.currentStreak + 1;
+                } else {
+                    // Streak broken
+                    newStreak = 1;
+                }
+                
+                const newStats = {
+                    ...stats,
+                    totalXP: newXP,
+                    currentLevel: newLevel,
+                    tasksCompleted: stats.tasksCompleted + 1,
+                    currentStreak: newStreak,
+                    longestStreak: Math.max(stats.longestStreak, newStreak),
+                    lastActiveDate: new Date().toISOString(),
+                    categoryStats: {
+                        ...stats.categoryStats,
+                        [task.category]: stats.categoryStats[task.category] + 1
+                    }
+                };
+                
+                newStats.achievements = checkAchievements(newStats, updatedTasks);
+                
+                setTasks(updatedTasks);
+                setStats(newStats);
+                
+                showNotification(`+${task.xpValue} XP earned!`);
+                if (leveledUp) {
+                    showNotification(`🎉 Level Up! You're now level ${newLevel}!`);
+                }
+            };
+
+            const addQuickTask = (taskTemplate, category) => {
+                const task = {
+                    id: Date.now().toString(),
+                    title: taskTemplate.title,
+                    category: category,
+                    xpValue: taskTemplate.xp,
+                    completed: false,
+                    completedAt: null,
+                    createdAt: new Date().toISOString()
+                };
+                
+                setTasks(prev => [task, ...prev]);
+                showNotification("Quick task added!");
+            };
+
+            const getProgressToNextLevel = () => {
+                const nextLevelXP = getXPForNextLevel(stats.currentLevel);
+                const currentLevelXP = LEVEL_XP_REQUIREMENTS[stats.currentLevel] || 0;
+                const progress = stats.totalXP - currentLevelXP;
+                const required = nextLevelXP - currentLevelXP;
+                return Math.min((progress / required) * 100, 100);
+            };
+
+            const unlockedAchievements = ACHIEVEMENTS.filter(a => stats.achievements.includes(a.id));
+
+            return (
+                <div className="w-full">
+                    {notifications.map(notification => (
+                        <div key={notification.id} className="notification">
+                            {notification.message}
+                        </div>
+                    ))}
+                    
+                    <header className="text-center mb-8">
+                        <h1 className="glitch-effect text-4xl mb-4">STUDY TRACKER</h1>
+                        <p className="text-xl">Level up your learning journey!</p>
+                    </header>
+
+                    {/* Stats Dashboard */}
+                    <div className="retro-container mb-6">
+                        <div className="flex flex-col lg:flex-row items-center justify-between mb-6">
+                            <div className="flex items-center gap-4 mb-4 lg:mb-0">
+                                <div className="level-badge">
+                                    {stats.currentLevel}
+                                </div>
+                                <div>
+                                    <div className="text-2xl font-bold text-accent mb-2">
+                                        Level {stats.currentLevel}
+                                    </div>
+                                    <div className="streak-indicator">
+                                        🔥 {stats.currentStreak} day streak
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="flex-1 max-w-md">
+                                <div className="text-center mb-2">
+                                    <span className="text-lg">{stats.totalXP} / {getXPForNextLevel(stats.currentLevel)} XP</span>
+                                </div>
+                                <div className="xp-bar">
+                                    <div 
+                                        className="xp-progress" 
+                                        style={{ width: `${getProgressToNextLevel()}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="stats-grid">
+                            <div className="stat-card">
+                                <span className="stat-number">{stats.totalXP}</span>
+                                <span className="text-lg">Total XP</span>
+                            </div>
+                            <div className="stat-card">
+                                <span className="stat-number">{stats.tasksCompleted}</span>
+                                <span className="text-lg">Tasks Completed</span>
+                            </div>
+                            <div className="stat-card">
+                                <span className="stat-number">{stats.longestStreak}</span>
+                                <span className="text-lg">Longest Streak</span>
+                            </div>
+                            <div className="stat-card">
+                                <span className="stat-number">{unlockedAchievements.length}</span>
+                                <span className="text-lg">Achievements</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Quick Tasks */}
+                    <div className="retro-container mb-6">
+                        <h2 className="text-2xl mb-4">⚡ Quick Tasks</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            {Object.entries(TASK_TEMPLATES).map(([category, templates]) => (
+                                templates.slice(0, 2).map((template, index) => (
+                                    <button
+                                        key={`${category}-${index}`}
+                                        onClick={() => addQuickTask(template, category)}
+                                        className="quick-task-btn"
+                                    >
+                                        {template.title} (+{template.xp} XP)
+                                    </button>
+                                ))
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Add Custom Task */}
+                    <div className="retro-container mb-6">
+                        <h2 className="text-2xl mb-4">➕ Add Custom Task</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div className="form-group">
+                                <label className="form-label">Task Title</label>
+                                <input
+                                    type="text"
+                                    value={newTask.title}
+                                    onChange={(e) => setNewTask({...newTask, title: e.target.value})}
+                                    className="form-input"
+                                    placeholder="Enter task description..."
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Category</label>
+                                <select
+                                    value={newTask.category}
+                                    onChange={(e) => setNewTask({...newTask, category: e.target.value})}
+                                    className="form-select"
+                                >
+                                    <option value="coding">💻 Coding</option>
+                                    <option value="job-search">🎯 Job Search</option>
+                                    <option value="learning">📚 Learning</option>
+                                    <option value="projects">🔨 Projects</option>
+                                    <option value="personal">👤 Personal</option>
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">XP Value</label>
+                                <input
+                                    type="number"
+                                    value={newTask.xp}
+                                    onChange={(e) => setNewTask({...newTask, xp: parseInt(e.target.value) || 0})}
+                                    className="form-input"
+                                    min="1"
+                                    max="100"
+                                />
+                            </div>
+                        </div>
+                        <button onClick={addTask} className="btn-primary">
+                            Add Task
+                        </button>
+                    </div>
+
+                    {/* Task List */}
+                    <div className="retro-container mb-6">
+                        <h2 className="text-2xl mb-4">📋 Your Tasks</h2>
+                        {tasks.length === 0 ? (
+                            <p className="text-center text-lg opacity-60">
+                                No tasks yet. Add some tasks to get started!
+                            </p>
+                        ) : (
+                            <div className="space-y-3">
+                                {tasks.map(task => (
+                                    <div
+                                        key={task.id}
+                                        className={`task-item category-${task.category} ${task.completed ? 'task-completed' : ''}`}
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex-1">
+                                                <h3 className="text-lg font-bold mb-1">{task.title}</h3>
+                                                <div className="flex items-center gap-3 text-sm opacity-80">
+                                                    <span className="capitalize">{task.category.replace('-', ' ')}</span>
+                                                    <span>+{task.xpValue} XP</span>
+                                                    {task.completed && (
+                                                        <span className="text-green-400">
+                                                            ✅ Completed {new Date(task.completedAt).toLocaleDateString()}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            {!task.completed && (
+                                                <button
+                                                    onClick={() => completeTask(task.id)}
+                                                    className="btn-primary"
+                                                >
+                                                    Complete
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Achievements */}
+                    <div className="retro-container">
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-2xl">🏆 Achievements</h2>
+                            <button
+                                onClick={() => setShowAchievements(!showAchievements)}
+                                className="btn-primary"
+                            >
+                                {showAchievements ? 'Hide' : 'Show'} All
+                            </button>
+                        </div>
+                        
+                        {unlockedAchievements.length > 0 && (
+                            <div className="mb-4">
+                                <h3 className="text-lg mb-3">Unlocked ({unlockedAchievements.length})</h3>
+                                <div className="flex flex-wrap gap-3">
+                                    {unlockedAchievements.map(achievement => (
+                                        <div key={achievement.id} className="achievement-badge">
+                                            <span>{achievement.icon}</span>
+                                            <span>{achievement.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                        
+                        {showAchievements && (
+                            <div>
+                                <h3 className="text-lg mb-3">All Achievements</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    {ACHIEVEMENTS.map(achievement => (
+                                        <div
+                                            key={achievement.id}
+                                            className={`p-3 rounded border-2 ${
+                                                stats.achievements.includes(achievement.id)
+                                                    ? 'border-green-500 bg-green-900/20'
+                                                    : 'border-gray-600 bg-gray-900/20 opacity-60'
+                                            }`}
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <span className="text-2xl">{achievement.icon}</span>
+                                                <div>
+                                                    <div className="font-bold">{achievement.name}</div>
+                                                    <div className="text-sm opacity-80">{achievement.description}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<StudyTracker />);
+    </script>
+
+    <script src="../shared/init.js"></script>
+    <script>
+        document.addEventListener('sharedComponentsReady', function() {
+            if (typeof initializeNavbar === 'function') {
+                initializeNavbar();
+            }
+            if (typeof initializeBackground === 'function') {
+                initializeBackground();
+            }
+            if (typeof initializeMP3Player === 'function') {
+                initializeMP3Player();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -20,6 +20,9 @@ const pageConfig = {
     },
     'melody.html': {
         disableMP3Player: true  // Disable on melody page since it has its own audio
+    },
+    'projects/exp.html': {
+        disableMP3Player: false
     }
 };
 

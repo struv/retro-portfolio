@@ -12,7 +12,15 @@ function initializeMP3Player() {
     let currentTrack = 0;
     let isPlaying = false;
     let audio = null;
-    let playlist = [...config.defaultPlaylist];
+    
+    // Adjust audio paths based on current page location
+    const isInSubdirectory = window.location.pathname.split('/').length > 2;
+    const audioPathPrefix = isInSubdirectory ? '../' : '';
+    let playlist = config.defaultPlaylist.map(track => ({
+        ...track,
+        src: audioPathPrefix + track.src
+    }));
+    
     let isShuffleEnabled = false;
     
     // Create MP3 player HTML using CSS classes
