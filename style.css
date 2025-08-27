@@ -197,23 +197,23 @@ button:hover {
 @keyframes glitch {
     0%, 90%, 100% { 
         transform: translate(0); 
-        text-shadow: none;
+        text-shadow: 0 0 6px rgba(0, 0, 0, 0.8), 4px 4px 0 var(--secondary), 8px 8px 0 var(--primary);
     }
     92% { 
         transform: translate(-5px, 3px); 
-        text-shadow: -2px 0 var(--primary);
+        text-shadow: 0 0 6px rgba(0, 0, 0, 0.8), -2px 0 var(--primary);
     }
     94% { 
         transform: translate(5px, -3px); 
-        text-shadow: 2px 0 var(--secondary);
+        text-shadow: 0 0 6px rgba(0, 0, 0, 0.8), 2px 0 var(--secondary);
     }
     96% { 
         transform: translate(-3px, -5px); 
-        text-shadow: 2px 2px var(--accent);
+        text-shadow: 0 0 6px rgba(0, 0, 0, 0.8), 2px 2px var(--accent);
     }
     98% { 
         transform: translate(3px, 2px); 
-        text-shadow: -2px -2px var(--primary);
+        text-shadow: 0 0 6px rgba(0, 0, 0, 0.8), -2px -2px var(--primary);
     }
 }
 
