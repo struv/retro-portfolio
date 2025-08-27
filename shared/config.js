@@ -23,6 +23,9 @@ const pageConfig = {
     },
     'projects/exp.html': {
         disableMP3Player: false
+    },
+    'projects/pathfinding.html': {
+        disableMP3Player: false
     }
 };
 
