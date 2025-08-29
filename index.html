@@ -45,13 +45,38 @@
         }
         
         .skills {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
+            align-items: start;
         }
         
         .skill-group {
-            flex: 1 1 200px;
+            background: rgba(0, 0, 51, 0.3);
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .skill-group::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+        }
+        
+        .skill-group h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--accent);
+            text-align: center;
+            border-bottom: 1px solid var(--secondary);
+            padding-bottom: 0.5rem;
         }
         
         .experience-item {
@@ -258,33 +283,59 @@
             <h2>Skills</h2>
             <div class="skills">
                 <div class="skill-group">
-                    <h3>Programming languages:</h3>
+                    <h3>Languages:</h3>
                     <ul class="retro-list">
-                        <li>JavaScript</li>
-                        <li>CSS</li>
-                        <li>HTML</li>
                         <li>C</li>
                         <li>C++</li>
+                        <li>CSS</li>
+                        <li>HTML</li>
                         <li>Java</li>
+                        <li>JavaScript</li>
+                        <li>Python</li>
                     </ul>
                 </div>
                 
                 <div class="skill-group">
-                    <h3>IDEs:</h3>
+                    <h3>Developer Tools:</h3>
                     <ul class="retro-list">
-                        <li>VSCode</li>
-                        <li>NetBeans</li>
-                        <li>IntelliJ</li>
+                        <li>Cursor</li>
+                        <li>Docker</li>
                         <li>Eclipse</li>
+                        <li>Git</li>
+                        <li>Google Cloud Platform</li>
+                        <li>IntelliJ</li>
                         <li>Jupyter</li>
+                        <li>VS Code</li>
                     </ul>
                 </div>
                 
                 <div class="skill-group">
-                    <h3>Frameworks:</h3>
+                    <h3>Web & Databases:</h3>
                     <ul class="retro-list">
-                        <li>React.js</li>
-                        <li>Node.js</li>
+                        <li>Firebase</li>
+                        <li>Flask</li>
+                        <li>MaterialUI</li>
+                        <li>MongoDB</li>
+                        <li>MySQL</li>
+                        <li>Node</li>
+                        <li>PostgreSQL</li>
+                        <li>React</li>
+                        <li>Three.js</li>
+                        <li>Tone.js</li>
+                    </ul>
+                </div>
+                
+                <div class="skill-group">
+                    <h3>Data Science & Testing:</h3>
+                    <ul class="retro-list">
+                        <li>Gtest</li>
+                        <li>Matplotlib</li>
+                        <li>NumPy</li>
+                        <li>OpenCV</li>
+                        <li>Pandas</li>
+                        <li>Pytest</li>
+                        <li>Pytesseract</li>
+                        <li>smtplib</li>
                     </ul>
                 </div>
             </div>
@@ -295,23 +346,24 @@
             
             <div class="experience-item">
                 <div class="experience-title">
+                    <span>Kids & Teens Medical Group Software Developer</span>
+                    <span>10/24 - Present</span>
+                </div>
+                <ul class="retro-list">
+                    <li>Engineered custom API integrations between When I Work, Paylocity, and eClinicalWorks</li>
+                    <li>Led implementation of AI medical scribes and meeting transcription tools</li>
+                    <li>Developed AI-powered EMR template generator trained on physician-crafted templates</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <div class="experience-title">
                     <span>Mochinut Kitchen Staff</span>
                     <span>6/21 - 1/22</span>
                 </div>
                 <ul class="retro-list">
-                    <li>Made and mixed dough, made corn dogs</li>
-                    <li>Fried, frosted, and decorated donuts controlling supply</li>
-                </ul>
-            </div>
-            
-            <div class="experience-item">
-                <div class="experience-title">
-                    <span>Aloha Senior Living Anaheim Caregiver</span>
-                    <span>5/20 - 5/21</span>
-                </div>
-                <ul class="retro-list">
-                    <li>Prepared breakfast, lunch, and dinner for residents, fed residents</li>
-                    <li>Moved residents, changed diapers, cleaned facility</li>
+                    <li>Made and mixed dough (I know the secret formula), made Korean corn dogs</li>
+                    <li>Fried, frosted, decorated, and ate donuts. Time devours the donut's fleeting perfection.</li>
                 </ul>
             </div>
             
