@@ -26,6 +26,9 @@ const pageConfig = {
     },
     'projects/pathfinding.html': {
         disableMP3Player: false
+    },
+    'projects/todo.html': {
+        disableMP3Player: false
     }
 };
 

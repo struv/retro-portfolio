@@ -391,5 +391,14 @@
         
         animate();
     </script>
+    
+    <script src="shared/init.js"></script>
+    <script>
+        document.addEventListener('sharedComponentsReady', function() {
+            initializeNavbar();
+            initializeBackground();
+            initializeMP3Player();
+        });
+    </script>
 </body>
 </html>

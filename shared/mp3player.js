@@ -13,6 +13,48 @@ function initializeMP3Player() {
     let isPlaying = false;
     let audio = null;
     
+    // localStorage keys for persistence
+    const STORAGE_KEYS = {
+        CURRENT_TRACK: 'mp3player_currentTrack',
+        IS_PLAYING: 'mp3player_isPlaying',
+        VOLUME: 'mp3player_volume',
+        SHUFFLE: 'mp3player_shuffle',
+        CURRENT_TIME: 'mp3player_currentTime'
+    };
+    
+    // Save player state to localStorage
+    function savePlayerState() {
+        try {
+            const state = {
+                currentTrack: currentTrack,
+                isPlaying: isPlaying,
+                volume: volumeSlider ? volumeSlider.value : 50,
+                shuffle: isShuffleEnabled,
+                currentTime: audio ? audio.currentTime : 0
+            };
+            localStorage.setItem('mp3player_state', JSON.stringify(state));
+        } catch (e) {
+            console.warn('Failed to save player state:', e);
+        }
+    }
+    
+    // Load player state from localStorage
+    function loadPlayerState() {
+        try {
+            const savedState = localStorage.getItem('mp3player_state');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                currentTrack = state.currentTrack || 0;
+                isPlaying = state.isPlaying || false;
+                isShuffleEnabled = state.shuffle || false;
+                return state;
+            }
+        } catch (e) {
+            console.warn('Failed to load player state:', e);
+        }
+        return null;
+    }
+    
     // Adjust audio paths based on current page location
     const isInSubdirectory = window.location.pathname.split('/').length > 2;
     const audioPathPrefix = isInSubdirectory ? '../' : '';
@@ -97,6 +139,12 @@ function initializeMP3Player() {
             audio = new Audio(playlist[currentTrack].src);
             audio.volume = volumeSlider.value / 100;
             
+            // Restore playback position if available
+            const savedState = loadPlayerState();
+            if (savedState && savedState.currentTime > 0) {
+                audio.currentTime = savedState.currentTime;
+            }
+            
             // Audio event listeners
             audio.addEventListener('loadstart', () => {
                 trackInfo.textContent = `Loading: ${playlist[currentTrack].title}`;
@@ -153,6 +201,9 @@ function initializeMP3Player() {
             playBtn.textContent = '⏸';
             isPlaying = true;
         }
+        
+        // Save state when play/pause changes
+        savePlayerState();
     }
     
     // Next track
@@ -177,6 +228,9 @@ function initializeMP3Player() {
             audio.play().catch(e => console.error('Playback failed:', e));
             playBtn.textContent = '⏸';
         }
+        
+        // Save state when track changes
+        savePlayerState();
     }
     
     // Previous track
@@ -201,6 +255,9 @@ function initializeMP3Player() {
             audio.play().catch(e => console.error('Playback failed:', e));
             playBtn.textContent = '⏸';
         }
+        
+        // Save state when track changes
+        savePlayerState();
     }
     
     // Event listeners
@@ -211,12 +268,14 @@ function initializeMP3Player() {
     shuffleBtn.addEventListener('click', () => {
         isShuffleEnabled = !isShuffleEnabled;
         shuffleBtn.style.opacity = isShuffleEnabled ? '1' : '0.5';
+        savePlayerState();
     });
     
     volumeSlider.addEventListener('input', (e) => {
         if (audio) {
             audio.volume = e.target.value / 100;
         }
+        savePlayerState();
     });
     
     dropdown.addEventListener('click', (e) => {
@@ -246,6 +305,7 @@ function initializeMP3Player() {
             }
             
             dropdown.classList.remove('active');
+            savePlayerState();
         });
     });
     
@@ -289,14 +349,52 @@ function initializeMP3Player() {
         }
     });
     
-    // Auto-select first track if available
-    if (playlist.length > 0) {
+    // Load saved state and initialize
+    const savedState = loadPlayerState();
+    if (savedState && playlist.length > 0) {
+        // Restore saved track (ensure it's within bounds)
+        currentTrack = Math.min(savedState.currentTrack, playlist.length - 1);
+        isShuffleEnabled = savedState.shuffle;
+        
+        // Restore volume
+        if (volumeSlider && savedState.volume !== undefined) {
+            volumeSlider.value = savedState.volume;
+        }
+        
+        // Update shuffle button appearance
+        if (shuffleBtn) {
+            shuffleBtn.style.opacity = isShuffleEnabled ? '1' : '0.5';
+        }
+        
+        createAudio();
+        
+        // Restore play state
+        if (savedState.isPlaying) {
+            // Small delay to ensure audio is loaded
+            setTimeout(() => {
+                togglePlay();
+            }, 100);
+        }
+    } else if (playlist.length > 0) {
+        // No saved state, start fresh
         currentTrack = 0;
         dropdown.value = 0;
         createAudio();
     }
     
-    console.log('MP3 Player initialized');
+    // Set up periodic saving of current time
+    setInterval(() => {
+        if (audio && isPlaying) {
+            savePlayerState();
+        }
+    }, 5000); // Save every 5 seconds when playing
+    
+    // Save state before page unload
+    window.addEventListener('beforeunload', () => {
+        savePlayerState();
+    });
+    
+    console.log('MP3 Player initialized with persistence');
 }
 
 // Helper function to get current page (shared with navbar)
@@ -306,5 +404,16 @@ function getCurrentPagePath() {
     return filename;
 }
 
+
 // Export function for global use
 window.initializeMP3Player = initializeMP3Player;
+
+// Export function to clear saved state (for debugging)
+window.clearMP3PlayerState = function() {
+    try {
+        localStorage.removeItem('mp3player_state');
+        console.log('MP3 Player state cleared');
+    } catch (e) {
+        console.warn('Failed to clear player state:', e);
+    }
+};
