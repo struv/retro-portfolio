@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Web Experiences with Three.js - William Struve</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/blog.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo-section">
+                <a href="../index.html" class="logo">William Struve</a>
+                <span class="logo-subtitle">Software Engineer & Music Producer</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../projects.html" class="nav-link">Projects</a>
+                <a href="../life.html" class="nav-link">Life</a>
+                <a href="../melody.html" class="nav-link">Melody</a>
+                <a href="../blog.html" class="nav-link active">Blog</a>
+                
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+        </nav>
+    </header>
+
+    <main class="article-container">
+        <a href="../blog.html" class="back-link">Back to Articles</a>
+        
+        <article>
+            <header class="article-header">
+                <div class="category-tag">TUTORIAL</div>
+                <h1 class="article-title">3D Web Experiences with Three.js</h1>
+                <div class="article-meta">
+                    <span>William Struve</span>
+                    <span class="meta-separator">•</span>
+                    <span>January 10, 2025</span>
+                    <span class="meta-separator">•</span>
+                    <span>8 min read</span>
+                </div>
+            </header>
+            
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=400&fit=crop&crop=center" alt="3D web graphics visualization" class="featured-image">
+            
+            <div class="article-content" id="article-content">
+                <!-- Content will be rendered here -->
+            </div>
+        </article>
+    </main>
+
+    <script>
+        const articleContent = `# Creating Immersive 3D Web Experiences
+
+Three.js has fundamentally transformed how we approach web development. No longer are we confined to flat, static pages. Today, we can create rich, interactive 3D environments that run smoothly in any modern browser, opening up entirely new possibilities for user engagement.
+
+## Why Three.js Matters
+
+The web has evolved from simple document sharing to a platform for complex applications. Three.js bridges the gap between web development and 3D graphics programming, making WebGL accessible to developers without requiring deep knowledge of graphics programming.
+
+Key advantages of Three.js:
+
+- **Accessibility**: Abstracts complex WebGL operations
+- **Performance**: Hardware-accelerated rendering  
+- **Compatibility**: Works across modern browsers
+- **Flexibility**: From simple scenes to complex applications
+
+## Essential Three.js Concepts
+
+### Scene, Camera, Renderer
+
+Every Three.js application starts with these three fundamental components:
+
+\`\`\`javascript
+// The basic Three.js setup
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+    75,                                    // Field of view
+    window.innerWidth / window.innerHeight, // Aspect ratio
+    0.1,                                   // Near clipping plane
+    1000                                   // Far clipping plane
+);
+
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+\`\`\`
+
+### Geometry and Materials
+
+Creating 3D objects involves combining geometry (shape) with materials (appearance):
+
+\`\`\`javascript
+// Creating a wireframe cube
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshBasicMaterial({
+    color: 0x00ff00,
+    wireframe: true
+});
+
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+\`\`\`
+
+## Performance Optimization Strategies
+
+Building performant 3D web applications requires careful consideration of several factors:
+
+### 1. Geometry Optimization
+
+**Use appropriate polygon counts:**
+- Low-poly models for distant objects
+- Higher detail only where necessary
+- Level-of-detail (LOD) systems for complex scenes
+
+**Optimize buffer geometry:**
+\`\`\`javascript
+// Use BufferGeometry for better performance
+const geometry = new THREE.BufferGeometry();
+const vertices = new Float32Array([
+    -1.0, -1.0,  1.0,
+     1.0, -1.0,  1.0,
+     1.0,  1.0,  1.0
+]);
+
+geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+\`\`\`
+
+### 2. Material Efficiency
+
+**Reuse materials when possible:**
+\`\`\`javascript
+// Create materials once, use multiple times
+const sharedMaterial = new THREE.MeshBasicMaterial({
+    color: 0xff0000,
+    wireframe: true
+});
+
+// Use for multiple meshes
+const cube1 = new THREE.Mesh(geometry1, sharedMaterial);
+const cube2 = new THREE.Mesh(geometry2, sharedMaterial);
+\`\`\`
+
+### 3. Rendering Optimizations
+
+**Implement frustum culling:**
+- Only render objects in view
+- Use \`object.frustumCulled = true\`
+
+**Batch similar operations:**
+- Group objects with similar materials
+- Use instanced rendering for repeated elements
+
+## Advanced Techniques
+
+### Particle Systems
+
+Particle systems create complex visual effects with minimal performance impact:
+
+\`\`\`javascript
+function createParticleSystem() {
+    const particleCount = 10000;
+    const geometry = new THREE.BufferGeometry();
+    
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    
+    for (let i = 0; i < particleCount * 3; i += 3) {
+        // Random positions in a sphere
+        positions[i] = (Math.random() - 0.5) * 100;
+        positions[i + 1] = (Math.random() - 0.5) * 100;
+        positions[i + 2] = (Math.random() - 0.5) * 100;
+        
+        // Random colors
+        colors[i] = Math.random();
+        colors[i + 1] = Math.random();
+        colors[i + 2] = Math.random();
+    }
+    
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    
+    const material = new THREE.PointsMaterial({
+        size: 0.5,
+        vertexColors: true
+    });
+    
+    return new THREE.Points(geometry, material);
+}
+\`\`\`
+
+### Animation and Interactivity
+
+Smooth animation is crucial for engaging 3D experiences:
+
+\`\`\`javascript
+function animate() {
+    requestAnimationFrame(animate);
+    
+    // Rotate objects
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+    
+    // Update particle positions
+    updateParticles();
+    
+    renderer.render(scene, camera);
+}
+\`\`\`
+
+## Real-World Applications
+
+### Interactive Product Visualizations
+
+Three.js excels at creating product configurators and virtual showrooms. Users can interact with 3D models, change materials, and view products from every angle.
+
+### Data Visualization
+
+Complex datasets become more comprehensible when visualized in 3D space. Scientific data, network graphs, and geographical information all benefit from dimensional representation.
+
+### Gaming and Entertainment
+
+Browser-based games leverage Three.js for everything from simple puzzle games to complex multiplayer experiences.
+
+## Best Practices
+
+### Code Organization
+
+Structure your Three.js projects for maintainability:
+
+\`\`\`javascript
+class Scene3D {
+    constructor() {
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.renderer = new THREE.WebGLRenderer();
+        
+        this.init();
+    }
+    
+    init() {
+        this.setupLighting();
+        this.createObjects();
+        this.setupControls();
+        this.animate();
+    }
+    
+    setupLighting() {
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        
+        this.scene.add(ambientLight);
+        this.scene.add(directionalLight);
+    }
+    
+    // ... other methods
+}
+\`\`\`
+
+### Error Handling
+
+Always implement proper error handling for resource loading and WebGL context issues:
+
+\`\`\`javascript
+const renderer = new THREE.WebGLRenderer();
+renderer.domElement.addEventListener('webglcontextlost', handleContextLoss);
+
+function handleContextLoss(event) {
+    event.preventDefault();
+    console.log('WebGL context lost. Attempting to restore...');
+}
+\`\`\`
+
+## Looking Forward
+
+The future of 3D web development is exciting. Emerging technologies like WebXR are making virtual and augmented reality experiences possible directly in browsers. As web standards evolve and hardware capabilities improve, we can expect even more sophisticated 3D applications.
+
+> "The best 3D experiences on the web feel natural and intuitive, seamlessly blending interaction with visual storytelling."
+
+Three.js continues to evolve, with regular updates bringing new features and performance improvements. By mastering these fundamentals and staying current with best practices, developers can create compelling 3D experiences that push the boundaries of what's possible on the web.
+
+## Next Steps
+
+Ready to start building? Begin with simple scenes and gradually add complexity. Experiment with different geometries, materials, and lighting setups. Most importantly, focus on user experience – the most technically impressive 3D scene means nothing if users can't interact with it intuitively.
+
+---
+
+*Want to see these concepts in action? Check out the interactive examples in my portfolio, or dive into the Three.js documentation to start building your own 3D web experiences.*`;
+
+        function renderContent() {
+            const contentElement = document.getElementById('article-content');
+            const html = marked.parse(articleContent);
+            contentElement.innerHTML = html;
+        }
+
+        document.addEventListener('DOMContentLoaded', renderContent);
+    </script>
+</body>
+</html>

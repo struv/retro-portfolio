@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to My Digital Realm - William Struve</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/blog.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo-section">
+                <a href="../index.html" class="logo">William Struve</a>
+                <span class="logo-subtitle">Software Engineer & Music Producer</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../projects.html" class="nav-link">Projects</a>
+                <a href="../life.html" class="nav-link">Life</a>
+                <a href="../melody.html" class="nav-link">Melody</a>
+                <a href="../blog.html" class="nav-link active">Blog</a>
+                
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+        </nav>
+    </header>
+
+    <main class="article-container">
+        <a href="../blog.html" class="back-link">Back to Articles</a>
+        
+        <article>
+            <header class="article-header">
+                <div class="category-tag">INTRO</div>
+                <h1 class="article-title">Welcome to My Digital Realm</h1>
+                <div class="article-meta">
+                    <span>William Struve</span>
+                    <span class="meta-separator">•</span>
+                    <span>January 15, 2025</span>
+                    <span class="meta-separator">•</span>
+                    <span>3 min read</span>
+                </div>
+            </header>
+            
+            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=400&fit=crop&crop=center" alt="Digital realm visualization" class="featured-image">
+            
+            <div class="article-content" id="article-content">
+                <!-- Content will be rendered here -->
+            </div>
+        </article>
+    </main>
+
+    <script>
+        const articleContent = `# Welcome to My Digital Realm
+
+Greetings, fellow digital explorer! Welcome to my corner of the internet where code meets creativity, and pixels dance to the rhythm of innovation.
+
+## About This Space
+
+This blog is my digital playground where I'll be sharing:
+
+- **Web Development Adventures**: From vanilla JavaScript experiments to cutting-edge frameworks
+- **Music Production Journey**: How I blend technology with musical creativity  
+- **Technical Deep Dives**: API discoveries, performance optimizations, and architectural decisions
+- **Creative Process**: The intersection of engineering and artistic expression
+
+## What Makes This Special?
+
+I'm passionate about the intersection of **technology** and **art**. Whether it's crafting interactive 3D experiences with Three.js or producing electronic music that sounds like it belongs in a sci-fi movie, I believe in creating digital experiences that are both functional and beautiful.
+
+Here's a little taste of what you might find in my code:
+
+\`\`\`javascript
+function createDigitalExperience() {
+    const technology = ['React', 'Three.js', 'Web Audio API'];
+    const creativity = ['Music Production', 'Visual Design', 'UX Innovation'];
+    
+    console.log('Initializing creative development mode...');
+    
+    return {
+        philosophy: 'Function meets form',
+        approach: 'Technical excellence with artistic vision',
+        output: 'Meaningful digital experiences'
+    };
+}
+\`\`\`
+
+## The Journey Ahead
+
+I'm excited to document this journey and share discoveries along the way. From technical tutorials to creative experiments, this space will evolve as I do.
+
+> "The best way to predict the future is to create it." - Peter Drucker
+
+Whether you're here for the code, the insights, or just curious about the creative process, I hope you find something that sparks your interest.
+
+## What's Coming
+
+In upcoming posts, I'll be exploring:
+
+- **Three.js Deep Dives**: Creating immersive web experiences
+- **Audio Programming**: Building interactive sound with Web APIs  
+- **Performance Engineering**: Optimizing for both speed and experience
+- **Creative Workflows**: Tools and techniques for digital artists
+
+Stay tuned for regular updates, and feel free to reach out if anything resonates with you!
+
+---
+
+*Ready to dive deeper? Check out my latest experiments with 3D web graphics and audio synthesis...*`;
+
+        function renderContent() {
+            const contentElement = document.getElementById('article-content');
+            const html = marked.parse(articleContent);
+            contentElement.innerHTML = html;
+        }
+
+        document.addEventListener('DOMContentLoaded', renderContent);
+    </script>
+</body>
+</html>

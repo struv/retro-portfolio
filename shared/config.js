@@ -4,6 +4,7 @@ const navConfig = [
     { path: 'projects.html', label: 'Projects' },
     { path: 'life.html', label: 'Life' },
     { path: 'melody.html', label: 'Melody' },
+    { path: 'blog.html', label: 'Blog' }
     // Add new pages here
 ];
 
