@@ -2,8 +2,6 @@
 const navConfig = [
     { path: 'index.html', label: 'Home' },
     { path: 'projects.html', label: 'Projects' },
-    { path: 'life.html', label: 'Life' },
-    { path: 'melody.html', label: 'Melody' },
     { path: 'blog.html', label: 'Blog' }
     // Add new pages here
 ];
@@ -16,10 +14,10 @@ const pageConfig = {
     'projects.html': {
         disableMP3Player: false
     },
-    'life.html': {
+    'projects/life.html': {
         disableMP3Player: false
     },
-    'melody.html': {
+    'projects/melody.html': {
         disableMP3Player: true  // Disable on melody page since it has its own audio
     },
     'projects/exp.html': {

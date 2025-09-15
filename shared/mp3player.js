@@ -129,20 +129,22 @@ function initializeMP3Player() {
     const content = document.getElementById('mp3-content');
     
     // Initialize audio
-    function createAudio() {
+    function createAudio(restoreTime = false) {
         if (audio) {
             audio.pause();
             audio = null;
         }
-        
+
         if (playlist[currentTrack]) {
             audio = new Audio(playlist[currentTrack].src);
             audio.volume = volumeSlider.value / 100;
-            
-            // Restore playback position if available
-            const savedState = loadPlayerState();
-            if (savedState && savedState.currentTime > 0) {
-                audio.currentTime = savedState.currentTime;
+
+            // Only restore playback position if explicitly requested (for page loads)
+            if (restoreTime) {
+                const savedState = loadPlayerState();
+                if (savedState && savedState.currentTime > 0) {
+                    audio.currentTime = savedState.currentTime;
+                }
             }
             
             // Audio event listeners
@@ -183,7 +185,7 @@ function initializeMP3Player() {
     function togglePlay() {
         if (!audio) {
             if (playlist.length > 0) {
-                createAudio();
+                createAudio(); // Don't restore time when manually starting
             } else {
                 return;
             }
@@ -209,7 +211,7 @@ function initializeMP3Player() {
     // Next track
     function nextTrack() {
         if (playlist.length === 0) return;
-        
+
         if (isShuffleEnabled) {
             // Get a random track different from the current one
             let newTrack;
@@ -220,15 +222,18 @@ function initializeMP3Player() {
         } else {
             currentTrack = (currentTrack + 1) % playlist.length;
         }
-        
+
         dropdown.value = currentTrack;
-        createAudio();
-        
+        createAudio(); // Don't restore time for track changes
+
         if (isPlaying) {
             audio.play().catch(e => console.error('Playback failed:', e));
             playBtn.textContent = '⏸';
         }
-        
+
+        // Update track display
+        updateSelectedTrack();
+
         // Save state when track changes
         savePlayerState();
     }
@@ -236,7 +241,7 @@ function initializeMP3Player() {
     // Previous track
     function prevTrack() {
         if (playlist.length === 0) return;
-        
+
         if (isShuffleEnabled) {
             // Get a random track different from the current one
             let newTrack;
@@ -247,15 +252,18 @@ function initializeMP3Player() {
         } else {
             currentTrack = currentTrack === 0 ? playlist.length - 1 : currentTrack - 1;
         }
-        
+
         dropdown.value = currentTrack;
-        createAudio();
-        
+        createAudio(); // Don't restore time for track changes
+
         if (isPlaying) {
             audio.play().catch(e => console.error('Playback failed:', e));
             playBtn.textContent = '⏸';
         }
-        
+
+        // Update track display
+        updateSelectedTrack();
+
         // Save state when track changes
         savePlayerState();
     }
@@ -298,7 +306,7 @@ function initializeMP3Player() {
             currentTrack = index;
             selectedTrack.textContent = playlist[currentTrack].title;
             selectedTrack.setAttribute('data-track', playlist[currentTrack].title);
-            createAudio();
+            createAudio(); // Don't restore time for manual track selection
             
             if (wasPlaying) {
                 togglePlay();
@@ -314,6 +322,9 @@ function initializeMP3Player() {
         if (playlist[currentTrack]) {
             selectedTrack.textContent = playlist[currentTrack].title;
             selectedTrack.setAttribute('data-track', playlist[currentTrack].title);
+            // Also update the main track info display
+            trackInfo.textContent = playlist[currentTrack].title;
+            trackInfo.setAttribute('data-track', playlist[currentTrack].title);
         }
     }
     
@@ -366,8 +377,8 @@ function initializeMP3Player() {
             shuffleBtn.style.opacity = isShuffleEnabled ? '1' : '0.5';
         }
         
-        createAudio();
-        
+        createAudio(true); // Restore time on page load
+
         // Restore play state
         if (savedState.isPlaying) {
             // Small delay to ensure audio is loaded
@@ -379,7 +390,7 @@ function initializeMP3Player() {
         // No saved state, start fresh
         currentTrack = 0;
         dropdown.value = 0;
-        createAudio();
+        createAudio(); // No time to restore for fresh start
     }
     
     // Set up periodic saving of current time
