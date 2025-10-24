@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Lions of Paradise - Part 2 - William Struve</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <script src="../shared/blog-data.js"></script>
+    <style>
+        .article-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(0, 0, 51, 0.9);
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .back-link::before {
+            content: '← ';
+        }
+
+        .series-header {
+            background: rgba(255, 0, 255, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .series-title {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--accent);
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .series-nav {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .series-part {
+            font-family: 'VT323', monospace;
+            color: var(--text);
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--secondary);
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .series-part:hover {
+            background: rgba(0, 255, 255, 0.2);
+            border-color: var(--primary);
+        }
+
+        .series-part.current {
+            background: rgba(255, 0, 255, 0.2);
+            border-color: var(--accent);
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .category-tag {
+            display: inline-block;
+            color: var(--accent);
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-title {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--primary);
+            font-size: 1.8rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 0 var(--secondary);
+        }
+
+        .article-meta {
+            font-family: 'VT323', monospace;
+            color: var(--text);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .meta-separator {
+            color: var(--accent);
+            margin: 0 0.5rem;
+        }
+
+        .featured-image {
+            width: 100%;
+            border: 2px solid var(--primary);
+            border-radius: 4px;
+            margin-bottom: 2rem;
+        }
+
+        .article-content {
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content strong {
+            color: var(--accent);
+        }
+
+        .article-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--secondary);
+        }
+
+        .nav-button {
+            font-family: 'VT323', monospace;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--primary);
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-button:hover {
+            background: var(--primary);
+            color: var(--bg);
+        }
+
+        .nav-button.next::after {
+            content: ' →';
+        }
+
+        .nav-button.prev::before {
+            content: '← ';
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+
+    <main class="article-container" id="article-container">
+        <!-- Content will be generated here -->
+    </main>
+
+    <script>
+        // Get the series data for this part
+        const partId = 'lions-of-paradise-2';
+        const seriesData = blogData.getSeriesForPart(partId);
+
+        function renderPage() {
+            if (!seriesData) {
+                console.error('Series data not found');
+                return;
+            }
+
+            const { article, currentPart, currentIndex, previousPart, nextPart } = seriesData;
+            const container = document.getElementById('article-container');
+
+            // Generate series navigation
+            let seriesNavHTML = '';
+            article.series.parts.forEach((part, index) => {
+                if (part.id === partId) {
+                    seriesNavHTML += `<span class="series-part current">${part.title}</span>`;
+                } else {
+                    seriesNavHTML += `<a href="${part.id}.html" class="series-part">${part.title}</a>`;
+                }
+            });
+
+            // Generate navigation buttons
+            const prevButton = previousPart
+                ? `<a href="${previousPart.id}.html" class="nav-button prev">Previous Part</a>`
+                : '<div></div>';
+            const nextButton = nextPart
+                ? `<a href="${nextPart.id}.html" class="nav-button next">Next Part</a>`
+                : '<div></div>';
+
+            container.innerHTML = `
+                <a href="../blog.html" class="back-link">Back to Articles</a>
+
+                <div class="series-header">
+                    <div class="series-title">Series: ${article.series.title}</div>
+                    <div class="series-nav">
+                        ${seriesNavHTML}
+                    </div>
+                </div>
+
+                <article>
+                    <header class="article-header">
+                        <div class="category-tag">${article.tag} • PART ${currentIndex + 1} OF ${article.series.parts.length}</div>
+                        <h1 class="article-title">${article.title}</h1>
+                        <div class="article-meta">
+                            <span>${article.author}</span>
+                            <span class="meta-separator">•</span>
+                            <span>${article.date}</span>
+                            <span class="meta-separator">•</span>
+                            <span>${currentPart.readTime}</span>
+                        </div>
+                    </header>
+
+                    <img src="${article.image}" alt="${article.title}" class="featured-image">
+
+                    <div class="article-content" id="article-content">
+                        <!-- Content will be rendered here -->
+                    </div>
+
+                    <nav class="article-nav">
+                        ${prevButton}
+                        ${nextButton}
+                    </nav>
+                </article>
+            `;
+
+            renderContent();
+        }
+
+        document.addEventListener('DOMContentLoaded', renderPage);
+    </script>
+
+    <script>
+        const articleContent = `TEST STORY
+
+This is the continuation of The Lions of Paradise story. Part 2 content will be added here as the story develops.`;
+
+        function renderContent() {
+            const contentElement = document.getElementById('article-content');
+            const paragraphs = articleContent.split('\n\n');
+            contentElement.innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', renderContent);
+    </script>
+
+    <script src="../shared/init.js"></script>
+    <script>
+        document.addEventListener('sharedComponentsReady', function() {
+            console.log('Initializing components...');
+            initializeNavbar();
+            initializeMP3Player();
+            console.log('All components initialized');
+        });
+    </script>
+</body>
+</html>

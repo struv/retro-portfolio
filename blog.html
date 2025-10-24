@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="shared/blog.css">
     <link rel="stylesheet" href="style.css">
+    <script src="shared/blog-data.js"></script>
 </head>
 <body>
 
@@ -25,36 +26,25 @@
     </main>
 
     <script>
-        // Blog articles data
-        const articles = [
-            {
-                id: 'welcome-digital-realm',
-                title: 'Welcome to My Digital Realm',
-                excerpt: 'An introduction to my journey in web development, music production, and the intersection of technology and creativity. Exploring what makes digital experiences truly engaging.',
-                image: 'https://i.pinimg.com/1200x/53/8d/f2/538df29b0fd24d2f21850feb1eb18214.jpg',
-                date: 'January 15, 2025',
-                tag: 'INTRO',
-                readTime: '3 min read'
-            },
-            {
-                id: 'three-js-experiments',
-                title: '3D Web Experiences with Three.js',
-                excerpt: 'Deep dive into creating immersive 3D graphics for the web. From basic geometries to complex particle systems, exploring the possibilities of WebGL.',
-                image: 'https://i.pinimg.com/736x/6c/d1/07/6cd10748a3dfb9d43929bf37c104ea5a.jpg',
-                date: 'January 10, 2025',
-                tag: 'TUTORIAL',
-                readTime: '8 min read'
-            }
-        ];
-
         function renderArticles() {
             const grid = document.getElementById('articles-grid');
-            
+            const articles = blogData.articles;
+
             articles.forEach(article => {
                 const articleElement = document.createElement('article');
                 articleElement.className = 'article-card';
-                articleElement.onclick = () => window.location.href = `blog/${article.id}.html`;
-                
+
+                // For multi-part series, link to the first part
+                const linkUrl = article.series
+                    ? `blog/${article.series.parts[0].id}.html`
+                    : `blog/${article.id}.html`;
+
+                articleElement.onclick = () => window.location.href = linkUrl;
+
+                const seriesInfo = article.series
+                    ? `<span class="article-date">• ${article.series.parts.length} parts</span>`
+                    : '';
+
                 articleElement.innerHTML = `
                     <img src="${article.image}" alt="${article.title}" class="article-image">
                     <div class="article-content-card">
@@ -63,13 +53,14 @@
                             <span class="article-date">${article.date}</span>
                             <span class="article-date">•</span>
                             <span class="article-date">${article.readTime}</span>
+                            ${seriesInfo}
                         </div>
                         <h2 class="article-title-card">${article.title}</h2>
                         <p class="article-excerpt">${article.excerpt}</p>
-                        <a href="blog/${article.id}.html" class="read-more">Read Article</a>
+                        <a href="${linkUrl}" class="read-more">Read ${article.series ? 'Series' : 'Article'}</a>
                     </div>
                 `;
-                
+
                 grid.appendChild(articleElement);
             });
         }
