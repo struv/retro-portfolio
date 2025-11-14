@@ -5,6 +5,16 @@
 const blogData = {
     articles: [
         {
+            id: 'vibe-coding-security',
+            title: 'Vibe Coding Common Security Issues',
+            excerpt: 'AI-assisted coding is revolutionary, but security can\'t be an afterthought. Learn the 8 essential security measures every developer should implement when building with modern AI tools.',
+            image: 'https://i.pinimg.com/1200x/c2/3d/08/c23d082c090b55fe20d612b321a0511a.jpg',
+            date: 'January 28, 2025',
+            tag: 'SECURITY',
+            readTime: '6 min read',
+            author: 'William Struve'
+        },
+        {
             id: 'lions-of-paradise',
             title: 'The Lions of Paradise',
             excerpt: 'Starting a company where your childhood friend\'s brother wants you dead sounds stupid. And yeah, technically it is. But in my defense, the idea was good.',
