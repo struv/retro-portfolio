@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects - William Struve</title>
+    <title>Projects | William Struve</title>
+    <meta name="description" content="Professional applications, academic team projects, and personal browser demos by William Struve, including patient intake, vaccine inventory, and operational dashboards.">
+    <link rel="canonical" href="https://www.wstruve.com/projects.html">
+    <meta property="og:title" content="Projects | William Struve">
+    <meta property="og:description" content="Useful software for clinic workflows, academic team projects, and personal browser experiments.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.wstruve.com/projects.html">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <style>
@@ -79,105 +85,94 @@
         
     </style>
 </head>
-<body>
-    <div class="container">
+<body class="portfolio-page">
+    <main class="container portfolio-copy">
         <header class="projects-header retro-container">
             <h1 class="glitch-effect">Projects</h1>
-            <p>Interactive demos and experiments</p>
+            <p>Applications delivered at work, academic team projects, and personal experiments.</p>
         </header>
-        
-        <section class="retro-container">
-            <h2>Interactive Demos</h2>
-            
+
+        <section class="retro-container" aria-labelledby="professional-heading">
+            <h2 id="professional-heading">Professional Projects</h2>
+            <p>Built at Kids &amp; Teens Medical Group. I owned delivery and support, using AI coding tools extensively for implementation and collaborating with colleagues on requirements and maintenance.</p>
+            <article class="project-item">
+                <h3 class="project-title">Modulo</h3>
+                <p class="project-description">Built and launched a patient intake and communications application to replace NexHealth. I defined initial requirements around clinic workflows, supported rollout through live demonstrations, and coordinated maintenance with another developer. Staff used it for form packets by visit type, mobile form fill with e-signatures, SMS/email delivery, a messaging inbox, and English/Spanish kiosk check-in.</p>
+                <p class="project-description">September 2026: 115 active staff accounts, 3,847 completed form packets, and 24,039 outbound SMS transmissions. Forms were started or packets completed at 24 clinic locations.</p>
+                <p class="project-note">September 1–30, Pacific time. Accounts are not a count of individual employees; packets can contain multiple documents. SMS transmissions indicate provider acceptance, not confirmed delivery.</p>
+                <div class="project-tech">TypeScript • React • Express • PostgreSQL • Drizzle ORM • Vercel</div>
+            </article>
+            <article class="project-item">
+                <h3 class="project-title">Vaccine Inventory</h3>
+                <p class="project-description">Built and maintained a clinic-facing stock-entry app backed by the reconciliation team's existing Excel workbook. I gathered requirements from the team lead and tested the app-to-workbook workflow with him. Added entry duplication for multiple cases and in-app onboarding for new locations; served as the sole support and maintenance owner during my tenure.</p>
+                <p class="project-description">A snapshot collected October 13, 2026 showed inventory edits dated September at 21 clinics. The reconciliation team continued comparing stock counts with EMR records in its established workflow.</p>
+                <p class="project-note">September 1–30, Pacific time. This is retained edit evidence, not a complete submission history; later edits can overwrite earlier timestamps.</p>
+                <div class="project-tech">TypeScript • Excel / SharePoint • Vercel</div>
+            </article>
+            <article class="project-item">
+                <h3 class="project-title">Transfer Reporting Dashboard</h3>
+                <p class="project-description">Delivered an interactive view of Excel-based transfer reports so my manager could review the data for weekly reporting used in CEO presentations. I pulled reports each week; the dashboard and data transformation were implemented, while full automation of report collection remained unfinished.</p>
+                <div class="project-tech">Python • Excel • JavaScript</div>
+            </article>
+            <article class="project-item">
+                <h3 class="project-title">Scheduling Capacity Dashboard</h3>
+                <p class="project-description">Delivered a dashboard used by scheduling staff to identify locations needing more appointments, considering capacity and specialties.</p>
+                <div class="project-tech">Next.js • TypeScript • CSV data</div>
+            </article>
+        </section>
+
+        <section class="retro-container" aria-labelledby="academic-heading">
+            <h2 id="academic-heading">Academic Projects</h2>
+            <article class="project-item">
+                <h3 class="project-title">Meta-Scan — UB-04 Claim Form OCR</h3>
+                <p class="project-description">Led a four-person college team building a Flask app that extracts fields from scanned UB-04 claim forms into CSV, using Tesseract OCR with OpenCV preprocessing. Teammates built the OCR pipeline: form recognition, CSV sectioning, the Flask app, and the OpenCV crop step.</p>
+                <p class="project-description">My work: patient and admit/discharge field validation, the pytest validation tests, the tutorial/help pages, and the README.</p>
+                <div class="project-tech">August 2024 • Python • Flask • Tesseract • OpenCV • pytest</div>
+                <p class="project-link"><a href="https://github.com/CS-179K/Meta-Scan">View team repository</a></p>
+            </article>
+            <article class="project-item">
+                <h3 class="project-title">Live Chatroom</h3>
+                <p class="project-description">Four-person college team building a chatroom with Express, MongoDB, and Handlebars server-side rendering. I built the rooms and messaging backend, the Mongoose models, and message edit/delete. A teammate added Google OAuth login and message search.</p>
+                <div class="project-tech">May–June 2024 • JavaScript • Node.js • Express • MongoDB • Handlebars</div>
+                <p class="project-link"><a href="https://github.com/struv/cs110-final">View team repository</a></p>
+            </article>
+        </section>
+
+        <section class="retro-container" aria-labelledby="personal-heading">
+            <h2 id="personal-heading">Personal Demos</h2>
+            <p>Small browser experiments in music, visualization, and learning. These are personal projects.</p>
             <a href="projects/life.html" class="project-item">
                 <span class="project-title">Psychedelic Game of Life</span>
-                <div class="project-description">
-                    Conway's Game of Life with trippy visual effects, animated cells, and classic patterns
-                </div>
-                <div class="project-tech">React • JavaScript • CSS Animations</div>
+                <div class="project-description">Explore Conway's Game of Life with animated cells, color effects, and preset patterns.</div>
+                <div class="project-tech">React • JavaScript • CSS</div>
             </a>
-
             <a href="projects/melody.html" class="project-item">
                 <span class="project-title">Melody Maker</span>
-                <div class="project-description">
-                    Interactive music creation tool with retro synth sounds and visual effects
-                </div>
-                <div class="project-tech">Web Audio API • JavaScript • Three.js</div>
+                <div class="project-description">Generate and play synth melodies, adjust musical settings, and view the audio spectrum.</div>
+                <div class="project-tech">React • Tone.js • Canvas</div>
             </a>
-            
-            <a href="#" class="project-item">
-                <span class="project-title">3D Particle System</span>
-                <div class="project-description">
-                    Interactive particle physics simulation with Three.js
-                </div>
-                <div class="project-tech">Three.js • WebGL</div>
-            </a>
-            
-            <a href="#" class="project-item">
-                <span class="project-title">Retro Snake Game</span>
-                <div class="project-description">
-                    Classic snake game with CRT-style visual effects
-                </div>
-                <div class="project-tech">Canvas API • JavaScript</div>
-            </a>
-        </section>
-        
-        <section class="retro-container">
-            <h2>Web Applications</h2>
-            
-            <a href="https://single-n-back.vercel.app" class="project-item" target="_blank">
-                <span class="project-title">Single N-Back Trainer</span>
-                <div class="project-description">
-                    Working memory training exercise that challenges your brain to remember and track letter sequences
-                </div>
-                <div class="project-tech">JavaScript • Web Audio API • Cognitive Training</div>
-            </a>
-            
             <a href="projects/todo.html" class="project-item">
                 <span class="project-title">Task Manager</span>
-                <div class="project-description">
-                    Full-stack todo app with real-time updates, task filtering, and priority management
-                </div>
-                <div class="project-tech">JavaScript • LocalStorage • CSS Animations</div>
+                <div class="project-description">A browser-only task list with priorities, filtering, and search. Tasks are saved in this browser's local storage.</div>
+                <div class="project-tech">JavaScript • Local storage</div>
             </a>
-            
             <a href="projects/exp.html" class="project-item">
                 <span class="project-title">Study Tracker</span>
-                <div class="project-description">
-                    Gamified learning tracker with XP system, achievements, and progress visualization
-                </div>
-                <div class="project-tech">React • LocalStorage • CSS Animations • Game Mechanics</div>
+                <div class="project-description">Track study tasks with XP and achievements. Progress is saved in this browser's local storage.</div>
+                <div class="project-tech">React • Local storage</div>
             </a>
-            
-            <a href="#" class="project-item">
-                <span class="project-title">Weather Dashboard</span>
-                <div class="project-description">
-                    Real-time weather data with interactive maps
-                </div>
-                <div class="project-tech">React • API Integration • Charts</div>
-            </a>
-        </section>
-        
-        <section class="retro-container">
-            <h2>Algorithms & Data Structures</h2>
-            
             <a href="projects/sorting.html" class="project-item">
                 <span class="project-title">Sorting Visualizer</span>
-                <div class="project-description">
-                    Visual representation of sorting algorithms in action
-                </div>
+                <div class="project-description">Watch six sorting algorithms with adjustable array settings and playback speed.</div>
                 <div class="project-tech">JavaScript • Canvas</div>
             </a>
-            
             <a href="projects/pathfinding.html" class="project-item">
                 <span class="project-title">Pathfinding Visualizer</span>
-                <div class="project-description">
-                    A* and Dijkstra algorithms with maze generation
-                </div>
-                <div class="project-tech">JavaScript • Graph Theory</div>
+                <div class="project-description">Draw walls, place start and end points, and compare A* and Dijkstra pathfinding on a grid.</div>
+                <div class="project-tech">React • JavaScript</div>
             </a>
         </section>
-    </div>
+    </main>
 
     <script src="shared/init.js"></script>
     <script>

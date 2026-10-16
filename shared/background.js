@@ -133,7 +133,10 @@ function initializeBackground() {
         
         // Restore minimized state from localStorage
         const savedBGState = localStorage.getItem('bgControlsMinimized');
-        if (savedBGState === 'true') {
+        const startMinimized = savedBGState === null &&
+            document.body.classList.contains('portfolio-page') &&
+            window.matchMedia('(max-width: 1100px)').matches;
+        if (savedBGState === 'true' || startMinimized) {
             controlsMinimized = true;
             controlsContainer.classList.add('minimized');
             toggleButton.textContent = '+';

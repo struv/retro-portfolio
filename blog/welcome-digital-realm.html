@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to My Digital Realm - William Struve</title>
+    <meta name="description" content="An introduction to William Struve's web development experiments, music, and personal notes.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -12,7 +13,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
-<body>
+<body class="portfolio-page">
 
     <main class="article-container">
         <a href="../blog.html" class="back-link">Back to Articles</a>
@@ -26,7 +27,7 @@
                     <span class="meta-separator">•</span>
                     <span>January 15, 2025</span>
                     <span class="meta-separator">•</span>
-                    <span>3 min read</span>
+                    <span>1 min read</span>
                 </div>
             </header>
             
@@ -41,60 +42,22 @@
     <script>
         const articleContent = `# Welcome to My Digital Realm
 
-Greetings, fellow digital explorer! Welcome to my corner of the internet where code meets creativity, and pixels dance to the rhythm of innovation.
+*Introduction updated October 2026.*
+
+This is where I keep notes on web development, music, and personal experiments.
 
 ## About This Space
 
-This blog is my digital playground where I'll be sharing:
+My professional work has included patient intake, vaccine inventory, and operational dashboards. I care about understanding a workflow, getting useful software into people's hands, and helping them use it after launch.
 
-- **Web Development Adventures**: From vanilla JavaScript experiments to cutting-edge frameworks
-- **Music Production Journey**: How I blend technology with musical creativity  
-- **Technical Deep Dives**: API discoveries, performance optimizations, and architectural decisions
-- **Creative Process**: The intersection of engineering and artistic expression
+The [Projects page](../projects.html) separates that work from college team projects and personal demos. Here on the blog, I share things I try and learn along the way.
 
-## What Makes This Special?
+## Outside Work
 
-I'm passionate about the intersection of **technology** and **art**. Whether it's crafting interactive 3D experiences with Three.js or producing electronic music that sounds like it belongs in a sci-fi movie, I believe in creating digital experiences that are both functional and beautiful.
+I make music and enjoy browser experiments with sound and visuals. This site's retro design and music player are part of that interest.
 
-Here's a little taste of what you might find in my code:
-
-\`\`\`javascript
-function createDigitalExperience() {
-    const technology = ['React', 'Three.js', 'Web Audio API'];
-    const creativity = ['Music Production', 'Visual Design', 'UX Innovation'];
-    
-    console.log('Initializing creative development mode...');
-    
-    return {
-        philosophy: 'Function meets form',
-        approach: 'Technical excellence with artistic vision',
-        output: 'Meaningful digital experiences'
-    };
-}
-\`\`\`
-
-## The Journey Ahead
-
-I'm excited to document this journey and share discoveries along the way. From technical tutorials to creative experiments, this space will evolve as I do.
-
-> "The best way to predict the future is to create it." - Peter Drucker
-
-Whether you're here for the code, the insights, or just curious about the creative process, I hope you find something that sparks your interest.
-
-## What's Coming
-
-In upcoming posts, I'll be exploring:
-
-- **Three.js Deep Dives**: Creating immersive web experiences
-- **Audio Programming**: Building interactive sound with Web APIs  
-- **Performance Engineering**: Optimizing for both speed and experience
-- **Creative Workflows**: Tools and techniques for digital artists
-
-Stay tuned for regular updates, and feel free to reach out if anything resonates with you!
-
----
-
-*Ready to dive deeper? Check out my latest experiments with 3D web graphics and audio synthesis...*`;
+You can browse the demos, read the notes, or [get in touch](../index.html).
+`;
 
         function renderContent() {
             const contentElement = document.getElementById('article-content');

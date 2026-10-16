@@ -268,6 +268,143 @@ button:hover {
 
 /* Add these classes to your existing style.css */
 
+/* Keep portfolio copy readable within the existing retro panels. */
+.portfolio-copy a {
+    color: var(--secondary);
+    text-underline-offset: 0.2em;
+}
+
+.portfolio-copy a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
+.portfolio-copy .skills {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+}
+
+.portfolio-copy .experience-title {
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    font-size: 1.4rem;
+    line-height: 1.4;
+}
+
+.portfolio-copy .experience-title span:last-child {
+    font-size: 1.2rem;
+}
+
+.portfolio-copy .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+}
+
+.portfolio-copy h2,
+.portfolio-copy .project-title {
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.portfolio-copy .project-note {
+    font-size: 1.15rem;
+    line-height: 1.4;
+}
+
+.portfolio-copy .project-description {
+    opacity: 1;
+}
+
+.portfolio-copy .project-link {
+    margin: 1rem 0 0;
+    font-size: 1.3rem;
+}
+
+.portfolio-copy .project-item {
+    color: var(--text);
+}
+
+.portfolio-copy .section,
+.portfolio-copy .retro-container {
+    background: rgba(0, 0, 51, 0.92);
+}
+
+.portfolio-copy .project-item::before {
+    pointer-events: none;
+}
+
+.portfolio-copy article.project-item:hover {
+    transform: none;
+}
+
+.portfolio-copy {
+    padding-bottom: 10rem;
+}
+
+.portfolio-page .main-container,
+.portfolio-page .article-container {
+    padding-top: 6rem;
+    padding-bottom: 8rem;
+}
+
+.portfolio-page .minimized .retro-panel-header {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: 0;
+    gap: 0.75rem;
+}
+
+@media (max-width: 600px) {
+    .portfolio-page .mp3-player.minimized {
+        right: auto !important;
+    }
+
+    .portfolio-copy.container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .portfolio-copy .section,
+    .portfolio-copy .retro-container {
+        padding: 1.25rem;
+    }
+
+    .portfolio-copy h2 {
+        font-size: 1.15rem;
+    }
+
+    .portfolio-copy h1 {
+        font-size: clamp(1.5rem, 7vw, 2rem);
+        line-height: 1.5;
+    }
+
+    .portfolio-copy .project-item,
+    .portfolio-copy .skill-group {
+        padding: 1rem;
+    }
+
+    .portfolio-copy .project-title {
+        font-size: 1rem;
+    }
+
+    .portfolio-copy .retro-list {
+        padding-left: 0;
+    }
+
+    .portfolio-copy .retro-list li {
+        padding-left: 1.25rem;
+    }
+
+    .portfolio-page .header-text {
+        width: calc(100vw - 2rem);
+    }
+
+    .portfolio-page .header-text h1 {
+        font-size: clamp(1rem, 5.2vw, 2rem);
+        white-space: normal;
+    }
+}
+
 /* Shared retro panel styling */
 .retro-panel {
     background: rgba(0, 0, 51, 0.9);

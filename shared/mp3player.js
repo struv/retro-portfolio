@@ -9,6 +9,8 @@ function initializeMP3Player() {
     }
     
     const config = window.SiteConfig.mp3Player;
+    const startMinimized = document.body.classList.contains('portfolio-page') &&
+        window.matchMedia('(max-width: 1100px)').matches;
     let currentTrack = 0;
     let isPlaying = false;
     let audio = null;
@@ -67,10 +69,10 @@ function initializeMP3Player() {
     
     // Create MP3 player HTML using CSS classes
     const playerHTML = `
-        <div id="mp3-player" class="retro-panel mp3-player">
+        <div id="mp3-player" class="retro-panel mp3-player${startMinimized ? ' minimized' : ''}">
             <div class="retro-panel-header">
                 <span class="retro-panel-title">♪ PLAYER</span>
-                <button id="mp3-minimize" class="retro-minimize-btn">−</button>
+                <button id="mp3-minimize" class="retro-minimize-btn" aria-label="Minimize or expand music player">${startMinimized ? '+' : '−'}</button>
             </div>
             
             <div id="mp3-content" class="mp3-content">

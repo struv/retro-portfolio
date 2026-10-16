@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>William Struve - Retro 3D Portfolio</title>
+    <title>William Struve | Software Developer</title>
+    <meta name="description" content="William Struve builds and supports useful software: patient intake, inventory tools, and operational dashboards, from requirements through launch and user training.">
+    <link rel="canonical" href="https://www.wstruve.com/">
+    <meta property="og:title" content="William Struve | Software Developer">
+    <meta property="og:description" content="Building and launching useful applications, understanding workflows, and supporting the people who use them.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.wstruve.com/">
     <link rel="stylesheet" href="style.css">
     <style>
         /* Page-specific styles */
@@ -241,13 +247,13 @@
         }
     </style>
 </head>
-<body>
+<body class="portfolio-page">
     <canvas id="bg"></canvas>
     
     <!-- Hero Banner Section -->
     <div class="hero-banner">
         <div class="banner-image">
-            <img src="img/header.jpg" alt="Hero Background" class="banner-bg">
+            <img src="img/header.jpg" alt="" class="banner-bg">
             <div class="banner-overlay"></div>
         </div>
         <div class="banner-content">
@@ -263,134 +269,98 @@
         </div>
     </div>
     
-    <div class="container main-content">
-        
-        <section class="section">
-            <h2>Background</h2>
-            <p>To live is to build. Software to solve problems, skills to navigate the modern world, music to preserve slices of time and emotion. And in my free time I explore: Expeditions fuel the soul.</p>
+    <main class="container main-content portfolio-copy">
+        <section class="section" aria-labelledby="intro-heading">
+            <h2 id="intro-heading">Software Developer</h2>
+            <p>I build and launch applications that help people get their work done. My experience includes patient intake, vaccine inventory, and reporting tools, from understanding the workflow to supporting staff after launch.</p>
+            <p><a href="projects.html">Explore my projects</a> or get in touch:</p>
+            <p class="contact-links">
+                <a href="mailto:wstruve.tech@gmail.com">Email</a>
+                <a href="https://github.com/struv">GitHub</a>
+                <a href="https://www.linkedin.com/in/wstruve/">LinkedIn</a>
+            </p>
         </section>
-        
-        <section class="section">
-            <h2>Fun facts about me</h2>
-            <ul class="retro-list">
-                <li>I have a pet cat named Stark</li>
-                <li>I can cook pasta because I'm Italian</li>
-                <li>I have great reflexes but terrible memory</li>
-            </ul>
+
+        <section class="section" aria-labelledby="about-heading">
+            <h2 id="about-heading">About</h2>
+            <p>At Kids &amp; Teens Medical Group, I delivered software alongside medical administration and Excel reporting. Working with clinic staff and operations teams helped me understand where a new application would help and where an existing process needed to stay.</p>
+            <p>I defined requirements, launched tools, demonstrated workflows to regional managers and senior staff, and handled support requests. I used AI coding tools extensively for implementation, while owning delivery and coordinating changes with another developer.</p>
+            <p>I earned a B.S. in Computer Science from the University of California, Riverside in August 2024. Outside work, I make music and experiment with browser-based tools and visualizations.</p>
         </section>
-        
-        <section class="section">
-            <h2>Skills</h2>
+
+        <section class="section" aria-labelledby="experience-heading">
+            <h2 id="experience-heading">Experience</h2>
+            <div class="experience-item">
+                <div class="experience-title">
+                    <span>Jr. Software Developer<br>Kids &amp; Teens Medical Group</span>
+                    <span>October 2024–October 2026</span>
+                </div>
+                <ul class="retro-list">
+                    <li>Built and launched Modulo for patient forms, signatures, and SMS/email outreach, taking it from a one-clinic pilot to a production application that replaced NexHealth.</li>
+                    <li>Defined requirements by studying clinic workflows, trained regional managers and senior staff, and maintained a shared channel for user questions and bug reports.</li>
+                    <li>Coordinated Modulo maintenance with another developer: delegated requests, provided guidance on the application setup, and handled escalations using coding tools.</li>
+                    <li>Built and maintained an Excel-backed vaccine inventory app, preserving the reconciliation team's workbook workflow. Tested entries with the team lead and added row duplication and location onboarding.</li>
+                    <li>Delivered transfer-reporting and scheduling-capacity dashboards for management and scheduling staff. Prepared weekly reports; full reporting automation remained unfinished.</li>
+                    <li>Rolled out an AI medical scribe in physician trials; it was pulled after the trials showed it was less efficient than expected. Built and rolled out an AI EMR template generator based on physician-written templates; it was pulled when leadership moved me to other priorities.</li>
+                </ul>
+            </div>
+            <div class="experience-item">
+                <div class="experience-title">
+                    <span>Web Development Intern<br>Lepow International</span>
+                    <span>May 2022–September 2023</span>
+                </div>
+                <ul class="retro-list">
+                    <li>Updated WordPress and Elementor pages and maintained site content.</li>
+                    <li>Supported influencer marketing activities.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section" aria-labelledby="skills-heading">
+            <h2 id="skills-heading">Skills &amp; Tools</h2>
+            <p>Technologies used across professional work, coursework, and personal projects.</p>
             <div class="skills">
                 <div class="skill-group">
-                    <h3>Languages:</h3>
+                    <h3>Languages</h3>
                     <ul class="retro-list">
-                        <li>C</li>
-                        <li>C++</li>
-                        <li>CSS</li>
-                        <li>HTML</li>
-                        <li>Java</li>
-                        <li>JavaScript</li>
+                        <li>TypeScript &amp; JavaScript</li>
                         <li>Python</li>
+                        <li>SQL</li>
+                        <li>HTML &amp; CSS</li>
                     </ul>
                 </div>
-                
                 <div class="skill-group">
-                    <h3>Developer Tools:</h3>
+                    <h3>Web &amp; Data</h3>
                     <ul class="retro-list">
-                        <li>Cursor</li>
-                        <li>Docker</li>
-                        <li>Eclipse</li>
-                        <li>Git</li>
-                        <li>Google Cloud Platform</li>
-                        <li>IntelliJ</li>
-                        <li>Jupyter</li>
-                        <li>VS Code</li>
+                        <li>React &amp; Next.js</li>
+                        <li>Node.js &amp; Express</li>
+                        <li>Flask (coursework)</li>
+                        <li>PostgreSQL &amp; Drizzle ORM</li>
+                        <li>Excel</li>
+                        <li>WordPress &amp; Elementor</li>
                     </ul>
                 </div>
-                
                 <div class="skill-group">
-                    <h3>Web & Databases:</h3>
+                    <h3>Development Tools</h3>
                     <ul class="retro-list">
-                        <li>Firebase</li>
-                        <li>Flask</li>
-                        <li>MaterialUI</li>
-                        <li>MongoDB</li>
-                        <li>MySQL</li>
-                        <li>Node</li>
-                        <li>PostgreSQL</li>
-                        <li>React</li>
-                        <li>Three.js</li>
-                        <li>Tone.js</li>
+                        <li>Git &amp; Vercel</li>
+                        <li>Claude Code &amp; Codex</li>
+                        <li>Docker (personal Pi-hole setup)</li>
                     </ul>
                 </div>
-                
                 <div class="skill-group">
-                    <h3>Data Science & Testing:</h3>
+                    <h3>Delivery &amp; Support</h3>
                     <ul class="retro-list">
-                        <li>Gtest</li>
-                        <li>Matplotlib</li>
-                        <li>NumPy</li>
-                        <li>OpenCV</li>
-                        <li>Pandas</li>
-                        <li>Pytest</li>
-                        <li>Pytesseract</li>
-                        <li>smtplib</li>
+                        <li>Workflow analysis</li>
+                        <li>Requirements gathering</li>
+                        <li>User training</li>
+                        <li>Production support</li>
+                        <li>Maintenance coordination</li>
                     </ul>
                 </div>
             </div>
         </section>
-        
-        <section class="section">
-            <h2>Experience🧑‍💼</h2>
-            
-            <div class="experience-item">
-                <div class="experience-title">
-                    <span>Kids & Teens Medical Group Software Developer</span>
-                    <span>10/24 - Present</span>
-                </div>
-                <ul class="retro-list">
-                    <li>Engineered custom API integrations between When I Work, Paylocity, and eClinicalWorks</li>
-                    <li>Led implementation of AI medical scribes and meeting transcription tools  for over 100 employees</li>
-                    <li>Developed AI-powered EMR template generator trained on physician-crafted templates</li>
-                </ul>
-            </div>
-
-            <div class="experience-item">
-                <div class="experience-title">
-                    <span>Mochinut Kitchen Staff</span>
-                    <span>6/21 - 1/22</span>
-                </div>
-                <ul class="retro-list">
-                    <li>Made and mixed dough (I know the secret formula), made Korean corn dogs</li>
-                    <li>Fried, frosted, decorated, and ate donuts. Time devours the donut's fleeting perfection.</li>
-                </ul>
-            </div>
-            
-            <div class="experience-item">
-                <div class="experience-title">
-                    <span>Lepow International Web Development Intern</span>
-                    <span>6/19 - 4/19</span>
-                </div>
-                <ul class="retro-list">
-                    <li>Created, updated, and edited web pages for various company sites</li>
-                    <li>Worked with Wordpress, Elementor, and PHP</li>
-                </ul>
-            </div>
-            <!--
-            <div class="experience-item">
-                <div class="experience-title">
-                    <span>Mt. San Antonio College Technical Education Resource Center Tutor</span>
-                    <span>12/18 - 4/19</span>
-                </div>
-                <ul class="retro-list">
-                    <li>Taught students Math / English / Physics / Computer Science</li>
-                    <li>Simplified ideas taught in class for students to easily retain</li>
-                </ul>
-            </div>
-            -->
-        </section>
-    </div>
+    </main>
 
     <script src="shared/init.js"></script>
     <script>

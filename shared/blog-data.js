@@ -7,7 +7,7 @@ const blogData = {
         {
             id: 'vibe-coding-security',
             title: 'Vibe Coding Common Security Issues',
-            excerpt: 'AI-assisted coding is revolutionary, but security can\'t be an afterthought. Learn the 8 essential security measures every developer should implement when building with modern AI tools.',
+            excerpt: 'Notes on security considerations when using AI coding tools, including access controls, input validation, secrets, and monitoring.',
             image: 'https://i.pinimg.com/1200x/c2/3d/08/c23d082c090b55fe20d612b321a0511a.jpg',
             date: 'January 28, 2025',
             tag: 'SECURITY',
@@ -44,17 +44,17 @@ const blogData = {
         {
             id: 'welcome-digital-realm',
             title: 'Welcome to My Digital Realm',
-            excerpt: 'An introduction to my journey in web development, music production, and the intersection of technology and creativity. Exploring what makes digital experiences truly engaging.',
+            excerpt: 'An introduction to this collection of web development experiments, music, and things I learn along the way.',
             image: 'https://i.pinimg.com/1200x/53/8d/f2/538df29b0fd24d2f21850feb1eb18214.jpg',
             date: 'January 15, 2025',
             tag: 'INTRO',
-            readTime: '3 min read',
+            readTime: '1 min read',
             author: 'William Struve'
         },
         {
             id: 'three-js-experiments',
             title: '3D Web Experiences with Three.js',
-            excerpt: 'Deep dive into creating immersive 3D graphics for the web. From basic geometries to complex particle systems, exploring the possibilities of WebGL.',
+            excerpt: 'Examples of browser graphics with Three.js, from basic shapes to particle effects.',
             image: 'https://i.pinimg.com/736x/6c/d1/07/6cd10748a3dfb9d43929bf37c104ea5a.jpg',
             date: 'January 10, 2025',
             tag: 'TUTORIAL',
