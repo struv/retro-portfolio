@@ -1,0 +1,216 @@
+{
+  "date": "2026-10-16",
+  "timezone": "America/Los_Angeles",
+  "wake_target": "06:50",
+  "work_start": "08:20",
+  "normal_finish": "16:40",
+  "latest_finish": "18:00",
+  "source_observations": {
+    "resume": "Machina Labs application draft and PDF prepared; no submission recorded in the current notes.",
+    "python": "October 15 coaching progress records Series 3 exercises 1–3 completed with guidance. All 30 saved exercise checks pass on October 16. Brief delayed retrieval of dict.get and extra-space complexity, and constructing a checker, remain practice targets; independent mastery and baseline remain unassessed.",
+    "system_design": "First request-trace attempt remains unattempted in the current progress file.",
+    "calendar": "No conflicts on visible personal calendars for the planned date."
+  },
+  "outcomes": [
+    "Submit the first suitable application after a time-boxed accuracy and fit review.",
+    "Retrieve dict.get and extra-space reasoning, then practice writing a tiny checker with recorded assistance.",
+    "Draft the opening system-design request trace and practice one concise Modulo story."
+  ],
+  "events": [
+    {
+      "block_key": "resume-review",
+      "title": "SWE Prep · Résumé: final Machina review",
+      "start": "2026-10-16T08:20:00-07:00",
+      "end": "2026-10-16T09:10:00-07:00",
+      "description": "Review the prepared Machina Labs one-page résumé and evidence notes; do not rebuild the master. Confirm contact details, dates, metric wording, personal contributions and interview-explainable skills. Recheck the live posting and make a clear apply/skip decision by 9:10. The role still lists four years and strong TypeScript/container expectations; do not inflate experience to meet them. If choosing another role, use the Northridge shortlist and name the next concrete step.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/resume-review",
+      "event_id": "8n36gnt4j4ji8vfcibs0ju9j0k",
+      "url": "https://www.google.com/calendar/event?eid=OG4zNmdudDRqNGppOHZmY2liczBqdTlqMGsgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "break-1",
+      "title": "SWE Prep · Break",
+      "start": "2026-10-16T09:10:00-07:00",
+      "end": "2026-10-16T09:20:00-07:00",
+      "description": "Ten-minute break away from focused work.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/break-1",
+      "event_id": "h5394cj6v3kfd74ug8ahgn2vfs",
+      "url": "https://www.google.com/calendar/event?eid=aDUzOTRjajZ2M2tmZDc0dWc4YWhnbjJ2ZnMgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "application-submit",
+      "title": "SWE Prep · Application: audit fixes and submit",
+      "start": "2026-10-16T09:40:00-07:00",
+      "end": "2026-10-16T10:10:00-07:00",
+      "description": "Revised for today's later start (wake reported around 9 a.m.). Review the\nrésumé audit if available and make essential accuracy corrections, then finish\nthe chosen application's form and submit it yourself. Aim for 10:10, but take\nthe time needed to resolve a substantive factual issue. Record the actual\nsubmission confirmation or exact remaining blocker. No submission has been\nverified by this scheduling update.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015 Block\nkey: 2026-10-16/application-submit\n\n",
+      "event_id": "62idb4ddatqa585cmvuouu0hc0",
+      "url": "https://www.google.com/calendar/event?eid=NjJpZGI0ZGRhdHFhNTg1Y212dW91dTBoYzAgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "guitar-1",
+      "title": "SWE Prep · Guitar break",
+      "start": "2026-10-16T10:10:00-07:00",
+      "end": "2026-10-16T10:25:00-07:00",
+      "description": "Fifteen minutes of guitar.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/guitar-1",
+      "event_id": "lo52b0c13a9q0il61h49o27sks",
+      "url": "https://www.google.com/calendar/event?eid=bG81MmIwYzEzYTlxMGlsNjFoNDlvMjdza3Mgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "python-review",
+      "title": "SWE Prep · Python: retrieval after Series 3",
+      "start": "2026-10-16T10:25:00-07:00",
+      "end": "2026-10-16T11:15:00-07:00",
+      "description": "Series 3 exercises 1–3 were completed with coaching last night; all 30 saved\nexercise checks passed again on October 16. Start with brief retrieval of\ndict.get(key, default) and distinct-character extra space using a new example.\nExplain before consulting earlier code. Choose the next small practice step\nwith the coach after retrieval, one exercise at a time. Preserve saved\nattempts and keep the independent baseline separate and unattempted.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015 Block\nkey: 2026-10-16/python-review\n\n",
+      "event_id": "egr6rbatbdsjmdg9pv881truus",
+      "url": "https://www.google.com/calendar/event?eid=ZWdyNnJiYXRiZHNqbWRnOXB2ODgxdHJ1dXMgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "break-2",
+      "title": "SWE Prep · Break",
+      "start": "2026-10-16T11:15:00-07:00",
+      "end": "2026-10-16T11:25:00-07:00",
+      "description": "Ten-minute break before the second Python session.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/break-2",
+      "event_id": "c0dhv42oa20u6bngnid48n5000",
+      "url": "https://www.google.com/calendar/event?eid=YzBkaHY0Mm9hMjB1NmJuZ25pZDQ4bjUwMDAgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "python-next",
+      "title": "SWE Prep · Python: build a tiny checker",
+      "start": "2026-10-16T11:25:00-07:00",
+      "end": "2026-10-16T12:15:00-07:00",
+      "description": "Practice constructing a small checker incrementally for one already-understood\nfunction. Write one ordinary case, one edge case, and a clear pass/fail\ncomparison yourself, using a focused hint if needed. Read and trace your\nchecker, then run it. Track any supplied structure or hints separately; no\nindependent checker-writing mastery has yet been established. Leave completed\nSeries 3 implementations intact.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015 Block\nkey: 2026-10-16/python-next\n\n",
+      "event_id": "lesdrgi4bdojv88cmtqs7dair4",
+      "url": "https://www.google.com/calendar/event?eid=bGVzZHJnaTRiZG9qdjg4Y210cXM3ZGFpcjQgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "guitar-2",
+      "title": "SWE Prep · Guitar break",
+      "start": "2026-10-16T12:15:00-07:00",
+      "end": "2026-10-16T12:30:00-07:00",
+      "description": "Fifteen minutes of guitar.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/guitar-2",
+      "event_id": "bhrb9amuf6sarvcn0ot3jru2ho",
+      "url": "https://www.google.com/calendar/event?eid=YmhyYjlhbXVmNnNhcnZjbjBvdDNqcnUyaG8gd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "application-admin",
+      "title": "SWE Prep · Application tracker and next role",
+      "start": "2026-10-16T12:30:00-07:00",
+      "end": "2026-10-16T12:50:00-07:00",
+      "description": "Record the actual morning outcome, including any submission confirmation. Choose the next suitable role from the Northridge aerospace shortlist and save its URL and next action. No outreach or application is automatically sent.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/application-admin",
+      "event_id": "dradvfkeckr2rmn4g665rubrpo",
+      "url": "https://www.google.com/calendar/event?eid=ZHJhZHZma2Vja3Iycm1uNGc2NjVydWJycG8gd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "buffer-1",
+      "title": "SWE Prep · Buffer",
+      "start": "2026-10-16T12:50:00-07:00",
+      "end": "2026-10-16T13:00:00-07:00",
+      "description": "Unstructured buffer before going outside.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/buffer-1",
+      "event_id": "71q3s11ebp2l5r49sv90777bso",
+      "url": "https://www.google.com/calendar/event?eid=NzFxM3MxMWVicDJsNXI0OXN2OTA3Nzdic28gd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "sunlight",
+      "title": "SWE Prep · Sunlight",
+      "start": "2026-10-16T13:00:00-07:00",
+      "end": "2026-10-16T13:05:00-07:00",
+      "description": "Go outside for your five-minute sunlight break.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/sunlight",
+      "event_id": "jstm0tfhitpak8ro9sni2k6n8g",
+      "url": "https://www.google.com/calendar/event?eid=anN0bTB0ZmhpdHBhazhybzlzbmkyazZuOGcgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "buffer-2",
+      "title": "SWE Prep · Free buffer",
+      "start": "2026-10-16T13:05:00-07:00",
+      "end": "2026-10-16T13:30:00-07:00",
+      "description": "Use this time freely before lunch. No extra required study block.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/buffer-2",
+      "event_id": "00quh7s0jestdf38bi1637h7tg",
+      "url": "https://www.google.com/calendar/event?eid=MDBxdWg3czBqZXN0ZGYzOGJpMTYzN2g3dGcgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "lunch",
+      "title": "SWE Prep · Cook and eat lunch",
+      "start": "2026-10-16T13:30:00-07:00",
+      "end": "2026-10-16T14:00:00-07:00",
+      "description": "Thirty minutes protected for cooking and eating.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/lunch",
+      "event_id": "rjcgqb5b28k8asbmcnb99pk0j0",
+      "url": "https://www.google.com/calendar/event?eid=cmpjZ3FiNWIyOGs4YXNibWNuYjk5cGswajAgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "reading-walk",
+      "title": "SWE Prep · Reading walk",
+      "start": "2026-10-16T14:00:00-07:00",
+      "end": "2026-10-16T14:15:00-07:00",
+      "description": "Take your usual 10–15-minute walk with your book.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/reading-walk",
+      "event_id": "t8keu9hlm2qftbit6nf4v3hmdo",
+      "url": "https://www.google.com/calendar/event?eid=dDhrZXU5aGxtMnFmdGJpdDZuZjR2M2htZG8gd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "system-design",
+      "title": "SWE Prep · System design: trace a form submission",
+      "start": "2026-10-16T14:15:00-07:00",
+      "end": "2026-10-16T15:05:00-07:00",
+      "description": "Open System Design/01_form_submission.md. Answer only its opening question first: what happens from browser to application to storage and back when Submit is pressed? Use your own words, note uncertainties, and ask for review before taking one follow-up. Save your attempt and assistance. The current design progress remains unattempted; this calendar block is a plan.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/system-design",
+      "event_id": "ltpohb966jd3g8eovkkpfmm288",
+      "url": "https://www.google.com/calendar/event?eid=bHRwb2hiOTY2amQzZzhlb3Zra3BmbW0yODggd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "guitar-3",
+      "title": "SWE Prep · Guitar break",
+      "start": "2026-10-16T15:05:00-07:00",
+      "end": "2026-10-16T15:20:00-07:00",
+      "description": "Fifteen minutes of guitar before project-story practice.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/guitar-3",
+      "event_id": "gj409i3rv7dddfp16ne1lff1ac",
+      "url": "https://www.google.com/calendar/event?eid=Z2o0MDlpM3J2N2RkZGZwMTZuZTFsZmYxYWMgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "project-story",
+      "title": "SWE Prep · Project story: Modulo",
+      "start": "2026-10-16T15:20:00-07:00",
+      "end": "2026-10-16T16:10:00-07:00",
+      "description": "Use the current Resume Evidence notes to prepare a 90-second account of the problem, your decisions, rollout, one failure and how you checked the result. Separate your ownership and review from agent-written implementation, and use the documented metric definitions. Practice aloud once, then note the technical question you found hardest to explain.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/project-story",
+      "event_id": "97ja99us5rs10lu57nc11kbppc",
+      "url": "https://www.google.com/calendar/event?eid=OTdqYTk5dXM1cnMxMGx1NTduYzExa2JwcGMgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "break-3",
+      "title": "SWE Prep · Break",
+      "start": "2026-10-16T16:10:00-07:00",
+      "end": "2026-10-16T16:20:00-07:00",
+      "description": "Ten-minute break before the daily review.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/break-3",
+      "event_id": "ue5hcjs74mimu92m8l4pli8lu8",
+      "url": "https://www.google.com/calendar/event?eid=dWU1aGNqczc0bWltdTkybThsNHBsaThsdTggd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    },
+    {
+      "block_key": "daily-review",
+      "title": "SWE Prep · Daily review and shutdown",
+      "start": "2026-10-16T16:20:00-07:00",
+      "end": "2026-10-16T16:40:00-07:00",
+      "description": "Record actual applications, Python work, design/story attempts and blockers. Reply in this chat with what you completed, what blocked you and your preferred next wake/start time. Saturday's current targets are 6:45 a.m. wake and 8:15 a.m. start. Finish the normal day here; 6 p.m. remains the latest boundary.\n\nDaily plan for 2026-10-16. Managed marker: swe-prep-daily-plan-20261015\nBlock key: 2026-10-16/daily-review",
+      "event_id": "md8tboe8mlf24aegjusft17v2c",
+      "url": "https://www.google.com/calendar/event?eid=bWQ4dGJvZThtbGYyNGFlZ2p1c2Z0MTd2MmMgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles"
+    }
+  ],
+  "calendar_verified": true,
+  "calendar_verification": {
+    "verified_during_run_for": "2026-10-16",
+    "event_count": 19,
+    "overlaps": 0,
+    "external_guests": 0,
+    "meet_links": 0,
+    "last_revised_on": "2026-10-16"
+  },
+  "morning_check_in": {
+    "date": "2026-10-16",
+    "wake_time_approx": "09:00",
+    "check_in_at": "2026-10-16T09:38:24-07:00",
+    "reported_ready_to_begin": true,
+    "previous_night_stayed_up_until_approx": "23:30",
+    "sleep_quality": "User reports sleeping really well.",
+    "breakfast_plan": "User plans to skip breakfast today.",
+    "reported_previous_night_work": "Coding exercises and reading.",
+    "application_target": "10:10",
+    "actual_application_submission": "unverified",
+    "calendar_application_start": "09:40",
+    "preference_scope": "Today's actual report; not a permanent change to wake targets or morning routine."
+  },
+  "revised_on": "2026-10-16"
+}

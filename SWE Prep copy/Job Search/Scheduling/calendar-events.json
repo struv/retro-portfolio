@@ -1,0 +1,329 @@
+{
+  "version": 1,
+  "calendar_id": "primary",
+  "timezone": "America/Los_Angeles",
+  "marker": "swe-prep-daily-plan-20261015",
+  "verified_on": "2026-10-16",
+  "events": [
+    {
+      "date": "2026-10-15",
+      "block_key": "resume-triage",
+      "event_id": "u3p439mrd9otoif3k23uqd4ffk",
+      "title": "SWE Prep · Résumé: confirm essentials",
+      "start": "2026-10-15T12:35:00-07:00",
+      "end": "2026-10-15T13:00:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=dTNwNDM5bXJkOW90b2lmM2syM3VxZDRmZmsgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-15",
+      "block_key": "sunlight",
+      "event_id": "k8gkamrhi845cfp1dlcbm3bq1o",
+      "title": "SWE Prep · Sunlight",
+      "start": "2026-10-15T13:00:00-07:00",
+      "end": "2026-10-15T13:05:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=azhna2FtcmhpODQ1Y2ZwMWRsY2JtM2JxMW8gd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-15",
+      "block_key": "resume-next-edits",
+      "event_id": "u0090vl69nm109drguv4lfcd1k",
+      "title": "SWE Prep · Résumé: essential edits",
+      "start": "2026-10-15T13:05:00-07:00",
+      "end": "2026-10-15T13:25:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=dTAwOTB2bDY5bm0xMDlkcmd1djRsZmNkMWsgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-15",
+      "block_key": "lunch",
+      "event_id": "u27jo0a9vlcgqgru8k8icdu3es",
+      "title": "SWE Prep · Cook and eat lunch",
+      "start": "2026-10-15T13:30:00-07:00",
+      "end": "2026-10-15T14:00:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=dTI3am8wYTl2bGNncWdydThrOGljZHUzZXMgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-15",
+      "block_key": "reading-walk",
+      "event_id": "s5ts09erd86m5ulh77csmj6i60",
+      "title": "SWE Prep · Reading walk",
+      "start": "2026-10-15T14:00:00-07:00",
+      "end": "2026-10-15T14:15:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=czV0czA5ZXJkODZtNXVsaDc3Y3NtajZpNjAgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-15",
+      "block_key": "resume-finalize",
+      "event_id": "0c7u87i5a6actk03f0s8h80gng",
+      "title": "SWE Prep · Résumé: application-ready version",
+      "start": "2026-10-15T14:15:00-07:00",
+      "end": "2026-10-15T15:05:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=MGM3dTg3aTVhNmFjdGswM2YwczhoODBnbmcgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-15",
+      "block_key": "guitar-1",
+      "event_id": "min2kiamr6rtsrbl2amd2euhu8",
+      "title": "SWE Prep · Guitar break",
+      "start": "2026-10-15T15:05:00-07:00",
+      "end": "2026-10-15T15:20:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=bWluMmtpYW1yNnJ0c3JibDJhbWQyZXVodTggd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-15",
+      "block_key": "application-prep",
+      "event_id": "odo2aif55m7vugbpt8k77isvus",
+      "title": "SWE Prep · Prepare the first application",
+      "start": "2026-10-15T15:20:00-07:00",
+      "end": "2026-10-15T16:10:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=b2RvMmFpZjU1bTd2dWdicHQ4azc3aXN2dXMgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-15",
+      "block_key": "break-1",
+      "event_id": "tnpn9e6k95i13rtr2dnasj1rf4",
+      "title": "SWE Prep · Break",
+      "start": "2026-10-15T16:10:00-07:00",
+      "end": "2026-10-15T16:20:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=dG5wbjllNms5NWkxM3J0cjJkbmFzajFyZjQgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-15",
+      "block_key": "python",
+      "event_id": "7294sl9vo3fvj6phepsga30310",
+      "title": "SWE Prep · Python: next frequency-map exercise",
+      "start": "2026-10-15T16:20:00-07:00",
+      "end": "2026-10-15T17:10:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=NzI5NHNsOXZvM2Z2ajZwaGVwc2dhMzAzMTAgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-15",
+      "block_key": "guitar-2",
+      "event_id": "dp486nkcfb2l47shg4f667s9hk",
+      "title": "SWE Prep · Guitar break",
+      "start": "2026-10-15T17:10:00-07:00",
+      "end": "2026-10-15T17:25:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=ZHA0ODZua2NmYjJsNDdzaGc0ZjY2N3M5aGsgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-15",
+      "block_key": "application-finish",
+      "event_id": "js496j5peiefq0anp3p0053bic",
+      "title": "SWE Prep · Application: finish or name the blocker",
+      "start": "2026-10-15T17:25:00-07:00",
+      "end": "2026-10-15T17:50:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=anM0OTZqNXBlaWVmcTBhbnAzcDAwNTNiaWMgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-15",
+      "block_key": "daily-review",
+      "event_id": "dd4fh93pgrnfah5s44trcropvs",
+      "title": "SWE Prep · Daily review and shutdown",
+      "start": "2026-10-15T17:50:00-07:00",
+      "end": "2026-10-15T18:00:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=ZGQ0Zmg5M3Bncm5mYWg1czQ0dHJjcm9wdnMgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "resume-review",
+      "event_id": "8n36gnt4j4ji8vfcibs0ju9j0k",
+      "title": "SWE Prep · Résumé: final Machina review",
+      "start": "2026-10-16T08:20:00-07:00",
+      "end": "2026-10-16T09:10:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=OG4zNmdudDRqNGppOHZmY2liczBqdTlqMGsgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "break-1",
+      "event_id": "h5394cj6v3kfd74ug8ahgn2vfs",
+      "title": "SWE Prep · Break",
+      "start": "2026-10-16T09:10:00-07:00",
+      "end": "2026-10-16T09:20:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=aDUzOTRjajZ2M2tmZDc0dWc4YWhnbjJ2ZnMgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "application-submit",
+      "event_id": "62idb4ddatqa585cmvuouu0hc0",
+      "title": "SWE Prep · Application: audit fixes and submit",
+      "start": "2026-10-16T09:40:00-07:00",
+      "end": "2026-10-16T10:10:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=NjJpZGI0ZGRhdHFhNTg1Y212dW91dTBoYzAgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "guitar-1",
+      "event_id": "lo52b0c13a9q0il61h49o27sks",
+      "title": "SWE Prep · Guitar break",
+      "start": "2026-10-16T10:10:00-07:00",
+      "end": "2026-10-16T10:25:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=bG81MmIwYzEzYTlxMGlsNjFoNDlvMjdza3Mgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "python-review",
+      "event_id": "egr6rbatbdsjmdg9pv881truus",
+      "title": "SWE Prep · Python: retrieval after Series 3",
+      "start": "2026-10-16T10:25:00-07:00",
+      "end": "2026-10-16T11:15:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=ZWdyNnJiYXRiZHNqbWRnOXB2ODgxdHJ1dXMgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "break-2",
+      "event_id": "c0dhv42oa20u6bngnid48n5000",
+      "title": "SWE Prep · Break",
+      "start": "2026-10-16T11:15:00-07:00",
+      "end": "2026-10-16T11:25:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=YzBkaHY0Mm9hMjB1NmJuZ25pZDQ4bjUwMDAgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "python-next",
+      "event_id": "lesdrgi4bdojv88cmtqs7dair4",
+      "title": "SWE Prep · Python: build a tiny checker",
+      "start": "2026-10-16T11:25:00-07:00",
+      "end": "2026-10-16T12:15:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=bGVzZHJnaTRiZG9qdjg4Y210cXM3ZGFpcjQgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "guitar-2",
+      "event_id": "bhrb9amuf6sarvcn0ot3jru2ho",
+      "title": "SWE Prep · Guitar break",
+      "start": "2026-10-16T12:15:00-07:00",
+      "end": "2026-10-16T12:30:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=YmhyYjlhbXVmNnNhcnZjbjBvdDNqcnUyaG8gd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "application-admin",
+      "event_id": "dradvfkeckr2rmn4g665rubrpo",
+      "title": "SWE Prep · Application tracker and next role",
+      "start": "2026-10-16T12:30:00-07:00",
+      "end": "2026-10-16T12:50:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=ZHJhZHZma2Vja3Iycm1uNGc2NjVydWJycG8gd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "buffer-1",
+      "event_id": "71q3s11ebp2l5r49sv90777bso",
+      "title": "SWE Prep · Buffer",
+      "start": "2026-10-16T12:50:00-07:00",
+      "end": "2026-10-16T13:00:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=NzFxM3MxMWVicDJsNXI0OXN2OTA3Nzdic28gd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "sunlight",
+      "event_id": "jstm0tfhitpak8ro9sni2k6n8g",
+      "title": "SWE Prep · Sunlight",
+      "start": "2026-10-16T13:00:00-07:00",
+      "end": "2026-10-16T13:05:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=anN0bTB0ZmhpdHBhazhybzlzbmkyazZuOGcgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "buffer-2",
+      "event_id": "00quh7s0jestdf38bi1637h7tg",
+      "title": "SWE Prep · Free buffer",
+      "start": "2026-10-16T13:05:00-07:00",
+      "end": "2026-10-16T13:30:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=MDBxdWg3czBqZXN0ZGYzOGJpMTYzN2g3dGcgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "lunch",
+      "event_id": "rjcgqb5b28k8asbmcnb99pk0j0",
+      "title": "SWE Prep · Cook and eat lunch",
+      "start": "2026-10-16T13:30:00-07:00",
+      "end": "2026-10-16T14:00:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=cmpjZ3FiNWIyOGs4YXNibWNuYjk5cGswajAgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "reading-walk",
+      "event_id": "t8keu9hlm2qftbit6nf4v3hmdo",
+      "title": "SWE Prep · Reading walk",
+      "start": "2026-10-16T14:00:00-07:00",
+      "end": "2026-10-16T14:15:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=dDhrZXU5aGxtMnFmdGJpdDZuZjR2M2htZG8gd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "system-design",
+      "event_id": "ltpohb966jd3g8eovkkpfmm288",
+      "title": "SWE Prep · System design: trace a form submission",
+      "start": "2026-10-16T14:15:00-07:00",
+      "end": "2026-10-16T15:05:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=bHRwb2hiOTY2amQzZzhlb3Zra3BmbW0yODggd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "guitar-3",
+      "event_id": "gj409i3rv7dddfp16ne1lff1ac",
+      "title": "SWE Prep · Guitar break",
+      "start": "2026-10-16T15:05:00-07:00",
+      "end": "2026-10-16T15:20:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=Z2o0MDlpM3J2N2RkZGZwMTZuZTFsZmYxYWMgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "project-story",
+      "event_id": "97ja99us5rs10lu57nc11kbppc",
+      "title": "SWE Prep · Project story: Modulo",
+      "start": "2026-10-16T15:20:00-07:00",
+      "end": "2026-10-16T16:10:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=OTdqYTk5dXM1cnMxMGx1NTduYzExa2JwcGMgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "break-3",
+      "event_id": "ue5hcjs74mimu92m8l4pli8lu8",
+      "title": "SWE Prep · Break",
+      "start": "2026-10-16T16:10:00-07:00",
+      "end": "2026-10-16T16:20:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=dWU1aGNqczc0bWltdTkybThsNHBsaThsdTggd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    },
+    {
+      "date": "2026-10-16",
+      "block_key": "daily-review",
+      "event_id": "md8tboe8mlf24aegjusft17v2c",
+      "title": "SWE Prep · Daily review and shutdown",
+      "start": "2026-10-16T16:20:00-07:00",
+      "end": "2026-10-16T16:40:00-07:00",
+      "url": "https://www.google.com/calendar/event?eid=bWQ4dGJvZThtbGYyNGFlZ2p1c2Z0MTd2MmMgd3N0cnV2ZTJAbQ&ctz=America/Los_Angeles",
+      "verified": true
+    }
+  ]
+}

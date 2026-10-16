@@ -1,0 +1,100 @@
+% MASTER RESUME: select and shorten material for each application.
+% See Resume Evidence.md for source references, estimates, and attribution.
+% Costs are candidate estimates; $60 is infrastructure, not all-in cost.
+% Most workplace implementation was done by agents; school project was self-written.
+\documentclass[10pt,letterpaper]{article}
+\usepackage[margin=0.65in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlist[itemize]{leftmargin=14pt,itemsep=2pt,topsep=3pt,parsep=0pt}
+\titleformat{\section}{\large\bfseries}{}{0pt}{}[\titlerule]
+\titlespacing*{\section}{0pt}{9pt}{4pt}
+\raggedright
+\begin{document}
+{\LARGE\bfseries William Struve}\par
+747-206-8550 \enspace | \enspace
+\href{mailto:wstruve.tech@gmail.com}{wstruve.tech@gmail.com} \enspace | \enspace
+\href{https://linkedin.com/in/wstruve}{linkedin.com/in/wstruve} \enspace | \enspace
+\href{https://github.com/struv}{github.com/struv}
+
+Software developer with experience building healthcare applications, gathering requirements, training users, and supporting production workflows. Built patient intake and vaccine inventory tools used across 25 clinics, alongside reporting and scheduling dashboards.
+
+\section{Experience}
+\textbf{Jr. Software Developer}\par
+Kids \& Teens Medical Group | La Canada Flintridge, CA | Oct 2024 -- Oct 2026\par
+Role included software delivery alongside medical administration and Excel reporting.
+
+\textbf{Modulo --- Patient Intake and Communications}\par
+\begin{itemize}
+\item Built and launched Modulo in approximately one to two months, progressing from a one-clinic pilot in January 2026 to production launch in February and use across 25 clinics.
+\item Replaced NexHealth, which cost the organization over \$10,000 per month, with an in-house application running on approximately \$60 per month in infrastructure and an existing GoTo messaging subscription at no additional charge.
+\item Defined initial requirements by studying clinic workflows and reviewing NexHealth features; supported SMS/email outreach, campaigns and recalls, and pre-appointment forms and signatures.
+\item Trained regional managers and senior staff through multiple live demonstrations and established a group chat for user questions, bug reports, and ongoing support.
+\item Delegated maintenance tasks to a developer, handled escalations using coding agents, and provided guidance on the database and application setup.
+\item Defined selection behavior for consent and questionnaire PDF downloads, coordinated implementation with a developer, and reviewed the released workflow.
+\end{itemize}
+
+\textbf{Vaccine Inventory}\par
+\begin{itemize}
+\item Built and maintained an Excel-backed vaccine inventory application in approximately two weeks; clinic staff began using it around March 2026, with medical assistants across 25 clinics entering physical stock counts through the app.
+\item Gathered requirements from the reconciliation lead and retained the existing Excel workbook so the overseas team could continue comparing inventory against EMR records using its established workflow.
+\item Tested the app-to-Excel workflow with the reconciliation lead and added entry duplication for multiple cases of the same vaccine, receiving positive user feedback.
+\item Served as sole support and maintenance owner; added in-app location onboarding so the overseas team could add newly acquired offices and sync them to the master workbook.
+\end{itemize}
+
+\newpage
+{\large\bfseries William Struve --- Master Resume, Continued}\par
+
+\section{Additional Experience Details}
+\textbf{Kids \& Teens Medical Group --- Dashboards and Reporting}\par
+\begin{itemize}
+\item Delivered an interactive IHA transfer dashboard so a manager could review Excel-based reporting data more easily for weekly reporting used in CEO presentations.
+\item Pulled transfer reports weekly; dashboard data transformation was implemented, while full automation of the reporting process remained unfinished.
+\item Delivered a capacity dashboard used by the scheduling team to identify locations needing additional appointments, accounting for capacity and specialties.
+\end{itemize}
+
+\textbf{Other Work and Completed Development}\par
+\begin{itemize}
+\item Completed a When I Work--Paylocity API integration using coding agents; company adoption was not pursued because of implementation cost.
+\item Helped other departments troubleshoot slow Excel workbooks using Claude in Excel.
+\item Created a personal audit-preparation checklist app and a one-time interactive EPT assessment form used to collect the CEO's responses.
+\end{itemize}
+
+\textbf{Web Development Intern}\par
+Lepow International | Walnut, CA | May 2022 -- Sep 2023
+\begin{itemize}
+\item Updated WordPress and Elementor pages and maintained site content.
+\item Supported influencer marketing activities.
+\end{itemize}
+
+\section{Academic Projects}
+\textbf{MediCAL Billing Application}\par
+Python, JavaScript, Flask, OpenCV, Pytesseract | Jul 2024 -- Aug 2024
+\begin{itemize}
+\item Led a four-person team and wrote most of the application code without AI assistance, selecting the technology stack and integrating OCR.
+\item Evaluated OCR options and used OpenCV for image preprocessing and alignment with Pytesseract/Tesseract for field extraction from completed paper EBO forms into CSV.
+\item Worked with a dedicated testing teammate who created mock inputs and checked output using a mixture of automated tests and mostly manual comparisons; document submission was outside the application's scope.
+\end{itemize}
+
+\textbf{Live Chatroom}\par
+JavaScript, Node.js, Express, WebSockets | May 2024 -- Jun 2024
+\begin{itemize}
+\item Built a browser-based chatroom with a teammate for a college web development course, using WebSockets for real-time messaging.
+\end{itemize}
+
+\section{Technologies Used}
+\textbf{Languages:} JavaScript, Python, SQL\par
+\textbf{Web:} React, Next.js, Node.js, HTML/CSS, WordPress, Elementor, WebSockets (academic chatroom)\par
+\textbf{Infrastructure and data:} Git, Vercel, AWS, Excel\par
+\textbf{OCR and development tools:} OpenCV, Pytesseract, Claude Code, Codex
+
+\section{Education}
+\textbf{University of California, Riverside}\par
+B.S. in Computer Science | Aug 2024
+\end{document}

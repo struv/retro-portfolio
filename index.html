@@ -19,7 +19,7 @@
             left: 0;
             z-index: -1;
         }
-        
+
         header {
             text-align: center;
             padding: 3rem 1rem;
@@ -29,7 +29,7 @@
             box-shadow: 0 0 20px var(--primary), inset 0 0 10px var(--secondary);
             animation: border-pulse 4s infinite;
         }
-        
+
         .section {
             margin-bottom: 3rem;
             padding: 2rem;
@@ -38,7 +38,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .section::before {
             content: '';
             position: absolute;
@@ -49,14 +49,14 @@
             background: linear-gradient(90deg, transparent, var(--accent), transparent);
             animation: scan-line 4s linear infinite;
         }
-        
+
         .skills {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
             align-items: start;
         }
-        
+
         .skill-group {
             background: rgba(0, 0, 51, 0.3);
             border: 2px solid var(--secondary);
@@ -65,7 +65,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .skill-group::before {
             content: '';
             position: absolute;
@@ -75,7 +75,7 @@
             height: 3px;
             background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
         }
-        
+
         .skill-group h3 {
             margin-top: 0;
             margin-bottom: 1rem;
@@ -84,12 +84,12 @@
             border-bottom: 1px solid var(--secondary);
             padding-bottom: 0.5rem;
         }
-        
+
         .experience-item {
             margin-bottom: 2rem;
             position: relative;
         }
-        
+
         .experience-title {
             display: flex;
             justify-content: space-between;
@@ -97,7 +97,7 @@
             font-weight: bold;
             color: var(--accent);
         }
-        
+
         .pixelated {
             image-rendering: pixelated;
         }
@@ -105,7 +105,7 @@
         .main-content {
             padding-bottom: 200px; /* Adjust based on actual player height */
         }
-        
+
         /* Hero Banner Styles */
         .hero-banner {
             position: relative;
@@ -118,7 +118,7 @@
             overflow: hidden;
             width: 100%;
         }
-        
+
         .banner-image {
             position: absolute;
             top: 0;
@@ -128,7 +128,7 @@
             z-index: 1;
             overflow: hidden;
         }
-        
+
         .banner-bg {
             width: 120%;
             height: 120%;
@@ -138,11 +138,11 @@
             top: -10%;
             left: -10%;
         }
-        
+
         .banner-overlay {
             display: none;
         }
-        
+
         .banner-content {
             position: relative;
             z-index: 3;
@@ -152,9 +152,9 @@
             justify-content: center;
             padding: 2rem;
         }
-        
 
-        
+
+
         /* Profile Picture Styles */
         .profile-container {
             position: relative;
@@ -164,7 +164,7 @@
             max-width: 800px;
             margin: 0 auto;
         }
-        
+
         .profile-pic-wrapper {
             position: relative;
             width: 250px;
@@ -175,18 +175,18 @@
             box-shadow: 0 0 30px var(--primary), inset 0 0 20px var(--secondary);
             animation: profile-float 6s ease-in-out infinite;
         }
-        
+
         .profile-pic {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.3s ease;
         }
-        
+
         .profile-pic-wrapper:hover .profile-pic {
             transform: scale(1.1);
         }
-        
+
         .profile-pic-glow {
             position: absolute;
             top: -10px;
@@ -199,7 +199,7 @@
             animation: glow-rotate 4s linear infinite;
             z-index: -1;
         }
-        
+
         .header-text {
             position: absolute;
             bottom: -20px;
@@ -208,7 +208,7 @@
             text-align: center;
             z-index: 10;
         }
-        
+
         .header-text h1 {
             margin: 0;
             line-height: 1.2;
@@ -217,30 +217,30 @@
             white-space: nowrap;
             color: #FFCC00;
         }
-        
+
         @keyframes profile-float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             25% { transform: translateY(-10px) rotate(1deg); }
             50% { transform: translateY(-5px) rotate(0deg); }
             75% { transform: translateY(-15px) rotate(-1deg); }
         }
-        
+
         @keyframes glow-rotate {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .hero-banner {
                 height: 300px;
             }
-            
+
             .profile-pic-wrapper {
                 width: 180px;
                 height: 180px;
             }
-            
+
             .header-text h1 {
                 font-size: 2rem;
             }
@@ -249,7 +249,7 @@
 </head>
 <body class="portfolio-page">
     <canvas id="bg"></canvas>
-    
+
     <!-- Hero Banner Section -->
     <div class="hero-banner">
         <div class="banner-image">
@@ -268,7 +268,7 @@
             </div>
         </div>
     </div>
-    
+
     <main class="container main-content portfolio-copy">
         <section class="section" aria-labelledby="intro-heading">
             <h2 id="intro-heading">Software Developer</h2>
@@ -325,7 +325,7 @@
                     <ul class="retro-list">
                         <li>TypeScript &amp; JavaScript</li>
                         <li>Python</li>
-                        <li>SQL</li>
+                        <li>C++ &amp; C</li>
                         <li>HTML &amp; CSS</li>
                     </ul>
                 </div>
@@ -371,19 +371,19 @@
             console.log('Initializing MP3 player...');
             initializeMP3Player();
             console.log('All components initialized');
-            
+
             // Mouse following effect for header image
             const bannerBg = document.querySelector('.banner-bg');
-            
+
             document.addEventListener('mousemove', function(e) {
                 const moveX = (e.clientX / window.innerWidth - 0.5) * 30;
                 const moveY = (e.clientY / window.innerHeight - 0.5) * 30;
-                
+
                 bannerBg.style.transform = `translate(${moveX}px, ${moveY}px)`;
             });
         });
     </script>
-    
+
 
 </body>
 </html>

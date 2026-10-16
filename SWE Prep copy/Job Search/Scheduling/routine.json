@@ -1,0 +1,222 @@
+{
+  "version": 1,
+  "updated_on": "2026-10-16",
+  "timezone": "America/Los_Angeles",
+  "workdays": [
+    "MO",
+    "TU",
+    "WE",
+    "TH",
+    "FR",
+    "SA"
+  ],
+  "rest_day": "SU",
+  "calendar_id": "primary",
+  "brief": {
+    "time": "19:00",
+    "days": [
+      "SU",
+      "MO",
+      "TU",
+      "WE",
+      "TH",
+      "FR"
+    ],
+    "plans_for": "next day",
+    "destination": "this chat",
+    "calendar_updates": true
+  },
+  "wake_plan": {
+    "start_date": "2026-10-15",
+    "target_date": "2026-10-29",
+    "initial_wake": "07:00",
+    "final_wake": "05:00",
+    "morning_routine_minutes": 90,
+    "targets": [
+      {
+        "date": "2026-10-15",
+        "wake_target": "07:00",
+        "work_start": "08:30"
+      },
+      {
+        "date": "2026-10-16",
+        "wake_target": "06:50",
+        "work_start": "08:20"
+      },
+      {
+        "date": "2026-10-17",
+        "wake_target": "06:45",
+        "work_start": "08:15"
+      },
+      {
+        "date": "2026-10-18",
+        "wake_target": "06:35",
+        "work_start": "08:05"
+      },
+      {
+        "date": "2026-10-19",
+        "wake_target": "06:25",
+        "work_start": "07:55"
+      },
+      {
+        "date": "2026-10-20",
+        "wake_target": "06:15",
+        "work_start": "07:45"
+      },
+      {
+        "date": "2026-10-21",
+        "wake_target": "06:10",
+        "work_start": "07:40"
+      },
+      {
+        "date": "2026-10-22",
+        "wake_target": "06:00",
+        "work_start": "07:30"
+      },
+      {
+        "date": "2026-10-23",
+        "wake_target": "05:50",
+        "work_start": "07:20"
+      },
+      {
+        "date": "2026-10-24",
+        "wake_target": "05:45",
+        "work_start": "07:15"
+      },
+      {
+        "date": "2026-10-25",
+        "wake_target": "05:35",
+        "work_start": "07:05"
+      },
+      {
+        "date": "2026-10-26",
+        "wake_target": "05:25",
+        "work_start": "06:55"
+      },
+      {
+        "date": "2026-10-27",
+        "wake_target": "05:15",
+        "work_start": "06:45"
+      },
+      {
+        "date": "2026-10-28",
+        "wake_target": "05:10",
+        "work_start": "06:40"
+      },
+      {
+        "date": "2026-10-29",
+        "wake_target": "05:00",
+        "work_start": "06:30"
+      }
+    ],
+    "adjustment_policy": "These are planned targets, not reported sleep or waking. Use a newer user-reported wake/start time in preference to the target. If the target is difficult, propose holding it rather than adding overdue work. Move bedtime earlier with the wake target."
+  },
+  "work_rhythm": {
+    "focus_minutes": 50,
+    "break_minutes": [
+      10,
+      15
+    ],
+    "default_focus_blocks": 6,
+    "optional_catchup_blocks": 1,
+    "latest_finish": "18:00",
+    "earlier_start_policy": "Keep the workload similar and finish earlier; do not expand required work just because the day starts earlier."
+  },
+  "anchors": [
+    {
+      "title": "Sunlight",
+      "start": "13:00",
+      "end": "13:05"
+    },
+    {
+      "title": "Cook and eat lunch",
+      "start": "13:30",
+      "end": "14:00"
+    },
+    {
+      "title": "Reading walk",
+      "start": "14:00",
+      "end": "14:15"
+    }
+  ],
+  "breaks": {
+    "guitar": "Use two or three 10–15 minute breaks for guitar; leave other breaks free."
+  },
+  "priorities": {
+    "initial": "Complete an accurate application-ready resume; target the first application by the end of the morning application block on October 16.",
+    "ongoing": "Protect the first two focus blocks for applications, role selection, tailored resume changes, and follow-ups. A normal target is one or two suitable applications, scaled to each application. Schedule submissions by the learner, not automatic submission.",
+    "python": "Two 50-minute blocks with one exercise at a time, beginning with brief retrieval and the latest verified handoff.",
+    "other_prep": "Use remaining focus blocks for system design and project/behavioral stories; rotate as progress warrants.",
+    "daily_review": "Record actual outcomes and blockers, and set the next concrete action. Do not treat a scheduled block as completed work."
+  },
+  "source_files": [
+    "../Job Search Plan.md",
+    "../Resume/Resume Draft.md",
+    "../Resume/Resume Evidence.md",
+    "../Interview Prep/START HERE.md",
+    "../Interview Prep/PROGRESS.md",
+    "../Interview Prep/System Design Training.md",
+    "../Interview Prep/System Design/PROGRESS.md"
+  ],
+  "calendar_policy": {
+    "prefix": "SWE Prep · ",
+    "event_marker": "swe-prep-daily-plan-20261015",
+    "recurrence": "Create one-off events for the planned date only.",
+    "duplicates": "Search and fully page the date first. Match events to the marker and block key. Reuse correct events; read before updating changed events; never create a duplicate after an uncertain write.",
+    "existing_commitments": "Check availability on visible personal calendars and preserve unrelated events. Do not move existing personal commitments.",
+    "verification": "Read back the target day's events, check times, overlaps and expected counts; report any partial failure without claiming success.",
+    "creation_parameters": {
+      "add_google_meet": false,
+      "attendees": [],
+      "visibility": "private"
+    }
+  },
+  "removed_recurring_commitments": {
+    "verified_removed_on": "2026-10-15",
+    "calendar_id": "59591d25d2dc48d3ca12906dfc47484b20d03fbbb9e80b3a1c7a23abf66c76fd@group.calendar.google.com",
+    "titles": [
+      "Toastmasters Weekly Meetings Presented By Speakeasy 8704",
+      "SoCal Exchangors",
+      "IEREIC Meeting"
+    ]
+  },
+  "automation": {
+    "id": "plan-tomorrow-s-job-search",
+    "kind": "heartbeat",
+    "status": "ACTIVE",
+    "target_thread_id": "01a140fe-41bc-7be3-bfc3-92174f632fb6",
+    "scheduled_local_time": "19:00",
+    "delivery_days": [
+      "SU",
+      "MO",
+      "TU",
+      "WE",
+      "TH",
+      "FR"
+    ],
+    "first_scheduled_brief": "2026-10-15T19:00:00-07:00",
+    "scheduled_run_observed": true,
+    "last_observed_run": {
+      "trigger_time_utc": "2026-10-16T01:56:20.752Z",
+      "planned_date": "2026-10-16",
+      "calendar_verified": true,
+      "event_count": 19
+    }
+  },
+  "daily_reports": [
+    {
+      "date": "2026-10-16",
+      "wake_time_approx": "09:00",
+      "check_in_at": "2026-10-16T09:38:24-07:00",
+      "reported_ready_to_begin": true,
+      "previous_night_stayed_up_until_approx": "23:30",
+      "sleep_quality": "User reports sleeping really well.",
+      "breakfast_plan": "User plans to skip breakfast today.",
+      "reported_previous_night_work": "Coding exercises and reading.",
+      "application_target": "10:10",
+      "actual_application_submission": "unverified",
+      "calendar_application_start": "09:40",
+      "preference_scope": "Today's actual report; not a permanent change to wake targets or morning routine."
+    }
+  ]
+}
