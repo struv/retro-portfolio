@@ -6,7 +6,7 @@ const blogData = {
     articles: [
         {
             id: 'vibe-coding-security',
-            title: 'Vibe Coding Common Security Issues',
+            title: 'Security Checklist for AI-Assisted Development',
             excerpt: 'Notes on security considerations when using AI coding tools, including access controls, input validation, secrets, and monitoring.',
             image: 'https://i.pinimg.com/1200x/c2/3d/08/c23d082c090b55fe20d612b321a0511a.jpg',
             date: 'January 28, 2025',
