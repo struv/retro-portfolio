@@ -26,7 +26,10 @@
             { src: 'img/projects/transfer-dashboard/overview.jpg', caption: 'Transfers by group with period, segment, and % filters' },
             { src: 'img/projects/transfer-dashboard/peds.jpg', caption: 'Pediatric segment view' }
         ],
-        'scheduling-dashboard': []
+        'scheduling-dashboard': [
+            { src: 'img/projects/scheduling-dashboard/current-week.jpg', caption: 'Patients booked per provider each day of the current week: red for under-booked days, green for 20 or more' },
+            { src: 'img/projects/scheduling-dashboard/prior-week.jpg', caption: 'Stepping through weeks to compare booking levels' }
+        ]
     };
 
     const EASE_OUT = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
