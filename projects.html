@@ -82,7 +82,111 @@
             color: var(--secondary);
             font-style: italic;
         }
-        
+
+        /* Screenshot gallery */
+        .project-item.has-gallery {
+            cursor: pointer;
+        }
+
+        .gallery-open {
+            margin-top: 1rem;
+            font-size: 0.7rem;
+            line-height: 1.6;
+        }
+
+        .gallery-open:focus-visible,
+        .gallery-dialog button:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+
+        .gallery-dialog {
+            width: min(960px, calc(100vw - 2rem));
+            max-height: calc(100vh - 2rem);
+            margin: auto;
+            padding: 1.25rem;
+            border: 4px solid var(--primary);
+            background: rgba(0, 0, 51, 0.97);
+            color: var(--text);
+            box-shadow: 0 0 30px var(--primary), inset 0 0 10px var(--secondary);
+            font-family: 'VT323', monospace;
+        }
+
+        .gallery-dialog::backdrop {
+            background: rgba(0, 0, 20, 0.8);
+        }
+
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+
+        .gallery-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--accent);
+        }
+
+        .gallery-figure {
+            margin: 0;
+        }
+
+        .gallery-image {
+            display: block;
+            width: 100%;
+            max-height: calc(100vh - 16rem);
+            object-fit: contain;
+            border: 2px solid var(--secondary);
+            background: #fff;
+        }
+
+        .gallery-caption {
+            margin-top: 0.75rem;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        .gallery-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 0.75rem;
+            font-size: 1.3rem;
+        }
+
+        .gallery-note {
+            margin: 0.75rem 0 0;
+            font-size: 1.1rem;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        @media (max-width: 600px) {
+            .gallery-dialog {
+                padding: 0.75rem;
+            }
+
+            .gallery-title {
+                font-size: 0.8rem;
+            }
+
+            .gallery-image {
+                max-height: calc(100vh - 20rem);
+            }
+
+            .gallery-caption,
+            .gallery-note {
+                font-size: 1.1rem;
+            }
+        }
+
     </style>
 </head>
 <body class="portfolio-page">
@@ -95,26 +199,26 @@
         <section class="retro-container" aria-labelledby="professional-heading">
             <h2 id="professional-heading">Professional Projects</h2>
             <p>Built at Kids &amp; Teens Medical Group. I owned delivery and support, using AI coding tools extensively for implementation and collaborating with colleagues on requirements and maintenance.</p>
-            <article class="project-item">
+            <article class="project-item" data-gallery="modulo">
                 <h3 class="project-title">Modulo</h3>
                 <p class="project-description">Built and launched a patient intake and communications application to replace NexHealth. I defined initial requirements around clinic workflows, supported rollout through live demonstrations, and coordinated maintenance with another developer. Staff used it for form packets by visit type, mobile form fill with e-signatures, SMS/email delivery, a messaging inbox, and English/Spanish kiosk check-in.</p>
                 <p class="project-description">September 2026: 115 active staff accounts, 3,847 completed form packets, and 24,039 outbound SMS transmissions. Forms were started or packets completed at 24 clinic locations.</p>
                 <p class="project-note">September 1–30, 2026</p>
                 <div class="project-tech">TypeScript • React • Express • PostgreSQL • Drizzle ORM • Vercel</div>
             </article>
-            <article class="project-item">
+            <article class="project-item" data-gallery="vaccine-inventory">
                 <h3 class="project-title">Vaccine Inventory</h3>
                 <p class="project-description">Built and maintained a clinic-facing stock-entry app backed by the reconciliation team's existing Excel workbook. I gathered requirements from the team lead and tested the app-to-workbook workflow with him. Added entry duplication for multiple cases and in-app onboarding for new locations; served as the sole support and maintenance owner during my tenure.</p>
                 <p class="project-description">A snapshot collected October 13, 2026 showed inventory edits dated September at 21 clinics. The reconciliation team continued comparing stock counts with EMR records in its established workflow.</p>
                 <p class="project-note">September 1–30, 2026</p>
                 <div class="project-tech">TypeScript • Excel / SharePoint • Vercel</div>
             </article>
-            <article class="project-item">
+            <article class="project-item" data-gallery="transfer-dashboard">
                 <h3 class="project-title">Transfer Reporting Dashboard</h3>
                 <p class="project-description">Delivered an interactive view of Excel-based transfer reports so my manager could review the data for weekly reporting used in CEO presentations. I pulled reports each week; the dashboard and data transformation were implemented, while full automation of report collection remained unfinished.</p>
                 <div class="project-tech">Python • Excel • JavaScript</div>
             </article>
-            <article class="project-item">
+            <article class="project-item" data-gallery="scheduling-dashboard">
                 <h3 class="project-title">Scheduling Capacity Dashboard</h3>
                 <p class="project-description">Delivered a dashboard used by scheduling staff to identify locations needing more appointments, considering capacity and specialties.</p>
                 <div class="project-tech">Next.js • TypeScript • CSV data</div>
@@ -175,6 +279,7 @@
     </main>
 
     <script src="shared/init.js"></script>
+    <script src="shared/project-gallery.js"></script>
     <script>
         document.addEventListener('sharedComponentsReady', function() {
             initializeNavbar();
