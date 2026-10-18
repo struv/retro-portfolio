@@ -23,12 +23,12 @@
             { src: 'img/projects/sp-router/table.jpg', caption: 'Searchable roster with contract, class, specialty, and city filters' }
         ],
         'transfer-dashboard': [
-            { src: 'img/projects/transfer-dashboard/overview.jpg', caption: 'Transfers by group with period, segment, and % filters' },
-            { src: 'img/projects/transfer-dashboard/peds.jpg', caption: 'Pediatric segment view' }
+            { src: 'img/projects/transfer-dashboard/overview.jpg', caption: 'Transfers by group with period, segment, and % filters' }
         ],
         'scheduling-dashboard': [
-            { src: 'img/projects/scheduling-dashboard/current-week.jpg', caption: 'Patients booked per provider each day of the current week: red for under-booked days, green for 20 or more' },
-            { src: 'img/projects/scheduling-dashboard/prior-week.jpg', caption: 'Stepping through weeks to compare booking levels' }
+            { src: 'img/projects/scheduling-dashboard/grid.jpg', caption: 'Forward schedule by office and day, with booking-curve and target controls' },
+            { src: 'img/projects/scheduling-dashboard/week.jpg', caption: 'Each chip is a provider\'s booked vs. expected visits; cells tint amber when under-booked, green on target' },
+            { src: 'img/projects/scheduling-dashboard/decisions.jpg', caption: 'Decisions drawer ranking Move, Fill, Shorten, and Gap recommendations against historical baselines' }
         ]
     };
 
