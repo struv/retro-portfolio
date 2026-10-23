@@ -25,6 +25,9 @@ into each screenshot via cover-fit with a per-project `focus` (fractions, defaul
 centre-top) in `projects-data.js`; clicking a card grows its cover into the gallery
 image (`expandOpen` in `project-gallery.js`), landing on the slide that matches the
 cover. The slider exposes `warp` and `warpOverride` for screenshots of the bend.
+Motion is frame-rate independent (easing constants are per 60Hz frame, scaled by the
+real frame time) and the warp is smoothed; `WARP_GAIN` is 10 so an ordinary hand drag
+bends the cards visibly, not just a fling.
 
 Phase 2 notes: index.html styles every `<canvas>` as fixed with z-index -1, so the
 slider canvas sets its own position and z-index. The global `button` rule transitions
