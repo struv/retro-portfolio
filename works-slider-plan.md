@@ -180,7 +180,7 @@ existing grid and particle background show behind the cards.
 | `index.html` (modify) | Section markup after the intro: title, DOM card strip (always present), canvas container; scripts; init on `sharedComponentsReady`; "Explore my projects" becomes `#projects`. |
 | `shared/config.js` (modify) | Nav "Projects" points at `index.html#projects`. |
 | `projects.html` (modify) | Becomes a redirect (meta refresh + canonical) to `/#projects` so shared links and the canonical URL keep working. |
-| `img/projects/covers/` (new) | One ~1024px landscape cover per project. |
+| `img/projects/covers/` (new) | Full-resolution (1800px) captures of the six demo pages; professional covers point at their existing screenshots. |
 
 ### Interaction spec
 
@@ -233,14 +233,14 @@ existing grid and particle background show behind the cards.
 
 | Project | Source today | Plan |
 |---|---|---|
-| Modulo | 5 screenshots (1800px) | downscale `field-mapper.jpg` or `dashboard.jpg` |
-| Vaccine Inventory | 3 screenshots | downscale `desktop.jpg` (not the portrait `mobile.jpg`) |
-| Provider Roster Map | 2 screenshots | downscale `map.jpg` |
-| Transfer Reporting Dashboard | 1 screenshot | downscale `overview.jpg` |
-| Scheduling Capacity Dashboard | 3 screenshots | downscale `grid.jpg` |
+| Modulo | 5 screenshots (1800px) | `dashboard.jpg` at full size (done) |
+| Vaccine Inventory | 3 screenshots | `desktop.jpg` at full size (done; the portrait `mobile.jpg` is an option) |
+| Provider Roster Map | 2 screenshots | `map.jpg` at full size (done) |
+| Transfer Reporting Dashboard | 1 screenshot | `overview.jpg` at full size (done) |
+| Scheduling Capacity Dashboard | 3 screenshots | `grid.jpg` at full size (done) |
 | Meta-Scan (academic) | none | generated retro title card until a real image exists |
 | Live Chatroom (academic) | none | generated retro title card until a real image exists |
-| Game of Life, Melody Maker, Task Manager, Study Tracker, Sorting Visualizer, Pathfinding Visualizer | none | capture the local demo pages |
+| Game of Life, Melody Maker, Task Manager, Study Tracker, Sorting Visualizer, Pathfinding Visualizer | none | captured from the local demo pages into `img/projects/covers/` (done) |
 
 Cover-fit UVs in the plane shader handle any remaining aspect mismatch.
 
@@ -255,8 +255,8 @@ Cover-fit UVs in the plane shader handle any remaining aspect mismatch.
    loop, synced DOM labels, hover zoom, click to open detail or demo.
 3. **Warp pass.** Render target + displacement/aberration/scanline shader tied to
    velocity, reduced-motion off switch.
-4. **Polish.** Title stagger, drag hint, scroll-in nudge, perf gating, cover captures and
-   title cards, remove the old projects page content after review.
+4. **Polish.** Title stagger, drag hint, scroll-in nudge, perf gating, demo-page cover
+   captures and brighter title cards. (Covers are not downscaled; see the status note.)
 
 ---
 
