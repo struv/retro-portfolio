@@ -37,6 +37,7 @@
     const WARP_GAIN = 10;      // how hard a drag bends the picture (0.2 at ~30px per 60Hz frame on a 1500px stage)
     const WARP_MAX = 0.2;      // reference clamp
     const WARP_SMOOTH = 0.25;  // per-frame easing of the bend, so pointer jitter doesn't flicker it
+    const CHROMA = 1;          // chromatic aberration amount (0 = off, 2 = double)
     const SCANLINE = 0.08;     // depth of the 2px scanlines over the cards
     const NUDGE = 0.5;         // fraction of the stage width the strip slides while scrolling into view
     const REWIND = 0.3;        // how far back up (in scroll progress) before the next entry nudges again
@@ -122,6 +123,7 @@
         uniform sampler2D uTexture;
         uniform float uStrength;
         uniform float uScanline;
+        uniform float uChroma;
         varying vec2 vUv;
 
         float parabola(float x, float k) {
@@ -138,10 +140,13 @@
             vec2 n = (uv - 0.5) * 2.0;
             d.y -= abs(uStrength) * 0.5 * (rightAmp + leftAmp) * n.y;
 
-            float split = uStrength * 0.025;
+            // Chromatic aberration: red and blue pull apart along the drag axis, plus a
+            // lens-like radial fringe that grows toward the stage edges; both with speed
+            vec2 radial = n * abs(uStrength) * 0.03;
+            vec2 shift = (vec2(uStrength * 0.05, 0.0) + radial) * uChroma;
             vec4 c = texture2D(uTexture, d);
-            vec4 cr = texture2D(uTexture, d + vec2(split, 0.0));
-            vec4 cb = texture2D(uTexture, d - vec2(split, 0.0));
+            vec4 cr = texture2D(uTexture, d + shift);
+            vec4 cb = texture2D(uTexture, d - shift);
             vec4 color = vec4(cr.r, c.g, cb.b, max(c.a, max(cr.a, cb.a)));
 
             float scan = 1.0 - uScanline * (0.5 + 0.5 * sin(gl_FragCoord.y * 3.14159265));
@@ -432,7 +437,8 @@
                 uniforms: {
                     uTexture: { value: this.rt.texture },
                     uStrength: { value: 0 },
-                    uScanline: { value: SCANLINE }
+                    uScanline: { value: SCANLINE },
+                    uChroma: { value: CHROMA }
                 },
                 transparent: true,
                 depthTest: false,
