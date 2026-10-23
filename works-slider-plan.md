@@ -9,7 +9,16 @@ Status: phase 1 done on 2026-10-22 (data file, card strip on the front page,
 detail overlay, nav/anchor links, `projects.html` redirect). Phase 2 done on
 2026-10-22 (`shared/works-slider.js`: WebGL planes, drag/wheel/keys, inertia, wrap,
 projected labels, hover, click). Phase 3 done on 2026-10-22 (velocity-driven warp
-pass in the same file). Phase 4 not started. Work is on the `works-slider` branch.
+pass in the same file). Phase 4 done on 2026-10-22 (scroll-in nudge, title letter
+stagger, demo-page covers, brighter title cards). All four phases are on the
+`works-slider` branch.
+
+Cover resolution, decided in phase 4: covers stay at full size (1800px wide), not
+the ~1024px the original plan proposed. A 2:3 card shows only ~40% of a landscape
+screenshot's width, so a 460px card on a 2x display needs ~2200px of source width to
+stay sharp. The six demo covers in `img/projects/covers/` were captured with headless
+Chrome at 1600×1000 at 1.5x and encoded at JPEG quality 62. Textures load without
+mipmaps, which also spares WebGL1 a power-of-two resize.
 
 Changes after the original plan: cards are 2:3 portrait (460×690), a "zoomed window"
 into each screenshot via cover-fit with a per-project `focus` (fractions, default

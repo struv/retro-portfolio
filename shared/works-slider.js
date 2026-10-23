@@ -36,6 +36,7 @@
     const WARP_GAIN = 4;       // how hard a drag bends the picture
     const WARP_MAX = 0.2;      // reference clamp
     const SCANLINE = 0.08;     // depth of the 2px scanlines over the cards
+    const NUDGE = 0.5;         // fraction of the stage width the strip slides while scrolling into view
 
     const CYAN = [0, 1, 1];
     const MAGENTA = [1, 0, 1];
@@ -164,15 +165,15 @@
 
         const draw = () => {
             const bg = ctx.createLinearGradient(0, 0, W, H);
-            bg.addColorStop(0, '#000033');
-            bg.addColorStop(0.6, '#220044');
-            bg.addColorStop(1, '#000033');
+            bg.addColorStop(0, '#0a0a4a');
+            bg.addColorStop(0.6, '#3d0a6b');
+            bg.addColorStop(1, '#0a0a4a');
             ctx.fillStyle = bg;
             ctx.fillRect(0, 0, W, H);
-            ctx.fillStyle = 'rgba(0, 255, 255, 0.07)';
+            ctx.fillStyle = 'rgba(0, 255, 255, 0.1)';
             for (let y = 0; y < H; y += 4) ctx.fillRect(0, y, W, 2);
 
-            ctx.font = '28px "Press Start 2P", monospace';
+            ctx.font = '32px "Press Start 2P", monospace';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             const lines = [];
@@ -187,14 +188,19 @@
                 }
             });
             lines.push(line);
-            const lineHeight = 52;
+            const lineHeight = 58;
             const top = H / 2 - ((lines.length - 1) * lineHeight) / 2;
             lines.forEach((text, i) => {
+                // Neon: a blurred magenta halo, a hard magenta offset, then the yellow face
+                ctx.shadowColor = '#ff00ff';
+                ctx.shadowBlur = 24;
                 ctx.fillStyle = '#ff00ff';
                 ctx.fillText(text, W / 2 + 4, top + i * lineHeight + 4);
+                ctx.shadowBlur = 0;
                 ctx.fillStyle = '#FFCC00';
                 ctx.fillText(text, W / 2, top + i * lineHeight);
             });
+            ctx.shadowColor = 'transparent';
             texture.needsUpdate = true;
         };
 
@@ -218,6 +224,7 @@
             this.velocity = 0;
             this.warp = 0;
             this.warpOverride = null;   // set to a number to hold the warp for a screenshot
+            this.scrollProgress = null;
             this.frames = 0;
             this.rafId = 0;
             this.visible = false;
@@ -323,6 +330,10 @@
 
         applyTexture(item, texture, width, height) {
             texture.anisotropy = Math.min(4, this.renderer.capabilities.getMaxAnisotropy());
+            // The card window shows the image close to 1:1, so mipmaps add nothing, and
+            // skipping them spares WebGL1 a power-of-two resize of every cover
+            texture.generateMipmaps = false;
+            texture.minFilter = THREE.LinearFilter;
             item.material.uniforms.uTexture.value = texture;
             item.material.uniforms.uImageSize.value.set(width, height);
             item.material.uniforms.uHasTexture.value = 1;
@@ -654,6 +665,9 @@
                 if (document.hidden) this.sleep(); else this.wake();
             });
 
+            this.scrollProgress = this.readScrollProgress();
+            window.addEventListener('scroll', () => this.onScroll(), { passive: true });
+
             // Narrow viewports swap back to the DOM strip
             const narrow = window.matchMedia(`(max-width: ${MIN_WIDTH - 1}px)`);
             const applyNarrow = () => {
@@ -665,6 +679,27 @@
             };
             narrow.addEventListener('change', applyNarrow);
             applyNarrow();
+        }
+
+        // 0 when the stage's top reaches the bottom of the viewport, 1 when it reaches the centre
+        readScrollProgress() {
+            const top = this.stage.getBoundingClientRect().top;
+            const vh = window.innerHeight || 1;
+            return Math.min(1, Math.max(0, (vh - top) / (vh / 2)));
+        }
+
+        // Scrolling the section into view also slides the strip a little, as on the
+        // reference site. Only new ground counts, so bouncing the scroll near the
+        // section doesn't keep pushing; once the section is fully below the viewport
+        // again the next entry starts over. Never over a drag.
+        onScroll() {
+            const progress = this.readScrollProgress();
+            const previous = this.scrollProgress;
+            if (progress === 0) this.scrollProgress = 0;
+            if (previous === null || progress <= previous || this.pointer || this.narrow) return;
+            this.scrollProgress = progress;
+            this.target -= (progress - previous) * this.width * NUDGE;
+            this.wake();
         }
 
         // The loop runs only while something is moving and the stage is on screen

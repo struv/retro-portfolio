@@ -94,9 +94,42 @@
         document.documentElement.style.setProperty('--scrollbar-width', `${Math.max(0, width)}px`);
     }
 
+    // Splits the section title into letters that rise in one after another the
+    // first time the heading scrolls into view
+    function staggerTitle() {
+        const heading = document.getElementById('projects-heading');
+        if (!heading || heading.querySelector('.works-letter')) return;
+        const text = heading.textContent.trim();
+        heading.setAttribute('aria-label', text);
+        heading.innerHTML = [...text].map((ch, i) => (
+            ch === ' ' ? ' ' : `<span class="works-letter" aria-hidden="true" style="--i: ${i}">${esc(ch)}</span>`
+        )).join('');
+
+        let revealed = false;
+        const reveal = () => {
+            if (revealed) return;
+            revealed = true;
+            heading.classList.add('is-in');
+        };
+        if (!('IntersectionObserver' in window)) {
+            reveal();
+            return;
+        }
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                reveal();
+                observer.disconnect();
+            }
+        }, { threshold: 0.5 });
+        observer.observe(heading);
+        // Never leave the title invisible if the observer stays quiet
+        setTimeout(reveal, 6000);
+    }
+
     function initializeWorksStrip() {
         setScrollbarWidth();
         window.addEventListener('resize', setScrollbarWidth);
+        staggerTitle();
 
         const strip = document.getElementById('worksStrip');
         const data = window.ProjectsData;

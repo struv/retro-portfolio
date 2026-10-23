@@ -31,6 +31,20 @@
     margin-top: 0;
 }
 
+/* Title letters rise in one after another the first time the section is seen */
+.works-letter {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.5em) skewX(-8deg);
+    transition: opacity 0.35s ease-out, transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition-delay: calc(var(--i, 0) * 50ms);
+}
+
+#projects-heading.is-in .works-letter {
+    opacity: 1;
+    transform: none;
+}
+
 .works-intro {
     font-size: 1.4rem;
     margin-bottom: 0.5rem;
@@ -159,10 +173,10 @@
     font-size: 0.9rem;
     line-height: 1.7;
     color: var(--accent);
-    text-shadow: 3px 3px 0 var(--primary);
+    text-shadow: 0 0 14px var(--primary), 0 0 28px rgba(255, 0, 255, 0.6), 3px 3px 0 var(--primary);
     background:
-        repeating-linear-gradient(0deg, rgba(0, 255, 255, 0.07) 0 2px, transparent 2px 4px),
-        linear-gradient(135deg, #000033 0%, #220044 60%, #000033 100%);
+        repeating-linear-gradient(0deg, rgba(0, 255, 255, 0.1) 0 2px, transparent 2px 4px),
+        linear-gradient(135deg, #0a0a4a 0%, #3d0a6b 60%, #0a0a4a 100%);
 }
 
 .works-card-tag {
@@ -715,6 +729,12 @@ html.gallery-locked {
 @media (prefers-reduced-motion: reduce) {
     .works-hint {
         animation: none;
+    }
+
+    .works-letter {
+        opacity: 1;
+        transform: none;
+        transition: none;
     }
 
     .works-card,
