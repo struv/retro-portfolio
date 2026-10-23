@@ -19,8 +19,10 @@
         const data = window.ProjectsData;
         const tag = data.categoryLabel[project.category] || '';
         const meta = [project.org, project.date].filter(Boolean).join(' · ');
+        // Which part of the screenshot the tall frame shows (fractions, default centre-top)
+        const focus = project.focus || [0.5, 0];
         const media = project.cover
-            ? `<img class="works-card-cover" src="${esc(project.cover)}" alt="" loading="lazy" decoding="async" draggable="false">`
+            ? `<img class="works-card-cover" src="${esc(project.cover)}" alt="" loading="lazy" decoding="async" draggable="false" style="object-position: ${focus[0] * 100}% ${focus[1] * 100}%">`
             : `<div class="works-card-cover works-card-titlecard" aria-hidden="true"><span>${esc(project.title)}</span></div>`;
         const inner = `
             <span class="works-card-media">
@@ -103,11 +105,16 @@
         strip.innerHTML = data.list.map(cardHTML).join('');
         enableDragScroll(strip);
 
-        // Overlay cards; demo links navigate on their own
+        // Overlay cards grow their cover into the full screenshot; demo links navigate on their own
         strip.addEventListener('click', (e) => {
             const card = e.target.closest('button.works-card[data-project]');
             if (!card || !window.ProjectGallery) return;
-            window.ProjectGallery.open(card.dataset.project, card);
+            const project = data.byId(card.dataset.project);
+            const media = card.querySelector('.works-card-media');
+            window.ProjectGallery.open(card.dataset.project, card, {
+                from: media ? media.getBoundingClientRect() : null,
+                focus: project && project.focus
+            });
         });
 
         // Start fetching the first screenshot as soon as the visitor shows interest

@@ -256,7 +256,9 @@
         details.innerHTML = `${meta ? `<p class="gallery-meta">${esc(meta)}</p>` : ''}${paragraphs}${noteHTML}${tech}${links}`;
     }
 
-    function open(project, openerEl) {
+    // options.from: the card cover's viewport rect; when given (and the project has a
+    // cover and screenshots), the cover grows out of the card into the gallery image
+    function open(project, openerEl, options = {}) {
         if (!dialog) buildDialog();
         slides = project.screenshots || [];
         opener = openerEl || null;
@@ -266,15 +268,63 @@
         image.removeAttribute('src');
         image.alt = '';
         dialog.classList.toggle('no-media', !slides.length);
+        dialog.classList.remove('expanding');
         note.textContent = project.screenshotNote || '';
         note.hidden = !project.screenshotNote;
         renderDetails(project);
         buildFilmstrip();
         dialog.classList.remove('closing');
         document.documentElement.classList.add('gallery-locked');
+
+        const canExpand = options.from && options.from.width > 0 && project.cover && slides.length && !reducedMotion();
+        if (canExpand) {
+            expandOpen(project, options.from, options.focus || [0.5, 0]);
+            return;
+        }
         dialog.showModal();
         dialog.scrollTop = 0;
         if (slides.length) go(0, 1);
+    }
+
+    // Opens on the slide that matches the cover, with a copy of the cover flying from
+    // the card's box to where the gallery image lands. The real image is hidden by the
+    // .expanding class until the copy arrives, then takes over in place.
+    async function expandOpen(project, from, focus) {
+        const token = navToken;
+        const coverIndex = slides.findIndex((s) => s.src === project.cover);
+        index = Math.max(0, coverIndex);
+        const slide = slides[index];
+
+        dialog.classList.add('expanding');
+        dialog.showModal();
+        dialog.scrollTop = 0;
+        setZoom(false);
+        updateChrome();
+
+        // Put the slide in place (invisible) so its final box can be measured
+        await preload(slide.src);
+        if (token !== navToken) return;
+        image.src = slide.src;
+        image.alt = slide.caption;
+        try { await image.decode(); } catch (e) { /* measure anyway */ }
+        if (token !== navToken) return;
+        const to = image.getBoundingClientRect();
+
+        const ghost = document.createElement('img');
+        ghost.className = 'gallery-ghost';
+        ghost.src = project.cover;
+        ghost.alt = '';
+        ghost.style.objectPosition = `${focus[0] * 100}% ${focus[1] * 100}%`;
+        dialog.appendChild(ghost);
+        const box = (r) => ({ left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
+        const flight = ghost.animate([box(from), box(to)], { duration: 420, easing: EASE_OUT, fill: 'forwards' });
+        try { await flight.finished; } catch (e) { /* cancelled by a close */ }
+        ghost.remove();
+        if (token !== navToken) return;
+        dialog.classList.remove('expanding');
+
+        preload(slides[(index + 1) % slides.length].src);
+        preload(slides[(index - 1 + slides.length) % slides.length].src);
     }
 
     function close() {
@@ -288,7 +338,8 @@
             if (done) return;
             done = true;
             dialog.removeEventListener('animationend', onEnd);
-            dialog.classList.remove('closing');
+            dialog.classList.remove('closing', 'expanding');
+            dialog.querySelectorAll('.gallery-ghost').forEach((g) => g.remove());
             dialog.close();
             setZoom(false);
             document.documentElement.classList.remove('gallery-locked');
@@ -303,9 +354,9 @@
         setTimeout(finish, 400);
     }
 
-    function openById(id, openerEl) {
+    function openById(id, openerEl, options) {
         const project = window.ProjectsData && window.ProjectsData.byId(id);
-        if (project) open(project, openerEl);
+        if (project) open(project, openerEl, options);
     }
 
     function preloadById(id) {

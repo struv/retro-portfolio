@@ -6,7 +6,7 @@
 .works-section {
     /* Card size for both the DOM strip and the WebGL slider: tune here */
     --works-card-width: 460px;
-    --works-cover-aspect: 4 / 3;
+    --works-cover-aspect: 2 / 3;
     /* 100vw includes a visible scrollbar; works-strip.js measures it into --scrollbar-width */
     --page-width: calc(100vw - var(--scrollbar-width, 0px));
     /* Left edge of the 800px container's content box, or the page gutter when narrower */
@@ -233,7 +233,7 @@
 
 .works-stage {
     position: relative;
-    height: clamp(380px, 64vh, 720px);
+    height: clamp(480px, 82vh, 920px);
     overflow: hidden;
     overflow: clip;
     touch-action: pan-y;
@@ -617,6 +617,27 @@ html.gallery-locked {
 .gallery-details a:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
+}
+
+/* Opening from a card: the dialog only fades (a transform would reparent the
+   fixed ghost), the real image stays hidden until the ghost has landed */
+.gallery-dialog.expanding[open] {
+    animation: gallery-fade-in 0.25s ease-out;
+}
+
+.gallery-dialog.expanding .gallery-image {
+    opacity: 0;
+}
+
+.gallery-ghost {
+    position: fixed;
+    z-index: 2;
+    margin: 0;
+    border: 2px solid var(--secondary);
+    background: #fff;
+    object-fit: cover;
+    box-shadow: 0 0 24px var(--primary);
+    pointer-events: none;
 }
 
 /* Projects without screenshots show only the writeup */
