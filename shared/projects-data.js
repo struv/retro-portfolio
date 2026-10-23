@@ -8,7 +8,11 @@
 //   org / date    shown as the card's meta line when present
 //   tagline       one line for the card
 //   tech          array, rendered as "A • B • C"
-//   cover         card image; phase 4 replaces these with ~1024px covers
+//   cover         card image. Keep these at full resolution: a 2:3 card shows
+//                 only ~40% of a landscape screenshot's width, so a 460px card
+//                 on a 2x display needs ~2200px of source width to stay sharp
+//   focus         [x, y] fractions of the cover the tall card window centres on;
+//                 default [0.5, 0] (centre-top)
 //   description   paragraphs for the detail overlay
 //   note          small print under the description (e.g. the metrics window)
 //   screenshots   [{ src, caption }], each with a matching "-thumb.jpg"
@@ -155,6 +159,7 @@
             category: 'personal',
             tagline: "Explore Conway's Game of Life with animated cells, color effects, and preset patterns.",
             tech: ['React', 'JavaScript', 'CSS'],
+            cover: 'img/projects/covers/life.jpg',
             href: 'projects/life.html'
         },
         {
@@ -163,6 +168,7 @@
             category: 'personal',
             tagline: 'Generate and play synth melodies, adjust musical settings, and view the audio spectrum.',
             tech: ['React', 'Tone.js', 'Canvas'],
+            cover: 'img/projects/covers/melody.jpg',
             href: 'projects/melody.html'
         },
         {
@@ -171,6 +177,7 @@
             category: 'personal',
             tagline: "A browser-only task list with priorities, filtering, and search. Tasks are saved in this browser's local storage.",
             tech: ['JavaScript', 'Local storage'],
+            cover: 'img/projects/covers/todo.jpg',
             href: 'projects/todo.html'
         },
         {
@@ -179,6 +186,7 @@
             category: 'personal',
             tagline: "Track study tasks with XP and achievements. Progress is saved in this browser's local storage.",
             tech: ['React', 'Local storage'],
+            cover: 'img/projects/covers/exp.jpg',
             href: 'projects/exp.html'
         },
         {
@@ -187,6 +195,7 @@
             category: 'personal',
             tagline: 'Watch six sorting algorithms with adjustable array settings and playback speed.',
             tech: ['JavaScript', 'Canvas'],
+            cover: 'img/projects/covers/sorting.jpg',
             href: 'projects/sorting.html'
         },
         {
@@ -195,6 +204,7 @@
             category: 'personal',
             tagline: 'Draw walls, place start and end points, and compare A* and Dijkstra pathfinding on a grid.',
             tech: ['React', 'JavaScript'],
+            cover: 'img/projects/covers/pathfinding.jpg',
             href: 'projects/pathfinding.html'
         }
     ];
