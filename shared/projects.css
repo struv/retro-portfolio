@@ -229,6 +229,102 @@
     }
 }
 
+/* ---------- WebGL slider stage (works-slider.js) ---------- */
+
+.works-stage {
+    position: relative;
+    height: clamp(380px, 64vh, 720px);
+    overflow: hidden;
+    overflow: clip;
+    touch-action: pan-y;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    outline: none;
+}
+
+.works-stage.is-dragging {
+    cursor: grabbing;
+}
+
+.works-stage[hidden] {
+    display: none;
+}
+
+/* index.html styles every <canvas> as fixed with z-index -1 for the background;
+   these two rules keep the slider canvas in the section and above its background */
+.works-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.works-labels {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.works-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin: 0;
+    padding: 0.3rem 0.4rem;
+    pointer-events: auto;
+    font-family: 'VT323', monospace;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-align: left;
+    text-decoration: none;
+    color: var(--text);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    will-change: transform;
+    -webkit-tap-highlight-color: transparent;
+    /* The global button rule transitions "all", which would animate the per-frame transform */
+    transition: none;
+}
+
+.works-label:hover {
+    background: transparent;
+}
+
+.works-label:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.works-label-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.7rem;
+    line-height: 1.6;
+    color: var(--accent);
+    transition: color 0.2s;
+}
+
+.works-label-meta {
+    font-size: 1.15rem;
+    color: var(--secondary);
+    opacity: 0.8;
+}
+
+.works-label.is-hover .works-label-title {
+    color: var(--primary);
+}
+
+.works-section--gl .works-strip {
+    display: none;
+}
+
 /* ---------- Detail overlay ---------- */
 
 .gallery-dialog {

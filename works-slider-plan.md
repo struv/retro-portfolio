@@ -6,7 +6,15 @@ section on the front page of wstruve.com, and retire the separate projects page.
 Written 2026-10-22.
 
 Status: phase 1 done on 2026-10-22 (data file, card strip on the front page,
-detail overlay, nav/anchor links, `projects.html` redirect). Phases 2–4 not started.
+detail overlay, nav/anchor links, `projects.html` redirect). Phase 2 done on
+2026-10-22 (`shared/works-slider.js`: WebGL planes, drag/wheel/keys, inertia, wrap,
+projected labels, hover, click). Phases 3–4 not started. Work is on the
+`works-slider` branch.
+
+Phase 2 notes: index.html styles every `<canvas>` as fixed with z-index -1, so the
+slider canvas sets its own position and z-index. The global `button` rule transitions
+`all`, so label elements set `transition: none` or their per-frame transforms animate.
+`window.WorksSlider.instance.step(n)` advances frames synchronously for testing.
 
 Implementation note from phase 1: `scroll-behavior: smooth` is deliberately not set
 on `html`. Landing on `index.html#projects` from another page should be an instant
