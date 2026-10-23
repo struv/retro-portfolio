@@ -4,6 +4,9 @@
 /* ---------- Section (full-bleed, breaks out of the 800px container) ---------- */
 
 .works-section {
+    /* Card size for both the DOM strip and the WebGL slider: tune here */
+    --works-card-width: 460px;
+    --works-cover-aspect: 4 / 3;
     /* 100vw includes a visible scrollbar; works-strip.js measures it into --scrollbar-width */
     --page-width: calc(100vw - var(--scrollbar-width, 0px));
     /* Left edge of the 800px container's content box, or the page gutter when narrower */
@@ -86,7 +89,7 @@
 
 .works-item {
     display: flex;
-    flex: 0 0 min(78vw, 380px);
+    flex: 0 0 min(78vw, var(--works-card-width));
     scroll-snap-align: start;
 }
 
@@ -126,7 +129,7 @@
 .works-card-media {
     position: relative;
     display: block;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: var(--works-cover-aspect);
     overflow: hidden;
     border-bottom: 2px solid var(--secondary);
     background: #000;
