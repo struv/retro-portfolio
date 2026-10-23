@@ -15,8 +15,9 @@
     'use strict';
 
     // Motion (the lerp and tap values come from the reference site)
-    const LERP = 0.075;        // fraction of the remaining distance covered each frame
+    const LERP = 0.075;        // fraction of the remaining distance covered per 60Hz frame
     const HOVER_LERP = 0.15;   // same, for the hover zoom/border
+    const FRAME_MS = 1000 / 60; // the frame the constants above are written for
     const FLING = 160;         // ms of pointer velocity added to the target on release
     const MAX_VX = 3;          // px/ms cap on that velocity, so a jumpy pointer can't launch the strip
     const TAP_MS = 200;        // a press shorter than this that barely moved is a tap
@@ -33,8 +34,9 @@
     const DPR_CAP = 1.5;
 
     // Warp pass (phase 3): strength = velocity / stage width * gain * t, clamped
-    const WARP_GAIN = 4;       // how hard a drag bends the picture
+    const WARP_GAIN = 10;      // how hard a drag bends the picture (0.2 at ~30px per 60Hz frame on a 1500px stage)
     const WARP_MAX = 0.2;      // reference clamp
+    const WARP_SMOOTH = 0.25;  // per-frame easing of the bend, so pointer jitter doesn't flicker it
     const SCANLINE = 0.08;     // depth of the 2px scanlines over the cards
     const NUDGE = 0.5;         // fraction of the stage width the strip slides while scrolling into view
     const REWIND = 0.3;        // how far back up (in scroll progress) before the next entry nudges again
@@ -225,6 +227,7 @@
             this.velocity = 0;
             this.warp = 0;
             this.warpOverride = null;   // set to a number to hold the warp for a screenshot
+            this.lastTick = 0;
             this.scrollProgress = null;
             this.frames = 0;
             this.rafId = 0;
@@ -724,30 +727,41 @@
 
         tick() {
             this.rafId = 0;
-            const busy = this.update();
+            const now = performance.now();
+            // After an idle stretch the gap is meaningless, so treat it as one frame
+            const dt = this.lastTick ? now - this.lastTick : FRAME_MS;
+            this.lastTick = now;
+            const busy = this.update(dt);
             this.render();
-            if (busy) this.wake();
+            if (busy) this.wake(); else this.lastTick = 0;
         }
 
-        // Advances the motion one frame; returns whether anything is still animating
-        update() {
+        // Advances the motion by dt milliseconds; returns whether anything is still
+        // animating. The easing constants are per 60Hz frame, so a 120Hz display runs
+        // the same curve in twice the steps and velocity is reported per 60Hz frame.
+        update(dt = FRAME_MS) {
+            const k = Math.min(3, Math.max(0.25, dt / FRAME_MS));
+            const ease = (perFrame) => 1 - Math.pow(1 - perFrame, k);
+
             const prev = this.offset;
-            this.offset += (this.target - this.offset) * LERP;
+            this.offset += (this.target - this.offset) * ease(LERP);
             if (Math.abs(this.target - this.offset) < 0.02) this.offset = this.target;
-            this.velocity = this.offset - prev;
+            this.velocity = (this.offset - prev) / k;
             this.frames += 1;
 
             // Narrow stages get more bend per pixel, as on the reference site
             const t = Math.min(2, Math.max(1, 2 - (this.width - 320) / 480));
-            this.warp = Math.max(-WARP_MAX, Math.min(WARP_MAX, (this.velocity / this.width) * WARP_GAIN * t));
+            const warpTarget = Math.max(-WARP_MAX, Math.min(WARP_MAX, (this.velocity / this.width) * WARP_GAIN * t));
+            this.warp += (warpTarget - this.warp) * ease(WARP_SMOOTH);
+            if (Math.abs(this.warp) < 0.001 && warpTarget === 0) this.warp = 0;
 
-            let animating = this.offset !== this.target || Math.abs(this.velocity) > 1e-3;
+            let animating = this.offset !== this.target || this.warp !== 0;
             this.items.forEach((item) => {
                 item.x = this.wrap(item.index * this.slot + this.offset);
                 item.mesh.position.x = item.x;
 
                 if (item.hover !== item.hoverTarget) {
-                    item.hover += (item.hoverTarget - item.hover) * HOVER_LERP;
+                    item.hover += (item.hoverTarget - item.hover) * ease(HOVER_LERP);
                     if (Math.abs(item.hoverTarget - item.hover) < 0.005) item.hover = item.hoverTarget;
                     animating = true;
                 }
@@ -780,9 +794,9 @@
             this.renderer.render(this.postScene, this.postCamera);
         }
 
-        // Synchronous frames for testing without requestAnimationFrame
+        // Synchronous 60Hz frames for testing without requestAnimationFrame
         step(n = 1) {
-            for (let i = 0; i < n; i++) this.update();
+            for (let i = 0; i < n; i++) this.update(FRAME_MS);
             this.render();
             return { offset: this.offset, target: this.target, velocity: this.velocity, warp: this.warp };
         }
