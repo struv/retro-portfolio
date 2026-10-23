@@ -8,8 +8,14 @@ Written 2026-10-22.
 Status: phase 1 done on 2026-10-22 (data file, card strip on the front page,
 detail overlay, nav/anchor links, `projects.html` redirect). Phase 2 done on
 2026-10-22 (`shared/works-slider.js`: WebGL planes, drag/wheel/keys, inertia, wrap,
-projected labels, hover, click). Phases 3–4 not started. Work is on the
-`works-slider` branch.
+projected labels, hover, click). Phase 3 done on 2026-10-22 (velocity-driven warp
+pass in the same file). Phase 4 not started. Work is on the `works-slider` branch.
+
+Changes after the original plan: cards are 2:3 portrait (460×690), a "zoomed window"
+into each screenshot via cover-fit with a per-project `focus` (fractions, default
+centre-top) in `projects-data.js`; clicking a card grows its cover into the gallery
+image (`expandOpen` in `project-gallery.js`), landing on the slide that matches the
+cover. The slider exposes `warp` and `warpOverride` for screenshots of the bend.
 
 Phase 2 notes: index.html styles every `<canvas>` as fixed with z-index -1, so the
 slider canvas sets its own position and z-index. The global `button` rule transitions

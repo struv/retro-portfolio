@@ -32,6 +32,11 @@
     const MIN_WIDTH = 768;     // narrower viewports keep the DOM strip
     const DPR_CAP = 1.5;
 
+    // Warp pass (phase 3): strength = velocity / stage width * gain * t, clamped
+    const WARP_GAIN = 4;       // how hard a drag bends the picture
+    const WARP_MAX = 0.2;      // reference clamp
+    const SCANLINE = 0.08;     // depth of the 2px scanlines over the cards
+
     const CYAN = [0, 1, 1];
     const MAGENTA = [1, 0, 1];
 
@@ -53,6 +58,7 @@
         uniform vec2 uMeshSize;
         uniform vec2 uCardSize;
         uniform vec2 uImageSize;
+        uniform vec2 uFocus;
         uniform float uHover;
         uniform float uRadius;
         uniform float uBorder;
@@ -65,12 +71,13 @@
             return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r;
         }
 
-        // Like CSS object-fit: cover with object-position: top
-        vec2 coverUv(vec2 uv, vec2 frame, vec2 img) {
+        // Like CSS object-fit: cover with object-position at uFocus (0,0 = top left;
+        // texture v runs bottom-up, hence the flip on y)
+        vec2 coverUv(vec2 uv, vec2 frame, vec2 img, vec2 focus) {
             float fr = frame.x / frame.y;
             float ir = img.x / img.y;
             vec2 s = fr > ir ? vec2(1.0, ir / fr) : vec2(fr / ir, 1.0);
-            vec2 o = vec2((1.0 - s.x) * 0.5, 1.0 - s.y);
+            vec2 o = (1.0 - s) * vec2(focus.x, 1.0 - focus.y);
             return o + uv * s;
         }
 
@@ -81,7 +88,7 @@
             vec2 cardUv = p / uCardSize + 0.5;
             float zoom = 1.0 + uHover * 0.08;
             vec2 zoomed = (cardUv - 0.5) / zoom + 0.5;
-            vec3 tex = texture2D(uTexture, coverUv(zoomed, uCardSize, uImageSize)).rgb;
+            vec3 tex = texture2D(uTexture, coverUv(zoomed, uCardSize, uImageSize, uFocus)).rgb;
             vec3 fill = mix(vec3(0.0, 0.0, 0.2), tex, uHasTexture);
 
             float inner = 1.0 - smoothstep(-uBorder - 0.5, -uBorder + 0.5, d);
@@ -93,6 +100,52 @@
         }
     `;
 
+    const POST_VERTEX = `
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = vec4(position.xy, 0.0, 1.0);
+        }
+    `;
+
+    // Full-stage pass over the rendered cards, adapted from the reference site:
+    // a horizontal bulge strongest at the centre, a vertical pinch at the left and
+    // right edges, both scaled by drag speed, plus a magenta/cyan split along the
+    // drag axis and faint scanlines. Everything off the cards is transparent, so
+    // the page background is untouched.
+    const WARP_FRAGMENT = `
+        precision highp float;
+        uniform sampler2D uTexture;
+        uniform float uStrength;
+        uniform float uScanline;
+        varying vec2 vUv;
+
+        float parabola(float x, float k) {
+            return pow(4.0 * x * (1.0 - x), k);
+        }
+
+        void main() {
+            vec2 uv = vUv;
+            vec2 d = uv;
+            d.x += -uStrength * parabola(uv.y, 1.0) * parabola(uv.x, 1.0);
+
+            float rightAmp = pow(smoothstep(0.5, 1.0, uv.x), 2.0);
+            float leftAmp = pow(smoothstep(0.5, 1.0, 1.0 - uv.x), 2.0);
+            vec2 n = (uv - 0.5) * 2.0;
+            d.y -= abs(uStrength) * 0.5 * (rightAmp + leftAmp) * n.y;
+
+            float split = uStrength * 0.025;
+            vec4 c = texture2D(uTexture, d);
+            vec4 cr = texture2D(uTexture, d + vec2(split, 0.0));
+            vec4 cb = texture2D(uTexture, d - vec2(split, 0.0));
+            vec4 color = vec4(cr.r, c.g, cb.b, max(c.a, max(cr.a, cb.a)));
+
+            float scan = 1.0 - uScanline * (0.5 + 0.5 * sin(gl_FragCoord.y * 3.14159265));
+            color.rgb *= scan;
+            gl_FragColor = color;
+        }
+    `;
+
     const esc = (s) => String(s).replace(/[&<>"']/g, (c) => (
         { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
     ));
@@ -100,9 +153,9 @@
     const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // Stand-in texture for projects without a cover: matches .works-card-titlecard
-    function makeTitleCard(project) {
-        const W = 800;
-        const H = 600;
+    function makeTitleCard(project, aspect) {
+        const W = 600;
+        const H = Math.round(W / aspect);
         const canvas = document.createElement('canvas');
         canvas.width = W;
         canvas.height = H;
@@ -126,7 +179,7 @@
             let line = '';
             project.title.split(' ').forEach((word) => {
                 const trial = line ? `${line} ${word}` : word;
-                if (ctx.measureText(trial).width > W - 120 && line) {
+                if (ctx.measureText(trial).width > W - 100 && line) {
                     lines.push(line);
                     line = word;
                 } else {
@@ -163,6 +216,8 @@
             this.offset = 0;
             this.target = 0;
             this.velocity = 0;
+            this.warp = 0;
+            this.warpOverride = null;   // set to a number to hold the warp for a screenshot
             this.frames = 0;
             this.rafId = 0;
             this.visible = false;
@@ -198,7 +253,9 @@
             this.camera.position.z = 10;
             this.geometry = new THREE.PlaneGeometry(1, 1);
 
+            this.readCardSize();
             this.projects.forEach((project, index) => this.items.push(this.createItem(project, index)));
+            this.createPost();
 
             this.strip.before(this.stage);
             this.strip.hidden = true;
@@ -225,6 +282,7 @@
                     uMeshSize: { value: new THREE.Vector2(1, 1) },
                     uCardSize: { value: new THREE.Vector2(1, 1) },
                     uImageSize: { value: new THREE.Vector2(4, 3) },
+                    uFocus: { value: new THREE.Vector2(...(project.focus || [0.5, 0])) },
                     uHover: { value: 0 },
                     uRadius: { value: RADIUS },
                     uBorder: { value: BORDER },
@@ -257,7 +315,7 @@
             const item = { project, index, mesh, material, label, hover: 0, hoverTarget: 0, x: 0 };
 
             if (!project.cover) {
-                const card = makeTitleCard(project);
+                const card = makeTitleCard(project, this.aspect);
                 this.applyTexture(item, card.texture, card.width, card.height);
             }
             return item;
@@ -292,16 +350,14 @@
             this.width = Math.max(1, Math.round(rect.width));
             this.height = Math.max(1, Math.round(rect.height));
 
-            const style = getComputedStyle(this.section);
-            const cssWidth = parseFloat(style.getPropertyValue('--works-card-width')) || 460;
-            const aspectParts = style.getPropertyValue('--works-cover-aspect').split('/').map(Number);
-            const aspect = aspectParts.length === 2 && aspectParts[1] ? aspectParts[0] / aspectParts[1] : 4 / 3;
+            this.readCardSize();
+            const aspect = this.aspect;
             // Mirrors --works-inset in projects.css: the content column's left edge
             const pageWidth = document.documentElement.clientWidth;
             this.inset = Math.max(32, pageWidth / 2 - 368);
 
             const maxByHeight = (this.height - LABEL_HEIGHT - 2 * PAD) * aspect;
-            this.cardW = Math.max(120, Math.min(cssWidth, this.width * 0.8, maxByHeight));
+            this.cardW = Math.max(120, Math.min(this.cssCardWidth, this.width * 0.8, maxByHeight));
             this.cardH = this.cardW / aspect;
             this.slot = this.cardW + GAP;
             // World y of the card centre: cards sit centred in the space above the labels
@@ -315,6 +371,7 @@
             this.syncCopies();
 
             this.renderer.setSize(this.width, this.height, false);
+            this.resizePost();
             this.camera.left = -this.width / 2;
             this.camera.right = this.width / 2;
             this.camera.top = this.height / 2;
@@ -330,6 +387,58 @@
             this.update();
             this.render();
             this.wake();
+        }
+
+        // The same two custom properties the DOM strip uses, so both agree
+        readCardSize() {
+            const style = getComputedStyle(this.section);
+            this.cssCardWidth = parseFloat(style.getPropertyValue('--works-card-width')) || 460;
+            const parts = style.getPropertyValue('--works-cover-aspect').split('/').map(Number);
+            this.aspect = parts.length === 2 && parts[1] ? parts[0] / parts[1] : 2 / 3;
+        }
+
+        // Render target plus a full-stage quad that applies the warp shader
+        createPost() {
+            try {
+                this.rt = new THREE.WebGLRenderTarget(2, 2, {
+                    minFilter: THREE.LinearFilter,
+                    magFilter: THREE.LinearFilter,
+                    depthBuffer: false,
+                    stencilBuffer: false
+                });
+            } catch (err) {
+                console.warn('Works slider: no render target, drawing without the warp.', err);
+                this.rt = null;
+                return;
+            }
+            this.postMaterial = new THREE.ShaderMaterial({
+                vertexShader: POST_VERTEX,
+                fragmentShader: WARP_FRAGMENT,
+                uniforms: {
+                    uTexture: { value: this.rt.texture },
+                    uStrength: { value: 0 },
+                    uScanline: { value: SCANLINE }
+                },
+                transparent: true,
+                depthTest: false,
+                depthWrite: false,
+                // The target holds premultiplied colour, so composite it as such
+                blending: THREE.CustomBlending,
+                blendSrc: THREE.OneFactor,
+                blendDst: THREE.OneMinusSrcAlphaFactor,
+                blendSrcAlpha: THREE.OneFactor,
+                blendDstAlpha: THREE.OneMinusSrcAlphaFactor
+            });
+            this.postScene = new THREE.Scene();
+            this.postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+            this.postScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), this.postMaterial));
+        }
+
+        resizePost() {
+            if (!this.rt) return;
+            const size = new THREE.Vector2();
+            this.renderer.getDrawingBufferSize(size);
+            this.rt.setSize(Math.max(1, size.x), Math.max(1, size.y));
         }
 
         // Extra copies only exist on very wide screens; they share the project's material
@@ -392,7 +501,14 @@
             if (project.href) {
                 window.location.href = project.href;
             } else if (window.ProjectGallery) {
-                window.ProjectGallery.open(project.id, openerEl);
+                const rect = this.stage.getBoundingClientRect();
+                const from = {
+                    left: rect.left + this.width / 2 + item.x - this.cardW / 2,
+                    top: rect.top + this.cardBottomCss - this.cardH,
+                    width: this.cardW,
+                    height: this.cardH
+                };
+                window.ProjectGallery.open(project.id, openerEl, { from, focus: project.focus });
             }
         }
 
@@ -577,7 +693,11 @@
             this.velocity = this.offset - prev;
             this.frames += 1;
 
-            let animating = this.offset !== this.target;
+            // Narrow stages get more bend per pixel, as on the reference site
+            const t = Math.min(2, Math.max(1, 2 - (this.width - 320) / 480));
+            this.warp = Math.max(-WARP_MAX, Math.min(WARP_MAX, (this.velocity / this.width) * WARP_GAIN * t));
+
+            let animating = this.offset !== this.target || Math.abs(this.velocity) > 1e-3;
             this.items.forEach((item) => {
                 item.x = this.wrap(item.index * this.slot + this.offset);
                 item.mesh.position.x = item.x;
@@ -602,17 +722,25 @@
             return animating;
         }
 
-        // Phase 3 swaps this for a render-target pass with the warp shader
+        // Cards go to the render target, then the warp quad draws them to the canvas
         render() {
             if (!this.renderer || this.narrow) return;
+            if (!this.rt) {
+                this.renderer.render(this.scene, this.camera);
+                return;
+            }
+            this.postMaterial.uniforms.uStrength.value = this.warpOverride === null ? this.warp : this.warpOverride;
+            this.renderer.setRenderTarget(this.rt);
             this.renderer.render(this.scene, this.camera);
+            this.renderer.setRenderTarget(null);
+            this.renderer.render(this.postScene, this.postCamera);
         }
 
         // Synchronous frames for testing without requestAnimationFrame
         step(n = 1) {
             for (let i = 0; i < n; i++) this.update();
             this.render();
-            return { offset: this.offset, target: this.target, velocity: this.velocity };
+            return { offset: this.offset, target: this.target, velocity: this.velocity, warp: this.warp };
         }
     }
 
