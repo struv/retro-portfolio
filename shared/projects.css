@@ -1,0 +1,614 @@
+/* Project showcase: the front-page card strip and the project detail overlay.
+   Loaded by index.html after style.css. */
+
+/* ---------- Section (full-bleed, breaks out of the 800px container) ---------- */
+
+.works-section {
+    /* 100vw includes a visible scrollbar; works-strip.js measures it into --scrollbar-width */
+    --page-width: calc(100vw - var(--scrollbar-width, 0px));
+    /* Left edge of the 800px container's content box, or the page gutter when narrower */
+    --works-inset: max(2rem, calc(var(--page-width) / 2 - 368px));
+    position: relative;
+    width: var(--page-width);
+    margin: 0 0 3rem calc(50% - var(--page-width) / 2);
+    padding: 2rem 0 2.25rem;
+    border-top: 4px solid var(--secondary);
+    border-bottom: 4px solid var(--secondary);
+    background: rgba(0, 0, 51, 0.55);
+    scroll-margin-top: 4rem;
+}
+
+.works-header {
+    max-width: 800px;
+    margin: 0 auto 1.25rem;
+    padding: 0 2rem;
+}
+
+.works-header h2 {
+    margin-top: 0;
+}
+
+.works-intro {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.works-hint {
+    margin: 0;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    animation: blink 1.4s infinite;
+}
+
+.works-hint.is-hidden {
+    visibility: hidden;
+}
+
+/* ---------- Strip ---------- */
+
+.works-strip {
+    display: flex;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0.5rem var(--works-inset) 1.25rem;
+    list-style: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--works-inset);
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) transparent;
+}
+
+.works-strip::-webkit-scrollbar {
+    height: 6px;
+}
+
+.works-strip::-webkit-scrollbar-thumb {
+    background: var(--primary);
+}
+
+/* While a mouse drags the strip, snapping is off and cards don't react to hover */
+.works-strip.dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    user-select: none;
+}
+
+.works-strip.dragging .works-card {
+    pointer-events: none;
+}
+
+.works-item {
+    display: flex;
+    flex: 0 0 min(78vw, 380px);
+    scroll-snap-align: start;
+}
+
+/* Card: a <button> for projects with an overlay, an <a> for demo pages */
+.works-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'VT323', monospace;
+    font-size: 1rem;
+    text-align: left;
+    text-decoration: none;
+    color: var(--text);
+    background: rgba(0, 0, 51, 0.92);
+    border: 2px solid var(--secondary);
+    border-radius: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s, background 0.2s;
+}
+
+.works-card:hover,
+.works-card:focus-visible {
+    background: rgba(0, 0, 51, 0.96);
+    border-color: var(--primary);
+    box-shadow: 0 0 18px var(--primary);
+    transform: translateY(-4px);
+}
+
+.works-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.works-card-media {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-bottom: 2px solid var(--secondary);
+    background: #000;
+}
+
+.works-card-cover {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.works-card:hover .works-card-cover {
+    transform: scale(1.04);
+}
+
+/* Stand-in for projects without a cover image yet */
+.works-card-titlecard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--accent);
+    text-shadow: 3px 3px 0 var(--primary);
+    background:
+        repeating-linear-gradient(0deg, rgba(0, 255, 255, 0.07) 0 2px, transparent 2px 4px),
+        linear-gradient(135deg, #000033 0%, #220044 60%, #000033 100%);
+}
+
+.works-card-tag {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    padding: 0.3rem 0.45rem;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text);
+    background: var(--primary);
+    box-shadow: 2px 2px 0 var(--secondary);
+}
+
+.works-card-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.9rem 1rem 1rem;
+}
+
+.works-card-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--accent);
+    overflow-wrap: anywhere;
+}
+
+.works-card-meta {
+    font-size: 1.1rem;
+    color: var(--secondary);
+}
+
+.works-card-tagline {
+    font-size: 1.3rem;
+    line-height: 1.35;
+}
+
+.works-card-tech {
+    margin-top: auto;
+    padding-top: 0.4rem;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--secondary);
+    opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+    .works-section {
+        --works-inset: 1rem;
+        padding-top: 1.5rem;
+    }
+
+    .works-header {
+        padding: 0 1rem;
+    }
+
+    .works-item {
+        flex-basis: 82vw;
+    }
+}
+
+/* ---------- Detail overlay ---------- */
+
+.gallery-dialog {
+    width: min(1040px, calc(100vw - 2rem));
+    max-height: calc(100vh - 2rem);
+    margin: auto;
+    padding: 1.25rem;
+    border: 4px solid var(--primary);
+    background: rgba(0, 0, 51, 0.97);
+    color: var(--text);
+    box-shadow: 0 0 30px var(--primary), inset 0 0 10px var(--secondary);
+    font-family: 'VT323', monospace;
+    overflow: hidden auto;
+}
+
+.gallery-dialog::backdrop {
+    background: rgba(0, 0, 20, 0.85);
+    backdrop-filter: blur(3px);
+}
+
+.gallery-dialog[open] {
+    animation: gallery-in 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.gallery-dialog[open]::backdrop {
+    animation: gallery-fade-in 0.24s ease-out;
+}
+
+.gallery-dialog.closing {
+    animation: gallery-out 0.18s ease-in forwards;
+}
+
+.gallery-dialog.closing::backdrop {
+    animation: gallery-fade-out 0.18s ease-in forwards;
+}
+
+@keyframes gallery-in {
+    from { opacity: 0; transform: translateY(12px) scale(0.97); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes gallery-out {
+    from { opacity: 1; transform: none; }
+    to { opacity: 0; transform: translateY(8px) scale(0.98); }
+}
+
+@keyframes gallery-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes gallery-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Keep the page behind the dialog from scrolling */
+html.gallery-locked {
+    overflow: hidden;
+}
+
+.gallery-dialog button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.gallery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 0.5rem;
+}
+
+.gallery-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--accent);
+}
+
+/* Fixed-height stage so portrait and landscape shots don't resize the dialog */
+.gallery-stage {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: clamp(240px, 62vh, 660px);
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(0, 255, 255, 0.25);
+    touch-action: pan-y;
+}
+
+.gallery-image {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    border: 2px solid var(--secondary);
+    background: #fff;
+    cursor: zoom-in;
+    user-select: none;
+    will-change: transform, opacity;
+}
+
+.gallery-stage.zoomed {
+    display: block;
+    overflow: auto;
+    touch-action: auto;
+}
+
+.gallery-stage.zoomed .gallery-image {
+    max-width: none;
+    max-height: none;
+    cursor: zoom-out;
+}
+
+.gallery-stage.zoomed .gallery-nav {
+    display: none;
+}
+
+.gallery-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 36px;
+    height: 36px;
+    margin: -18px 0 0 -18px;
+    border: 4px solid rgba(0, 255, 255, 0.25);
+    border-top-color: var(--secondary);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    animation: gallery-spin 0.8s linear infinite;
+}
+
+.gallery-loader.visible {
+    opacity: 1;
+}
+
+@keyframes gallery-spin {
+    to { transform: rotate(360deg); }
+}
+
+.gallery-nav {
+    position: absolute;
+    top: 50%;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    transform: translateY(-50%);
+    border: 2px solid var(--primary);
+    background: rgba(0, 0, 51, 0.7);
+    font-size: 0.9rem;
+    opacity: 0.6;
+    transition: opacity 0.2s, background 0.2s, transform 0.2s;
+}
+
+.gallery-prev { left: 0.75rem; }
+.gallery-next { right: 0.75rem; }
+
+.gallery-stage:hover .gallery-nav,
+.gallery-nav:focus-visible {
+    opacity: 1;
+}
+
+.gallery-nav:hover {
+    border-color: var(--secondary);
+    background: var(--primary);
+    transform: translateY(-50%) scale(1.08);
+}
+
+.gallery-caption {
+    margin: 0.75rem 0 0;
+    min-height: 1.9rem;
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.gallery-filmstrip {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding: 0.25rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) transparent;
+}
+
+.gallery-thumb {
+    flex: 0 0 auto;
+    width: 96px;
+    height: 60px;
+    padding: 0;
+    border: 2px solid transparent;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0.55;
+    overflow: hidden;
+    transition: opacity 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.gallery-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+}
+
+.gallery-thumb:hover {
+    opacity: 0.9;
+    background: rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+.gallery-thumb.active {
+    border-color: var(--accent);
+    opacity: 1;
+}
+
+.gallery-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    color: var(--text);
+}
+
+.gallery-hint {
+    opacity: 0.6;
+}
+
+.gallery-note {
+    margin: 0.5rem 0 0;
+    font-size: 1.1rem;
+    text-align: center;
+    color: var(--secondary);
+}
+
+.gallery-note[hidden] {
+    display: none;
+}
+
+/* Writeup under the screenshots */
+.gallery-details {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 255, 255, 0.25);
+}
+
+.gallery-meta {
+    margin: 0 0 0.75rem;
+    font-size: 1.2rem;
+    color: var(--secondary);
+}
+
+.gallery-details .project-description {
+    margin: 0 0 0.75rem;
+    font-size: 1.35rem;
+    line-height: 1.4;
+}
+
+.gallery-details .project-note {
+    margin: 0 0 0.75rem;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    opacity: 0.75;
+}
+
+.gallery-details .project-tech {
+    margin: 0;
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--secondary);
+}
+
+.gallery-details .project-link {
+    margin: 0.75rem 0 0;
+    font-size: 1.25rem;
+}
+
+.gallery-details a {
+    color: var(--secondary);
+    text-underline-offset: 0.2em;
+}
+
+.gallery-details a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* Projects without screenshots show only the writeup */
+.gallery-dialog.no-media .gallery-stage,
+.gallery-dialog.no-media .gallery-caption,
+.gallery-dialog.no-media .gallery-filmstrip,
+.gallery-dialog.no-media .gallery-footer,
+.gallery-dialog.no-media .gallery-note {
+    display: none;
+}
+
+.gallery-dialog.no-media .gallery-details {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+}
+
+@media (hover: none) {
+    .gallery-hint {
+        display: none;
+    }
+
+    .gallery-nav {
+        opacity: 0.85;
+    }
+}
+
+@media (max-width: 600px) {
+    .gallery-dialog {
+        padding: 0.75rem;
+    }
+
+    .gallery-title {
+        font-size: 0.8rem;
+    }
+
+    /* On phones, size the stage to the image so wide shots aren't tiny */
+    .gallery-stage {
+        height: auto;
+        min-height: 180px;
+    }
+
+    .gallery-image {
+        max-height: 56vh;
+    }
+
+    .gallery-stage.zoomed {
+        height: 56vh;
+    }
+
+    .gallery-nav {
+        width: 2.25rem;
+        height: 2.25rem;
+        font-size: 0.75rem;
+    }
+
+    .gallery-prev { left: 0.4rem; }
+    .gallery-next { right: 0.4rem; }
+
+    .gallery-thumb {
+        width: 72px;
+        height: 46px;
+    }
+
+    .gallery-caption,
+    .gallery-note {
+        font-size: 1.1rem;
+    }
+
+    .gallery-details .project-description {
+        font-size: 1.2rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .works-hint {
+        animation: none;
+    }
+
+    .works-card,
+    .works-card-cover,
+    .gallery-nav,
+    .gallery-thumb,
+    .gallery-loader {
+        transition: none;
+    }
+
+    .gallery-dialog[open],
+    .gallery-dialog[open]::backdrop,
+    .gallery-dialog.closing,
+    .gallery-dialog.closing::backdrop {
+        animation: none;
+    }
+}

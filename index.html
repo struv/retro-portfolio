@@ -11,6 +11,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.wstruve.com/">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="shared/projects.css">
     <style>
         /* Page-specific styles */
         canvas {
@@ -273,12 +274,21 @@
         <section class="section" aria-labelledby="intro-heading">
             <h2 id="intro-heading">Software Developer</h2>
             <p>I build and launch applications that help people get their work done. My experience includes patient intake, vaccine inventory, and reporting tools, from understanding the workflow to supporting staff after launch.</p>
-            <p><a href="projects.html">Explore my projects</a> or get in touch:</p>
+            <p><a href="#projects">Explore my projects</a> or get in touch:</p>
             <p class="contact-links">
                 <a href="mailto:wstruve.tech@gmail.com">Email</a>
                 <a href="https://github.com/struv">GitHub</a>
                 <a href="https://www.linkedin.com/in/wstruve/">LinkedIn</a>
             </p>
+        </section>
+
+        <section class="works-section" id="projects" aria-labelledby="projects-heading">
+            <div class="works-header">
+                <h2 id="projects-heading">Projects</h2>
+                <p class="works-intro">Applications delivered at work, academic team projects, and personal browser experiments. Drag to browse, click a card for details.</p>
+                <p class="works-hint" aria-hidden="true">&lt; DRAG &gt;</p>
+            </div>
+            <ul class="works-strip" id="worksStrip" role="list" aria-label="Projects"></ul>
         </section>
 
         <section class="section" aria-labelledby="about-heading">
@@ -362,6 +372,9 @@
         </section>
     </main>
 
+    <script src="shared/projects-data.js"></script>
+    <script src="shared/project-gallery.js"></script>
+    <script src="shared/works-strip.js"></script>
     <script src="shared/init.js"></script>
     <script>
         document.addEventListener('sharedComponentsReady', function() {

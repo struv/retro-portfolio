@@ -1,36 +1,8 @@
-// Screenshot gallery dialog for professional project cards
+// Project detail overlay: screenshots (when a project has them) plus the
+// writeup, tech list, and links. Reads projects from shared/projects-data.js
+// and is opened by the front-page strip via window.ProjectGallery.open(id).
 (function() {
     'use strict';
-
-    // Screenshots are captured from local builds seeded with mock data only.
-    // Cards whose list is empty stay as plain, non-clickable cards.
-    // Each image has a matching "-thumb.jpg" used in the filmstrip.
-    const PROJECT_GALLERIES = {
-        modulo: [
-            { src: 'img/projects/modulo/field-mapper.jpg', caption: 'Field mapper: place fields on any clinic PDF and auto-fill them from patient demographics' },
-            { src: 'img/projects/modulo/dashboard.jpg', caption: "Daily appointments across clinics with each family's form progress" },
-            { src: 'img/projects/modulo/messages.jpg', caption: 'Two-way SMS inbox: form links go out, families reply, staff answer' },
-            { src: 'img/projects/modulo/kiosk-tablet.jpg', caption: "Check-in kiosk: a tablet at each clinic's front desk lets families find their appointment in English or Spanish" },
-            { src: 'img/projects/modulo/form-packets.jpg', caption: 'Form packets for each visit type: new patient, newborn, well-child, sports, ADHD, Spanish' }
-        ],
-        'vaccine-inventory': [
-            { src: 'img/projects/vaccine-inventory/desktop.jpg', caption: 'Weekly stock entry by clinic, VFC and private lots' },
-            { src: 'img/projects/vaccine-inventory/mobile.jpg', caption: 'Collapsible rows for entry on a phone' },
-            { src: 'img/projects/vaccine-inventory/new-location.jpg', caption: 'Onboarding a new clinic location' }
-        ],
-        'sp-router': [
-            { src: 'img/projects/sp-router/map.jpg', caption: 'Map view: providers sharing an address grouped into one pin, with specialty breakdown' },
-            { src: 'img/projects/sp-router/table.jpg', caption: 'Searchable roster with contract, class, specialty, and city filters' }
-        ],
-        'transfer-dashboard': [
-            { src: 'img/projects/transfer-dashboard/overview.jpg', caption: 'Transfers by group with period, segment, and % filters' }
-        ],
-        'scheduling-dashboard': [
-            { src: 'img/projects/scheduling-dashboard/grid.jpg', caption: 'Forward schedule by office and day, with booking-curve and target controls' },
-            { src: 'img/projects/scheduling-dashboard/week.jpg', caption: 'Each chip is a provider\'s booked vs. expected visits; cells tint amber when under-booked, green on target' },
-            { src: 'img/projects/scheduling-dashboard/decisions.jpg', caption: 'Decisions drawer ranking Move, Fill, Shorten, and Gap recommendations against historical baselines' }
-        ]
-    };
 
     const EASE_OUT = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
     const SWIPE_THRESHOLD = 50;
@@ -38,7 +10,7 @@
     // so the image's edges can be reached without pinning the cursor to the border
     const PAN_EDGE = 0.1;
 
-    let dialog, stage, image, loader, caption, counter, filmstrip, prevBtn, nextBtn;
+    let dialog, stage, image, loader, caption, counter, filmstrip, prevBtn, nextBtn, note, details, titleEl;
     let slides = [];
     let index = 0;
     let navToken = 0;
@@ -48,6 +20,9 @@
 
     const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const thumbFor = (src) => src.replace(/\.jpg$/, '-thumb.jpg');
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => (
+        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+    ));
 
     // Load and decode an image once; later requests reuse the same promise
     function preload(src) {
@@ -66,7 +41,7 @@
         dialog.innerHTML = `
             <div class="gallery-header">
                 <h3 id="gallery-title" class="gallery-title"></h3>
-                <button type="button" class="gallery-close" aria-label="Close screenshots">X</button>
+                <button type="button" class="gallery-close" aria-label="Close project details">X</button>
             </div>
             <div class="gallery-stage">
                 <img class="gallery-image" alt="" draggable="false">
@@ -80,10 +55,12 @@
                 <span class="gallery-counter"></span>
                 <span class="gallery-hint">Click image to zoom</span>
             </div>
-            <p class="gallery-note">Screens shown with mock data. No patient information.</p>
+            <p class="gallery-note"></p>
+            <div class="gallery-details"></div>
         `;
         document.body.appendChild(dialog);
 
+        titleEl = dialog.querySelector('.gallery-title');
         stage = dialog.querySelector('.gallery-stage');
         image = dialog.querySelector('.gallery-image');
         loader = dialog.querySelector('.gallery-loader');
@@ -92,6 +69,8 @@
         filmstrip = dialog.querySelector('.gallery-filmstrip');
         prevBtn = dialog.querySelector('.gallery-prev');
         nextBtn = dialog.querySelector('.gallery-next');
+        note = dialog.querySelector('.gallery-note');
+        details = dialog.querySelector('.gallery-details');
 
         dialog.querySelector('.gallery-close').addEventListener('click', close);
         prevBtn.addEventListener('click', () => go(index - 1, -1));
@@ -118,6 +97,7 @@
         });
 
         dialog.addEventListener('keydown', (e) => {
+            if (!slides.length) return;
             if (e.key === 'ArrowLeft') go(index - 1, -1);
             if (e.key === 'ArrowRight') go(index + 1, 1);
         });
@@ -148,7 +128,7 @@
             thumb.type = 'button';
             thumb.className = 'gallery-thumb';
             thumb.setAttribute('aria-label', `Screenshot ${i + 1}: ${slide.caption}`);
-            thumb.innerHTML = `<img src="${thumbFor(slide.src)}" alt="" loading="lazy">`;
+            thumb.innerHTML = `<img src="${esc(thumbFor(slide.src))}" alt="" loading="lazy">`;
             thumb.addEventListener('click', () => go(i, i > index ? 1 : -1));
             filmstrip.appendChild(thumb);
         });
@@ -262,23 +242,43 @@
         stage.scrollTop = fy * image.offsetHeight - stage.clientHeight / 2;
     }
 
-    function open(title, projectSlides, openerEl) {
+    // The writeup block under the screenshots (or on its own for projects without any)
+    function renderDetails(project) {
+        const label = (window.ProjectsData.categoryLabel || {})[project.category] || '';
+        const meta = [project.org, project.date, label].filter(Boolean).join(' · ');
+        const paragraphs = (project.description || [])
+            .map((p) => `<p class="project-description">${esc(p)}</p>`).join('');
+        const noteHTML = project.note ? `<p class="project-note">${esc(project.note)}</p>` : '';
+        const tech = project.tech && project.tech.length
+            ? `<p class="project-tech">${project.tech.map(esc).join(' • ')}</p>` : '';
+        const links = (project.links || [])
+            .map((l) => `<p class="project-link"><a href="${esc(l.href)}">${esc(l.label)}</a></p>`).join('');
+        details.innerHTML = `${meta ? `<p class="gallery-meta">${esc(meta)}</p>` : ''}${paragraphs}${noteHTML}${tech}${links}`;
+    }
+
+    function open(project, openerEl) {
         if (!dialog) buildDialog();
-        slides = projectSlides;
-        opener = openerEl;
+        slides = project.screenshots || [];
+        opener = openerEl || null;
         index = 0;
         navToken++;
-        dialog.querySelector('.gallery-title').textContent = title;
+        titleEl.textContent = project.title;
         image.removeAttribute('src');
+        image.alt = '';
+        dialog.classList.toggle('no-media', !slides.length);
+        note.textContent = project.screenshotNote || '';
+        note.hidden = !project.screenshotNote;
+        renderDetails(project);
         buildFilmstrip();
         dialog.classList.remove('closing');
         document.documentElement.classList.add('gallery-locked');
         dialog.showModal();
-        go(0, 1);
+        dialog.scrollTop = 0;
+        if (slides.length) go(0, 1);
     }
 
     function close() {
-        if (!dialog.open || dialog.classList.contains('closing')) return;
+        if (!dialog || !dialog.open || dialog.classList.contains('closing')) return;
         let done = false;
         // Ignore animations bubbling up from children; fall back if the event never fires
         const onEnd = (e) => {
@@ -303,29 +303,15 @@
         setTimeout(finish, 400);
     }
 
-    function initializeProjectGallery() {
-        document.querySelectorAll('[data-gallery]').forEach((card) => {
-            const projectSlides = PROJECT_GALLERIES[card.dataset.gallery] || [];
-            if (!projectSlides.length) return;
-
-            const title = card.querySelector('.project-title').textContent;
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.className = 'gallery-open';
-            button.textContent = `View screenshots (${projectSlides.length})`;
-            button.addEventListener('click', () => open(title, projectSlides, button));
-            // Start fetching the first screenshot as soon as the visitor shows interest
-            button.addEventListener('pointerenter', () => preload(projectSlides[0].src), { once: true });
-            card.appendChild(button);
-            card.classList.add('has-gallery');
-
-            // Let the whole card open the gallery, but not when selecting text or using a link
-            card.addEventListener('click', (e) => {
-                if (e.target.closest('a, button') || window.getSelection().toString()) return;
-                open(title, projectSlides, button);
-            });
-        });
+    function openById(id, openerEl) {
+        const project = window.ProjectsData && window.ProjectsData.byId(id);
+        if (project) open(project, openerEl);
     }
 
-    document.addEventListener('DOMContentLoaded', initializeProjectGallery);
+    function preloadById(id) {
+        const project = window.ProjectsData && window.ProjectsData.byId(id);
+        if (project && project.screenshots && project.screenshots.length) preload(project.screenshots[0].src);
+    }
+
+    window.ProjectGallery = { open: openById, preload: preloadById, close };
 })();
