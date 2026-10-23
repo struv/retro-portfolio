@@ -37,6 +37,7 @@
     const WARP_MAX = 0.2;      // reference clamp
     const SCANLINE = 0.08;     // depth of the 2px scanlines over the cards
     const NUDGE = 0.5;         // fraction of the stage width the strip slides while scrolling into view
+    const REWIND = 0.3;        // how far back up (in scroll progress) before the next entry nudges again
 
     const CYAN = [0, 1, 1];
     const MAGENTA = [1, 0, 1];
@@ -689,17 +690,25 @@
         }
 
         // Scrolling the section into view also slides the strip a little, as on the
-        // reference site. Only new ground counts, so bouncing the scroll near the
-        // section doesn't keep pushing; once the section is fully below the viewport
-        // again the next entry starts over. Never over a drag.
+        // reference site. scrollProgress is a high-water mark: only new ground nudges,
+        // so small bounces near the section don't keep pushing, and the mark only
+        // lowers once the visitor has scrolled well back up. During a drag the mark
+        // still follows the scroll but the strip is left alone.
         onScroll() {
             const progress = this.readScrollProgress();
-            const previous = this.scrollProgress;
-            if (progress === 0) this.scrollProgress = 0;
-            if (previous === null || progress <= previous || this.pointer || this.narrow) return;
-            this.scrollProgress = progress;
-            this.target -= (progress - previous) * this.width * NUDGE;
-            this.wake();
+            const mark = this.scrollProgress;
+            if (mark === null) {
+                this.scrollProgress = progress;
+                return;
+            }
+            if (progress > mark) {
+                this.scrollProgress = progress;
+                if (this.pointer || this.narrow) return;
+                this.target -= (progress - mark) * this.width * NUDGE;
+                this.wake();
+            } else if (progress < mark - REWIND) {
+                this.scrollProgress = progress + REWIND;
+            }
         }
 
         // The loop runs only while something is moving and the stage is on screen
