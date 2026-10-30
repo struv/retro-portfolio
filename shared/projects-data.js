@@ -163,6 +163,16 @@
             href: 'projects/life.html'
         },
         {
+            id: 'jukebox',
+            title: 'CD Jukebox',
+            category: 'personal',
+            tagline: 'Browse eleven tracks by genre, insert a floating CD, and listen to music from my collection.',
+            tech: ['Three.js', 'GLSL', 'JavaScript', 'HTML Audio'],
+            cover: 'projects/jukebox/assets/covers/wave-mobbin.webp',
+            focus: [0.5, 0.5],
+            href: 'projects/jukebox.html'
+        },
+        {
             id: 'melody',
             title: 'Melody Maker',
             category: 'personal',

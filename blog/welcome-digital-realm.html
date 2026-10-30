@@ -10,10 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../shared/blog.css">
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../projects/jukebox/compact-player.css?v=genres-20261030">
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
-<body class="portfolio-page">
+<body class="portfolio-page" data-jukebox-portfolio>
 
     <main class="article-container">
         <a href="../blog.html" class="back-link">Back to Articles</a>
@@ -37,45 +37,9 @@
                 <!-- Content will be rendered here -->
             </div>
         </article>
+        <script type="application/json" data-article-content>"# Welcome to My Digital Realm\n\n*Introduction updated October 2026.*\n\nThis is where I keep notes on web development, music, and personal experiments.\n\n## About This Space\n\nMy professional work has included patient intake, vaccine inventory, and operational dashboards. I care about understanding a workflow, getting useful software into people's hands, and helping them use it after launch.\n\nThe [Projects page](../index.html#projects) separates that work from college team projects and personal demos. Here on the blog, I share things I try and learn along the way.\n\n## Outside Work\n\nI make music and enjoy browser experiments with sound and visuals. This site's retro design and music player are part of that interest.\n\nYou can browse the demos, read the notes, or [get in touch](../index.html).\n"</script>
     </main>
 
-    <script>
-        const articleContent = `# Welcome to My Digital Realm
-
-*Introduction updated October 2026.*
-
-This is where I keep notes on web development, music, and personal experiments.
-
-## About This Space
-
-My professional work has included patient intake, vaccine inventory, and operational dashboards. I care about understanding a workflow, getting useful software into people's hands, and helping them use it after launch.
-
-The [Projects page](../index.html#projects) separates that work from college team projects and personal demos. Here on the blog, I share things I try and learn along the way.
-
-## Outside Work
-
-I make music and enjoy browser experiments with sound and visuals. This site's retro design and music player are part of that interest.
-
-You can browse the demos, read the notes, or [get in touch](../index.html).
-`;
-
-        function renderContent() {
-            const contentElement = document.getElementById('article-content');
-            const html = marked.parse(articleContent);
-            contentElement.innerHTML = html;
-        }
-
-        document.addEventListener('DOMContentLoaded', renderContent);
-    </script>
-
-    <script src="../shared/init.js"></script>
-    <script>
-        document.addEventListener('sharedComponentsReady', function() {
-            console.log('Initializing components...');
-            initializeNavbar();
-            initializeMP3Player();
-            console.log('All components initialized');
-        });
-    </script>
+    <script type="module" src="../shared/portfolio-navigation.js?v=live-order-20261030"></script>
 </body>
 </html>

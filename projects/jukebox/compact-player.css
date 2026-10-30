@@ -1,0 +1,72 @@
+/* Shared portfolio controls. The full jukebox and blog own the same audio. */
+.jukebox-genres { display: flex; justify-content: center; gap: 6px; padding: 16px 12px 0; }
+.jukebox-genres button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1px solid #555b49; border-radius: 3px; color: #bfc6b3; background: #191c15; font: 12px/1.2 var(--mono, monospace); cursor: pointer; }
+.jukebox-genres button span { opacity: .65; font-size: .85em; }
+.jukebox-genres button[aria-pressed="true"] { border-color: #d6ed91; color: #d6ed91; background: #303923; }
+.jukebox-genres button:hover:not(:disabled) { border-color: #d6ed91; }
+.jukebox-genres button:focus-visible { outline: 2px solid #d6ed91; outline-offset: 3px; }
+body[data-jukebox-portfolio] .jukebox-genres button { border: 1px solid #73449b; color: #d2bde8; background: #130b2d; font: 18px/1.2 'VT323', monospace; }
+body[data-jukebox-portfolio] .jukebox-genres button[aria-pressed="true"] { border-color: #00ffff; color: #00ffff; background: #122543; }
+body[data-jukebox-portfolio] .jukebox-genres button:hover:not(:disabled) { border-color: #ff00ff; }
+body[data-jukebox-portfolio] .jukebox-genres button:focus-visible { outline-color: #ffff00; }
+body[data-jukebox-portfolio] #jukebox-chooser .jukebox-genres { justify-content: stretch; padding: 0 0 12px; }
+body[data-jukebox-portfolio] #jukebox-chooser .jukebox-genres button { flex: 1; gap: 5px; padding: 0 8px; font-size: 17px; border: 1px solid #73449b; background: #130b2d; }
+body[data-jukebox-portfolio] #jukebox-chooser .jukebox-genres button[aria-pressed="true"] { border-color: #00ffff; background: #122543; color: #00ffff; }
+#track-list > [hidden], #jukebox-chooser-list > [hidden] { display: none !important; }
+@media (max-width: 390px) {
+  .jukebox-genres { gap: 5px; padding-left: 0; padding-right: 0; }
+  .jukebox-genres button { padding: 0 9px; gap: 5px; }
+}
+body[data-jukebox-portfolio] #jukebox-dock,
+body[data-jukebox-portfolio] #jukebox-chooser { position: fixed; left: 20px; z-index: 1100; color: #ffffff; font-family: 'VT323', monospace; font-size: 18px; line-height: 1.4; box-sizing: border-box; }
+body[data-jukebox-portfolio] #jukebox-dock { bottom: 20px; }
+body[data-jukebox-portfolio] #jukebox-dock [hidden],
+body[data-jukebox-portfolio] #jukebox-dock[hidden],
+body[data-jukebox-portfolio] #jukebox-chooser[hidden] { display: none !important; }
+body[data-jukebox-portfolio] #jukebox-dock *,
+body[data-jukebox-portfolio] #jukebox-chooser * { box-sizing: border-box; }
+body[data-jukebox-portfolio] #jukebox-dock button,
+body[data-jukebox-portfolio] #jukebox-chooser button { appearance: none; font: inherit; cursor: pointer; color: inherit; border: 0; text-transform: none; letter-spacing: normal; touch-action: manipulation; }
+body[data-jukebox-portfolio] #jukebox-dock button:focus-visible,
+body[data-jukebox-portfolio] #jukebox-chooser button:focus-visible { outline: 2px solid #ffff00; outline-offset: 3px; }
+body[data-jukebox-portfolio] #jukebox-music-button { display: flex; align-items: center; gap: 9px; min-height: 44px; padding: 0 16px; border: 2px solid #ff00ff !important; border-radius: 2px; background: #000033f5; box-shadow: 3px 3px 0 #00ffff55, 0 0 12px #ff00ff33; }
+body[data-jukebox-portfolio] #jukebox-music-button span { font-size: 23px; color: #ffff00; }
+body[data-jukebox-portfolio] #jukebox-dock-player { display: flex; align-items: center; gap: 9px; width: min(376px, calc(100vw - 40px)); min-height: 68px; padding: 10px 12px; border: 2px solid #00ffff; border-radius: 2px; background: #000033f7; backdrop-filter: blur(10px); box-shadow: 3px 3px 0 #ff00ff66, 0 0 14px #00ffff22; }
+body[data-jukebox-portfolio] #jukebox-dock-art { width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; }
+body[data-jukebox-portfolio] .jukebox-dock-copy { min-width: 0; flex: 1; }
+body[data-jukebox-portfolio] #jukebox-dock-state { display: block; font: 12px/1.2 'VT323', monospace; letter-spacing: .03em; color: #00ffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+body[data-jukebox-portfolio] #jukebox-dock-title { display: block; font-size: 20px; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
+body[data-jukebox-portfolio] #jukebox-dock-toggle,
+body[data-jukebox-portfolio] #jukebox-dock-next { display: grid; place-items: center; width: 34px; height: 44px; flex-shrink: 0; padding: 0; border-radius: 2px; background: transparent; }
+body[data-jukebox-portfolio] #jukebox-dock svg { display: block; width: 18px; height: 18px; stroke: none; }
+body[data-jukebox-portfolio] #jukebox-dock-choose { min-height: 44px; padding: 0 9px; border: 2px solid #ff00ff; border-radius: 2px; background: #23004a; color: #ffffff; white-space: nowrap; font-size: 16px; }
+body[data-jukebox-portfolio] #jukebox-dock-toggle:hover,
+body[data-jukebox-portfolio] #jukebox-dock-next:hover { background: #3b005a; color: #ffff00; }
+body[data-jukebox-portfolio] #jukebox-dock-choose:hover { background: #ff00ff; color: #000033; }
+body[data-jukebox-portfolio] #jukebox-chooser { bottom: 100px; width: min(354px, calc(100vw - 40px)); max-height: min(510px, calc(100dvh - 130px)); overflow: auto; overscroll-behavior: contain; padding: 18px; border: 2px solid #ff00ff; border-radius: 2px; background: #000033fc; box-shadow: 4px 4px 0 #00ffff55, 0 0 18px #ff00ff22; }
+body[data-jukebox-portfolio] .jukebox-chooser-heading { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 16px; }
+body[data-jukebox-portfolio] .jukebox-chooser-heading > div > span { font: 7px/1.7 'Press Start 2P', monospace; letter-spacing: 0; color: #ffff00; }
+body[data-jukebox-portfolio] #jukebox-chooser-title { font: 11px/1.7 'Press Start 2P', monospace; font-weight: 400; color: #00ffff; margin: 5px 0 0; padding: 0; border: 0; text-transform: none; text-shadow: 1px 1px 0 #ff00ff; letter-spacing: 0; }
+body[data-jukebox-portfolio] #jukebox-chooser-close { width: 36px; height: 40px; padding: 0; font-size: 30px; border-radius: 2px; background: transparent; }
+body[data-jukebox-portfolio] #jukebox-chooser-close:hover { background: #3b005a; color: #ffff00; }
+body[data-jukebox-portfolio] #jukebox-chooser-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+body[data-jukebox-portfolio] #jukebox-chooser-list li { padding: 0; margin: 0; }
+body[data-jukebox-portfolio] #jukebox-chooser-list button { display: flex; align-items: center; gap: 11px; width: 100%; padding: 9px 8px; background: transparent; border: 2px solid transparent; border-radius: 2px; text-align: left; }
+body[data-jukebox-portfolio] #jukebox-chooser-list button:hover,
+body[data-jukebox-portfolio] #jukebox-chooser-list button[aria-current="true"] { background: #260044; border-color: #00ffff; }
+body[data-jukebox-portfolio] #jukebox-chooser-list img { width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; }
+body[data-jukebox-portfolio] .jukebox-choice-copy { display: block; min-width: 0; flex: 1; }
+body[data-jukebox-portfolio] .jukebox-choice-copy strong { display: block; color: #ffffff; font-size: 20px; font-weight: 400; }
+body[data-jukebox-portfolio] .jukebox-choice-copy > span { display: block; color: #a8cfff; font: 15px/1.3 'VT323', monospace; margin-top: 3px; }
+body[data-jukebox-portfolio] .jukebox-choice-state { font-size: 16px; color: #ffff00; }
+body[data-jukebox-portfolio] #jukebox-chooser > p { font: 15px/1.4 'VT323', monospace; color: #a8cfff; margin: 14px 0 0; }
+@media (max-width: 700px) {
+  body[data-jukebox-portfolio] { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+  body[data-jukebox-portfolio] #jukebox-dock { left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
+  body[data-jukebox-portfolio] #jukebox-dock-player { width: 100%; max-width: 440px; min-height: 64px; gap: 7px; padding: 8px 10px; margin: 0 auto; }
+  body[data-jukebox-portfolio] #jukebox-dock-art { width: 32px; height: 32px; }
+  body[data-jukebox-portfolio] #jukebox-dock-toggle,
+  body[data-jukebox-portfolio] #jukebox-dock-next { width: 32px; }
+  body[data-jukebox-portfolio] #jukebox-dock-choose { padding: 0 7px; font-size: 15px; }
+  body[data-jukebox-portfolio] #jukebox-chooser { left: 10px; bottom: calc(86px + env(safe-area-inset-bottom, 0px)); right: 10px; width: auto; max-width: 440px; max-height: calc(100dvh - 110px - env(safe-area-inset-bottom, 0px)); padding: 15px; }
+}

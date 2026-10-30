@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<defs><linearGradient id="bg" x2="0" y2="1"><stop stop-color="#050f26"/><stop offset=".62" stop-color="#123b70"/><stop offset="1" stop-color="#09243c"/></linearGradient><linearGradient id="glow" x2="0" y2="1"><stop stop-color="#a2dfff"/><stop offset="1" stop-color="#2a5fa0"/></linearGradient></defs>
+<rect width="1024" height="1024" fill="url(#bg)"/>
+<g fill="none" stroke="#5792d1" stroke-width="3"><path d="M512 468L-200 1024M512 468L100 1024M512 468L350 1024M512 468L674 1024M512 468L924 1024M512 468L1224 1024"/><path d="M0 540H1024M0 590H1024M0 660H1024M0 758H1024M0 896H1024"/></g>
+<circle cx="512" cy="380" r="190" fill="url(#glow)"/><rect x="0" y="455" width="1024" height="15" fill="#122f53"/><rect x="0" y="485" width="1024" height="20" fill="#12325b"/><rect x="0" y="518" width="1024" height="26" fill="#13355e"/><rect x="0" y="553" width="1024" height="30" fill="#173960"/>
+<g fill="#dff5ff" font-family="Arial, sans-serif" text-anchor="middle"><text x="512" y="180" font-size="69" font-weight="900" letter-spacing="8">NIGHT DRIVE</text><text x="512" y="787" font-size="23" letter-spacing="12">SOMEWHERE AFTER MIDNIGHT</text><text x="512" y="850" font-size="18" letter-spacing="7">ORIGINAL DEMO / 05</text></g>
+</svg>

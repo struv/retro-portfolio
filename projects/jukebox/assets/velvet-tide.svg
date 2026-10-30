@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#261649"/><stop offset=".5" stop-color="#6d3b90"/><stop offset="1" stop-color="#171f49"/></linearGradient><linearGradient id="wave" x2="0" y2="1"><stop stop-color="#efd1fb"/><stop offset="1" stop-color="#9f82ed"/></linearGradient></defs>
+<rect width="1024" height="1024" fill="url(#bg)"/>
+<g fill="none" stroke="url(#wave)" stroke-width="13" opacity=".9">
+<path d="M-50 425Q190 100 470 380T1074 350"/><path d="M-50 473Q190 148 470 428T1074 398"/><path d="M-50 521Q190 196 470 476T1074 446"/><path d="M-50 569Q190 244 470 524T1074 494"/><path d="M-50 617Q190 292 470 572T1074 542"/><path d="M-50 665Q190 340 470 620T1074 590"/><path d="M-50 713Q190 388 470 668T1074 638"/><path d="M-50 761Q190 436 470 716T1074 686"/>
+</g><circle cx="738" cy="266" r="67" fill="#f3bbd9"/>
+<g fill="#f9e4ff" font-family="Arial, sans-serif" text-anchor="middle"><text x="512" y="190" font-size="70" font-weight="700" letter-spacing="7">VELVET TIDE</text><text x="512" y="831" font-size="21" letter-spacing="10">DRIFT WITHOUT A DESTINATION</text><text x="512" y="875" font-size="18" letter-spacing="6">ORIGINAL DEMO / 04</text></g>
+</svg>

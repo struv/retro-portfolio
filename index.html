@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>William Struve | Software Developer</title>
-    <meta name="description" content="William Struve builds and supports useful software: patient intake, inventory tools, and operational dashboards, from requirements through launch and user training.">
+    <title>William Struve | Software Developer &amp; Electronic Music Producer</title>
+    <meta name="description" content="William Struve is a software developer and electronic music producer. Explore his software projects and listen to unreleased tracks he produced in an interactive CD player.">
     <link rel="canonical" href="https://www.wstruve.com/">
-    <meta property="og:title" content="William Struve | Software Developer">
-    <meta property="og:description" content="Building and launching useful applications, understanding workflows, and supporting the people who use them.">
+    <meta property="og:title" content="William Struve | Software Developer &amp; Electronic Music Producer">
+    <meta property="og:description" content="Software developer and electronic music producer. Producing and releasing music since 2013. Every CD in the player is an unreleased track produced by William Struve.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.wstruve.com/">
+    <link rel="preload" href="shared/fonts/vt323-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="shared/fonts/press-start-2p-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="modulepreload" href="projects/jukebox/app.js?v=live-order-20261030">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="shared/projects.css">
     <style>
         /* Page-specific styles */
-        canvas {
+        #bg {
             position: fixed;
             top: 0;
             left: 0;
@@ -217,6 +220,8 @@
             text-shadow: 0 0 10px #000, 0 0 20px #000, 0 0 30px #000, 4px 4px 0 var(--secondary), 8px 8px 0 var(--primary);
             white-space: nowrap;
             color: #FFCC00;
+            padding: 0;
+            border: 0;
         }
 
         @keyframes profile-float {
@@ -247,20 +252,26 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="shared/home-jukebox.css?v=footer-nav-1">
+    <link rel="stylesheet" href="projects/jukebox/compact-player.css?v=genres-20261030">
 </head>
-<body class="portfolio-page">
-    <canvas id="bg"></canvas>
-
-    <!-- Hero Banner Section -->
+<body class="portfolio-page home-jukebox" data-jukebox-home data-jukebox-portfolio data-phase="browsing">
+    <main id="portfolio-main">
+      <section id="welcome-scene" aria-labelledby="welcome-heading">
+          <nav class="welcome-nav" aria-label="Main navigation">
+            <a class="welcome-identity" href="#welcome-scene">W.STRUVE</a>
+            <div class="welcome-nav-links"><a href="#welcome-scene">Home</a><a href="#projects">Projects</a><a href="#about-heading">About</a></div>
+          </nav>
+    <!-- Original portfolio image and identity -->
     <div class="hero-banner">
         <div class="banner-image">
-            <img src="img/header.jpg" alt="" class="banner-bg">
+            <img src="img/header.webp" alt="" class="banner-bg" width="1920" height="2400" fetchpriority="high" decoding="async">
             <div class="banner-overlay"></div>
         </div>
         <div class="banner-content">
             <div class="profile-container">
                 <div class="profile-pic-wrapper">
-                    <img src="img/wstruve-retardio.png" alt="William Struve" class="profile-pic">
+                    <img src="img/portrait.webp" alt="William Struve" class="profile-pic" width="600" height="602" decoding="async">
                     <div class="profile-pic-glow"></div>
                 </div>
                 <div class="header-text">
@@ -270,7 +281,92 @@
         </div>
     </div>
 
-    <main class="container main-content portfolio-copy">
+        <div class="welcome-inner">
+          <div class="welcome-copy">
+            <h2 id="welcome-heading">A little music for your wandering.</h2>
+            <p>Some of my unreleased tracks<br> Choose a soundtrack. Make yourself at home.</p>
+            <span class="welcome-signature">— William Struve</span>
+          </div>
+          <div class="listening-room" aria-label="Interactive CD jukebox">
+        <div id="jukebox-genres" class="jukebox-genres" role="group" aria-label="Browse music by genre"></div>
+        <div id="stage" tabindex="0" role="group" aria-label="Interactive disc gallery" aria-describedby="gallery-instructions">
+          <div id="scene" aria-hidden="true"></div>
+          <p id="scene-message" role="status">Setting the room up…</p>
+          <div class="stage-grid" aria-hidden="true"></div>
+          <div class="stage-cross cross-left" aria-hidden="true">+</div>
+          <div class="stage-cross cross-right" aria-hidden="true">+</div>
+
+          <div id="jukebox-machine" aria-label="Compact disc player">
+            <div class="machine-top">
+              <span class="machine-brand">ROOM<span class="brand-number">01</span></span>
+              <span class="machine-type">COMPACT DISC PLAYER</span>
+              <span class="power-led" aria-label="Power on"></span>
+            </div>
+            <div class="slot-bezel"><div id="disc-slot"><span class="slot-light" aria-hidden="true"></span></div></div>
+            <div class="machine-bottom">
+              <div class="machine-display">
+                <div class="display-heading"><span id="phase-label">READY TO LISTEN</span><span class="equalizer" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div>
+                <strong id="now-title">No disc loaded</strong>
+                <span id="now-subtitle">Choose a sound from the collection</span>
+              </div>
+              <div class="machine-buttons">
+                <button id="play-pause" class="hardware-button" type="button" aria-label="Play or pause music" disabled>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z" fill="currentColor" stroke="none"/></svg>
+                </button>
+                <button id="eject" class="hardware-button eject-button" type="button" aria-label="Eject disc" disabled>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 14 7-9 7 9H5Zm0 4h14"/></svg>
+                </button>
+              </div>
+            </div>
+            <span class="machine-foot foot-left" aria-hidden="true"></span>
+            <span class="machine-foot foot-right" aria-hidden="true"></span>
+          </div>
+        </div>
+
+        <div class="gallery-footer">
+          <div class="selection">
+            <span id="selection-number" class="selection-number">01 / 04</span>
+            <div class="selection-copy"><strong id="selection-title">Select a disc</strong><span id="selection-subtitle">William’s collection</span></div>
+          </div>
+          <div class="gallery-actions">
+            <div class="browse-buttons">
+              <button id="browse-prev" class="icon-button" type="button" aria-label="Previous disc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
+              <button id="browse-next" class="icon-button" type="button" aria-label="Next disc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
+            </div>
+            <button id="insert" class="insert-button" type="button">Load disc <span aria-hidden="true">↘</span></button>
+          </div>
+        </div>
+
+        <div class="transport" aria-label="Playback controls">
+          <span id="elapsed" class="time">0:00</span>
+          <input id="seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Playback position" disabled>
+          <span id="duration" class="time">0:00</span>
+          <div class="volume-control">
+            <label for="volume" aria-label="Volume"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Zm5 3a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></svg></label>
+            <input id="volume" type="range" min="0" max="100" value="35" step="1" aria-label="Volume">
+          </div>
+        </div>
+          </div>
+          <div class="jukebox-sr-only">
+            <p id="gallery-instructions"><span class="desktop-help">Move left &amp; right to browse, or use the arrows.</span><span class="touch-help">Swipe to browse.</span> Select a disc to play. <span class="keyboard-help">Arrow keys + Enter work, too.</span></p>
+            <p id="status" aria-live="polite" aria-atomic="true">Silent until you press play.</p>
+          </div>
+          <ul id="track-list" hidden aria-label="Available discs"></ul>
+          <noscript><p class="welcome-noscript">Music needs JavaScript. You can still browse my projects below.</p></noscript>
+        </div>
+      </section>
+
+        <section class="works-section" id="projects" aria-labelledby="projects-heading">
+            <div class="works-header">
+                <h2 id="projects-heading">Projects</h2>
+                <p class="works-intro">Applications delivered at work, academic team projects, and personal browser experiments. Drag to browse, click a card for details.</p>
+                <p class="works-hint" aria-hidden="true">&lt; DRAG &gt;</p>
+            </div>
+            <ul class="works-strip" id="worksStrip" role="list" aria-label="Projects"></ul>
+        </section>
+
+      <div id="regular-content">
+        <div class="container main-content portfolio-copy">
         <section class="section" aria-labelledby="intro-heading">
             <h2 id="intro-heading">Software Developer</h2>
             <p>I build and launch applications that help people get their work done. My experience includes patient intake, vaccine inventory, and reporting tools, from understanding the workflow to supporting staff after launch.</p>
@@ -282,20 +378,15 @@
             </p>
         </section>
 
-        <section class="works-section" id="projects" aria-labelledby="projects-heading">
-            <div class="works-header">
-                <h2 id="projects-heading">Projects</h2>
-                <p class="works-intro">Applications delivered at work, academic team projects, and personal browser experiments. Drag to browse, click a card for details.</p>
-                <p class="works-hint" aria-hidden="true">&lt; DRAG &gt;</p>
-            </div>
-            <ul class="works-strip" id="worksStrip" role="list" aria-label="Projects"></ul>
-        </section>
+
 
         <section class="section" aria-labelledby="about-heading">
             <h2 id="about-heading">About</h2>
             <p>At Kids &amp; Teens Medical Group, I delivered software alongside medical administration and Excel reporting. Working with clinic staff and operations teams helped me understand where a new application would help and where an existing process needed to stay.</p>
             <p>I defined requirements, launched tools, demonstrated workflows to regional managers and senior staff, and handled support requests. I used AI coding tools extensively for implementation, while owning delivery and coordinating changes with another developer.</p>
-            <p>I earned a B.S. in Computer Science from the University of California, Riverside in August 2024. Outside work, I make music and experiment with browser-based tools and visualizations.</p>
+            <p>I earned a B.S. in Computer Science from the University of California, Riverside in August 2024. Outside work, I produce electronic music and experiment with browser-based tools and visualizations.</p>
+            <p>I’m also an electronic music producer. I’ve been producing and releasing music since 2013, and I founded the Music Production Club at my high school. Making music remains one of my biggest passions.</p>
+            <p>I’ve released music under several names and projects over the years. Some of that earlier work lives on <a href="https://www.youtube.com/@DJDextek">DJ Dextek’s YouTube channel</a> and <a href="https://soundcloud.com/struv/sets/lost-in-the-hills">SoundCloud as struv</a>. These days, I keep most of what I make private.</p>
         </section>
 
         <section class="section" aria-labelledby="experience-heading">
@@ -370,34 +461,24 @@
                 </div>
             </div>
         </section>
+        <footer class="portfolio-footer">
+            <a href="blog.html">Blog</a>
+        </footer>
+        </div>
+      </div>
     </main>
 
-    <script src="shared/projects-data.js"></script>
-    <script src="shared/project-gallery.js"></script>
-    <script src="shared/works-strip.js"></script>
-    <script src="shared/works-slider.js"></script>
-    <script src="shared/init.js"></script>
+    <script defer src="shared/projects-data.js"></script>
+    <script defer src="shared/project-gallery.js"></script>
+    <script defer src="shared/works-strip.js"></script>
+    <script defer src="shared/works-slider.js"></script>
+    <script defer src="shared/init.js"></script>
     <script>
         document.addEventListener('sharedComponentsReady', function() {
-            console.log('Initializing components...');
-            initializeNavbar();
             initializeBackground();
-            console.log('Initializing MP3 player...');
-            initializeMP3Player();
-            console.log('All components initialized');
-
-            // Mouse following effect for header image
-            const bannerBg = document.querySelector('.banner-bg');
-
-            document.addEventListener('mousemove', function(e) {
-                const moveX = (e.clientX / window.innerWidth - 0.5) * 30;
-                const moveY = (e.clientY / window.innerHeight - 0.5) * 30;
-
-                bannerBg.style.transform = `translate(${moveX}px, ${moveY}px)`;
-            });
         });
     </script>
-
-
+    <script defer src="shared/opening-scroll.js?v=continuous-2"></script>
+    <script type="module" src="shared/portfolio-navigation.js?v=live-order-20261030"></script>
 </body>
 </html>

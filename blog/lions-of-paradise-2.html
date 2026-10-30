@@ -10,112 +10,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../shared/blog.css">
     <link rel="stylesheet" href="../style.css">
-    <script src="../shared/blog-data.js"></script>
+    <link rel="stylesheet" href="../projects/jukebox/compact-player.css?v=genres-20261030">
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
-<body class="portfolio-page">
+<body class="portfolio-page" data-jukebox-portfolio>
 
-    <main class="article-container" id="article-container">
+    <main class="article-container" id="article-container" data-part-id="lions-of-paradise-2">
         <!-- Content will be generated here -->
+        <script type="application/json" data-article-content>"TEST STORY\n\nThis is the continuation of The Lions of Paradise story. Part 2 content will be added here as the story develops."</script>
     </main>
 
-    <script>
-        // Get the series data for this part
-        const partId = 'lions-of-paradise-2';
-        const seriesData = blogData.getSeriesForPart(partId);
-
-        function renderPage() {
-            if (!seriesData) {
-                console.error('Series data not found');
-                return;
-            }
-
-            const { article, currentPart, currentIndex, previousPart, nextPart } = seriesData;
-            const container = document.getElementById('article-container');
-
-            // Generate series navigation
-            let seriesNavHTML = '';
-            article.series.parts.forEach((part, index) => {
-                if (part.id === partId) {
-                    seriesNavHTML += `<span class="series-part current">${part.title}</span>`;
-                } else {
-                    seriesNavHTML += `<a href="${part.id}.html" class="series-part">${part.title}</a>`;
-                }
-            });
-
-            // Generate navigation buttons
-            const prevButton = previousPart
-                ? `<a href="${previousPart.id}.html" class="nav-button prev">Previous Part</a>`
-                : '<div></div>';
-            const nextButton = nextPart
-                ? `<a href="${nextPart.id}.html" class="nav-button next">Next Part</a>`
-                : '<div></div>';
-
-            container.innerHTML = `
-                <a href="../blog.html" class="back-link">Back to Articles</a>
-
-                <div class="series-header">
-                    <div class="series-title">Series: ${article.series.title}</div>
-                    <div class="series-nav">
-                        ${seriesNavHTML}
-                    </div>
-                </div>
-
-                <article>
-                    <header class="article-header">
-                        <div class="category-tag">${article.tag} • PART ${currentIndex + 1} OF ${article.series.parts.length}</div>
-                        <h1 class="article-title">${article.title}</h1>
-                        <div class="article-meta">
-                            <span>${article.author}</span>
-                            <span class="meta-separator">•</span>
-                            <span>${article.date}</span>
-                            <span class="meta-separator">•</span>
-                            <span>${currentPart.readTime}</span>
-                        </div>
-                    </header>
-
-                    <img src="${article.image}" alt="${article.title}" class="featured-image">
-
-                    <div class="article-content" id="article-content">
-                        <!-- Content will be rendered here -->
-                    </div>
-
-                    <nav class="article-nav">
-                        ${prevButton}
-                        ${nextButton}
-                    </nav>
-                </article>
-            `;
-
-            renderContent();
-        }
-
-        document.addEventListener('DOMContentLoaded', renderPage);
-    </script>
-
-    <script>
-        const articleContent = `TEST STORY
-
-This is the continuation of The Lions of Paradise story. Part 2 content will be added here as the story develops.`;
-
-        function renderContent() {
-            const contentElement = document.getElementById('article-content');
-            const paragraphs = articleContent.split('\n\n');
-            contentElement.innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
-        }
-
-        document.addEventListener('DOMContentLoaded', renderContent);
-    </script>
-
-    <script src="../shared/init.js"></script>
-    <script>
-        document.addEventListener('sharedComponentsReady', function() {
-            console.log('Initializing components...');
-            initializeNavbar();
-            initializeMP3Player();
-            console.log('All components initialized');
-        });
-    </script>
+    <script type="module" src="../shared/portfolio-navigation.js?v=live-order-20261030"></script>
 </body>
 </html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#151614">
+  <meta name="description" content="An interactive CD jukebox featuring unreleased tracks produced by William Struve. Browse floating discs, load a track, and listen.">
+  <title>The Listening Room — William Struve</title>
+  <link rel="stylesheet" href="jukebox/jukebox.css?v=genres-20261030">
+  <link rel="stylesheet" href="jukebox/compact-player.css?v=genres-20261030">
+</head>
+<body data-phase="browsing">
+  <div class="room">
+    <nav class="topline" aria-label="Page navigation">
+      <a class="back-link" href="../index.html#projects"><span aria-hidden="true">↖</span> W. STRUVE / PROJECTS</a>
+      <span class="prototype"><span class="live-dot" aria-hidden="true"></span> INTERACTIVE PROTOTYPE</span>
+    </nav>
+
+    <main>
+      <header class="room-header">
+        <div>
+          <p class="eyebrow">A SMALL COLLECTION. A LITTLE ESCAPE.</p>
+          <h1>THE LISTENING ROOM<span class="title-period">.</span></h1>
+        </div>
+        <p class="intro">Every CD is an unreleased track produced by me.<br> Pick a disc. Put something on.<br> — William Struve</p>
+      </header>
+
+      <section class="listening-room" aria-label="Interactive CD jukebox">
+        <div class="stage-header" aria-hidden="true">
+          <span>STEREO / VOL. 01</span>
+          <span class="stage-header-right">THREE GENRES. FIND YOUR MOOD.</span>
+        </div>
+
+        <div id="jukebox-genres" class="jukebox-genres" role="group" aria-label="Browse music by genre"></div>
+        <div id="stage" tabindex="0" role="group" aria-label="Interactive disc gallery" aria-describedby="gallery-instructions">
+          <div id="scene" aria-hidden="true"></div>
+          <p id="scene-message" role="status">Setting the room up…</p>
+          <div class="stage-grid" aria-hidden="true"></div>
+          <div class="stage-cross cross-left" aria-hidden="true">+</div>
+          <div class="stage-cross cross-right" aria-hidden="true">+</div>
+
+          <div id="jukebox-machine" aria-label="Compact disc player">
+            <div class="machine-top">
+              <span class="machine-brand">ROOM<span class="brand-number">01</span></span>
+              <span class="machine-type">COMPACT DISC PLAYER</span>
+              <span class="power-led" aria-label="Power on"></span>
+            </div>
+            <div class="slot-bezel"><div id="disc-slot"><span class="slot-light" aria-hidden="true"></span></div></div>
+            <div class="machine-bottom">
+              <div class="machine-display">
+                <div class="display-heading"><span id="phase-label">READY TO LISTEN</span><span class="equalizer" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div>
+                <strong id="now-title">No disc loaded</strong>
+                <span id="now-subtitle">Choose a sound from the collection</span>
+              </div>
+              <div class="machine-buttons">
+                <button id="play-pause" class="hardware-button" type="button" aria-label="Play or pause music" disabled>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z" fill="currentColor" stroke="none"/></svg>
+                </button>
+                <button id="eject" class="hardware-button eject-button" type="button" aria-label="Eject disc" disabled>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 14 7-9 7 9H5Zm0 4h14"/></svg>
+                </button>
+              </div>
+            </div>
+            <span class="machine-foot foot-left" aria-hidden="true"></span>
+            <span class="machine-foot foot-right" aria-hidden="true"></span>
+          </div>
+        </div>
+
+        <div class="gallery-footer">
+          <div class="selection">
+            <span id="selection-number" class="selection-number">01 / 04</span>
+            <div class="selection-copy"><strong id="selection-title">Select a disc</strong><span id="selection-subtitle">William’s collection</span></div>
+          </div>
+          <div class="gallery-actions">
+            <div class="browse-buttons">
+              <button id="browse-prev" class="icon-button" type="button" aria-label="Previous disc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
+              <button id="browse-next" class="icon-button" type="button" aria-label="Next disc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
+            </div>
+            <button id="insert" class="insert-button" type="button">Load disc <span aria-hidden="true">↘</span></button>
+          </div>
+        </div>
+
+        <div class="transport" aria-label="Playback controls">
+          <span id="elapsed" class="time">0:00</span>
+          <input id="seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Playback position" disabled>
+          <span id="duration" class="time">0:00</span>
+          <div class="volume-control">
+            <label for="volume" aria-label="Volume"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Zm5 3a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></svg></label>
+            <input id="volume" type="range" min="0" max="100" value="35" step="1" aria-label="Volume">
+          </div>
+        </div>
+      </section>
+
+      <div class="room-guidance">
+        <p id="gallery-instructions"><span class="desktop-help">Move left &amp; right to browse, or use the arrows.</span><span class="touch-help">Swipe to browse.</span> Click a disc to load it. <span class="keyboard-help">Arrow keys + Enter work, too.</span></p>
+        <p id="status" aria-live="polite" aria-atomic="true">Ready when you are.</p>
+      </div>
+
+      <section class="collection" aria-labelledby="collection-title">
+        <div class="collection-header"><h2 id="collection-title">ON THE SHELF</h2><span id="collection-count">HOUSE / 4 DISCS</span></div>
+        <ul id="track-list" class="track-list" aria-label="Available discs"></ul>
+      </section>
+
+      <section class="build-notes" aria-labelledby="build-notes-title">
+        <h2 id="build-notes-title">Behind the discs</h2>
+        <div class="build-notes-copy">
+          <p>This little room runs on HTML, CSS, and vanilla JavaScript. Three.js handles the 3D discs through WebGL. The deck itself is styled HTML and CSS, and the browser’s native audio player handles the music.</p>
+          <p>The rainbow effect comes from a custom GLSL fragment shader, a small program that colors the disc pixel by pixel on the graphics card. It layers waves of color around the center, fine concentric rings to suggest the CD’s grooves, and a sharp glint that shifts as the disc turns. The silver back gets the full effect; the artwork side gets a softer sheen to keep the cover readable. It’s a stylized approximation of how a real CD catches light.</p>
+          <p>To keep things light, the artwork uses compressed WebP images or small SVGs, and songs only load when you choose them. Idle animation pauses when you scroll past the player or switch tabs, and the rendering resolution is capped to ease the load on high-resolution screens.</p>
+        </div>
+      </section>
+
+      <footer class="page-footer"><span>MUSIC BY WILLIAM STRUVE</span><p>Eleven unreleased tracks. All produced by me.</p><span class="footer-mark" aria-hidden="true">↗</span></footer>
+    </main>
+  </div>
+  <noscript><p class="noscript">This interactive jukebox needs JavaScript to display discs and play music.</p></noscript>
+  <script type="module" src="jukebox/app.js?v=live-order-20261030"></script>
+</body>
+</html>

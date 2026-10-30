@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<defs><linearGradient id="bg" x2="0" y2="1"><stop stop-color="#ffb07e"/><stop offset=".6" stop-color="#ed6159"/><stop offset="1" stop-color="#962c53"/></linearGradient><linearGradient id="sun" x2="0" y2="1"><stop stop-color="#fff1ad"/><stop offset="1" stop-color="#f7a27e"/></linearGradient></defs>
+<rect width="1024" height="1024" fill="url(#bg)"/><circle cx="512" cy="430" r="290" fill="url(#sun)"/>
+<g fill="#4a284c"><path d="M0 540Q256 430 512 560T1024 540V640Q768 730 512 610T0 650Z"/><path d="M0 676Q256 576 512 706T1024 676V726Q768 810 512 760T0 740Z"/><path d="M0 788Q256 688 512 818T1024 788V824Q768 920 512 854T0 846Z"/><path d="M0 884Q256 804 512 914T1024 884V1024H0Z"/></g>
+<g fill="#fff7d5" font-family="Arial, sans-serif" text-anchor="middle"><text x="512" y="221" font-size="73" font-weight="900" letter-spacing="5">AFTERGLOW</text><text x="512" y="284" font-size="20" letter-spacing="11">THE LAST LIGHT LINGERS</text><text x="512" y="873" font-size="18" letter-spacing="5">ORIGINAL DEMO / 02</text></g>
+</svg>

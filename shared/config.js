@@ -9,7 +9,7 @@ const navConfig = [
 // Page-specific configuration
 const pageConfig = {
     'index.html': {
-        disableMP3Player: false
+        disableMP3Player: true // Homepage jukebox and compact controls share one audio engine.
     },
     'projects/life.html': {
         disableMP3Player: false

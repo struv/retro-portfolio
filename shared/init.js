@@ -1,6 +1,10 @@
 // Shared initialization and dependency loading
 (function() {
     'use strict';
+
+    // Resolve assets from this script, not the page's directory depth. This
+    // also works from nested routes and when the HTML is opened as a file.
+    const sharedBase = new URL('./', document.currentScript.src);
     
     // Load Three.js dependency
     function loadThreeJS() {
@@ -11,7 +15,7 @@
             }
             
             const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+            script.src = new URL('vendor/three-r128.min.js', sharedBase).href;
             script.onload = resolve;
             script.onerror = reject;
             document.head.appendChild(script);
@@ -20,8 +24,7 @@
     
     // Get the correct path for shared components
     function getSharedPath() {
-        const isInSubdirectory = window.location.pathname.split('/').length > 2;
-        return isInSubdirectory ? '../shared/' : 'shared/';
+        return sharedBase.href;
     }
     
     // Load configuration
@@ -78,24 +81,10 @@
         
         console.log('Starting component initialization...');
         
-        // Load dependencies and components sequentially
-        loadConfig()
-            .then(() => {
-                console.log('Config loaded');
-                return loadNavbar();
-            })
-            .then(() => {
-                console.log('Navbar loaded');
-                return loadThreeJS();
-            })
-            .then(() => {
-                console.log('Three.js loaded');
-                return loadBackground();
-            })
-            .then(() => {
-                console.log('Background loaded');
-                return loadMP3Player();
-            })
+        // Config and Three.js are independent. Components can load together
+        // once both dependencies are ready; keep the shared readiness event.
+        Promise.all([loadConfig(), loadThreeJS()])
+            .then(() => Promise.all([loadNavbar(), loadBackground(), loadMP3Player()]))
             .then(() => {
                 console.log('MP3 Player loaded');
                 // All dependencies loaded, components are ready to use

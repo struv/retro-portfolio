@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<defs><radialGradient id="bg"><stop stop-color="#187f98"/><stop offset=".65" stop-color="#082d4b"/><stop offset="1" stop-color="#07131f"/></radialGradient><linearGradient id="ring" x2="1" y2="1"><stop stop-color="#e2ffff"/><stop offset=".45" stop-color="#67f4d2"/><stop offset="1" stop-color="#2e79b9"/></linearGradient></defs>
+<rect width="1024" height="1024" fill="url(#bg)"/>
+<g fill="none" stroke="url(#ring)" transform="rotate(-28 512 512)"><ellipse cx="512" cy="512" rx="460" ry="170" stroke-width="26"/><ellipse cx="512" cy="512" rx="419" ry="232" stroke-width="4"/><ellipse cx="512" cy="512" rx="370" ry="295" stroke-width="12"/><ellipse cx="512" cy="512" rx="305" ry="365" stroke-width="2"/></g>
+<g fill="#d9fff0"><circle cx="263" cy="364" r="32"/><circle cx="772" cy="622" r="13"/><circle cx="187" cy="625" r="4"/><circle cx="784" cy="309" r="5"/></g>
+<g fill="#e2fff7" font-family="Arial, sans-serif" text-anchor="middle"><text x="512" y="212" font-size="79" font-weight="700" letter-spacing="14">ORBITAL</text><text x="512" y="804" font-size="22" letter-spacing="9">SIGNALS FROM ELSEWHERE</text><text x="512" y="859" font-size="18" letter-spacing="5">ORIGINAL DEMO / 01</text></g>
+</svg>

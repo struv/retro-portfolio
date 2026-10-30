@@ -661,7 +661,7 @@
                 new IntersectionObserver((entries) => {
                     const entry = entries[0];
                     if (entry.isIntersecting) this.loadTextures();
-                }, { rootMargin: '600px 0px' }).observe(this.stage);
+                }, { rootMargin: '150px 0px' }).observe(this.stage);
                 new IntersectionObserver((entries) => {
                     this.visible = entries[0].isIntersecting;
                     if (this.visible) this.wake(); else this.sleep();

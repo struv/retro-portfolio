@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="768" height="768" viewBox="0 0 768 768">
+  <defs><radialGradient id="haze" cx=".3" cy=".25" r=".9"><stop stop-color="#ad8ccb"/><stop offset=".5" stop-color="#575487"/><stop offset="1" stop-color="#17243f"/></radialGradient></defs>
+  <path fill="url(#haze)" d="M0 0h768v768H0z"/>
+  <g fill="none" stroke="#e1c7f2" transform="rotate(25 384 384)">
+    <ellipse cx="384" cy="384" rx="160" ry="370" stroke-width="30" opacity=".7"/>
+    <ellipse cx="384" cy="384" rx="240" ry="410" stroke-width="14" opacity=".5"/>
+    <ellipse cx="384" cy="384" rx="320" ry="450" stroke-width="6" opacity=".4"/>
+  </g>
+  <path d="M0 575Q200 445 415 590T768 542V768H0z" fill="#202f4e" opacity=".7"/>
+  <path d="M0 665Q270 510 495 650T768 620" fill="none" stroke="#9eadd7" stroke-width="3" opacity=".7"/>
+</svg>
